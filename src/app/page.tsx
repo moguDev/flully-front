@@ -1,22 +1,11 @@
 "use client";
-import { axiosInstance } from "@/lib/axiosInstance";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
   const handleStarted = () => {
     router.push("/map");
   };
-
-  // 疎通確認
-  useEffect(() => {
-    const getStatus = async () => {
-      const res = await axiosInstance.get("/status");
-      console.log(res);
-    };
-    getStatus();
-  }, []);
 
   return (
     <main className="bg-main min-h-screen w-screen pt-24">

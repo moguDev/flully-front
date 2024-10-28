@@ -1,19 +1,48 @@
 "use client";
-
+import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 export const LoginForm = () => {
   const router = useRouter();
+  const { login } = useAuth();
+  const defaultValues: FormData = { email: "", password: "" };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues });
+
+  const onsubmit = async (data: FormData) => {
+    await login(data.email, data.password).then(() => router.back());
+  };
+
   return (
     <div className="space-y-5">
-      <form method="post" className="space-y-5 mt-5">
+      <form
+        onSubmit={handleSubmit(onsubmit)}
+        method="post"
+        className="space-y-5 mt-5"
+      >
         <div className="flex items-center border-b border-gray-300 py-2">
           <span className="material-icons text-main mr-1">email</span>
           <input
             type="email"
             placeholder="メールアドレス"
             className="w-full bg-base outline-none"
+            {...register("email", {
+              required: "メールアドレスを入力してください",
+              pattern: {
+                value: /^[a-zA-Z\d._%+-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/i,
+                message: "メールアドレスの形式が不正です。",
+              },
+            })}
           />
         </div>
         <div className="flex items-center border-b border-gray-300 py-2">
@@ -22,6 +51,13 @@ export const LoginForm = () => {
             type="password"
             placeholder="パスワード"
             className="w-full bg-base outline-none"
+            {...register("password", {
+              required: "パスワードを入力してください。",
+              minLength: {
+                value: 8,
+                message: "パスワードは8文字以上にしてください。",
+              },
+            })}
           />
         </div>
         <Link href="#" className="text-xs py-1 opacity-60 font-bold underline">

@@ -2,11 +2,17 @@
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export const Header = () => {
   const pathName = usePathname();
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, checkAuth } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
   return (
     <header
       className={`fixed top-0 h-16 w-full bg-main ${pathName === "/" && "hidden"}`}
@@ -19,7 +25,7 @@ export const Header = () => {
               notifications
             </li>
             <li className="material-icons" style={{ fontSize: "32px" }}>
-              account_circle
+              <label htmlFor="drawer-menu">account_circle</label>
             </li>
           </ul>
         ) : (

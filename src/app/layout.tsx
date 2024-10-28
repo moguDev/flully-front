@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "./components/Header";
 import { Navigation } from "./components/Navigation";
 import { RecoilRootWrapper } from "./components/RecoilRootWrapper";
+import { SideDrawer } from "./components/SideDrawer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,9 +39,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <RecoilRootWrapper>
-          <Header />
-          {children}
-          <Navigation />
+          <SideDrawer>
+            <Header />
+            {children}
+            <Navigation />
+          </SideDrawer>
         </RecoilRootWrapper>
       </body>
     </html>
