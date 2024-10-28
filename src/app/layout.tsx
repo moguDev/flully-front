@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "./components/Header";
 import { Navigation } from "./components/Navigation";
+import { RecoilRootWrapper } from "./components/RecoilRootWrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,9 +37,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        {children}
-        <Navigation />
+        <RecoilRootWrapper>
+          <Header />
+          {children}
+          <Navigation />
+        </RecoilRootWrapper>
       </body>
     </html>
   );

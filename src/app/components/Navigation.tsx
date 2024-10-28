@@ -17,11 +17,13 @@ const NavigationMenu = ({
 }: NavigationMenuProps) => {
   return (
     <li
-      className={`w-1/4 flex flex-col items-center justify-center transition-all ${selected ? "opacity-100 scale-110" : "opacity-50"}`}
+      className={`mx-4 my-2 p-1 w-1/4 flex flex-col items-center justify-center transition-all rounded ${selected ? "opacity-100 scale-110 bg-main bg-opacity-30" : "opacity-50"}`}
       onClick={onClick}
     >
-      <p className="material-icons p-1">{selected ? iconName : iconName}</p>
-      <p style={{ fontSize: "10px" }}>{label}</p>
+      <p className="material-icons" style={{ fontSize: "28px" }}>
+        {selected ? iconName : iconName}
+      </p>
+      <p style={{ fontSize: "8px" }}>{label}</p>
     </li>
   );
 };
@@ -49,7 +51,7 @@ export const Navigation = () => {
         selected={selectIndex === 1}
         onClick={() => {
           setSelectIndex(1);
-          router.push("/threads");
+          // router.push("/threads");
         }}
       />
       <NavigationMenu
@@ -58,7 +60,7 @@ export const Navigation = () => {
         selected={selectIndex === 2}
         onClick={() => {
           setSelectIndex(2);
-          router.push("/ranking");
+          // router.push("/ranking");
         }}
       />
       <NavigationMenu
@@ -67,7 +69,7 @@ export const Navigation = () => {
         selected={selectIndex === 3}
         onClick={() => {
           setSelectIndex(3);
-          router.push("/mypage");
+          // router.push("/mypage");
         }}
       />
     </ul>
