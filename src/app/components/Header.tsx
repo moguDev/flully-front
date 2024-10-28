@@ -1,12 +1,11 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 export const Header = () => {
   const pathName = usePathname();
-  // const router = useRouter();
   const { isAuthenticated, checkAuth } = useAuth();
 
   useEffect(() => {

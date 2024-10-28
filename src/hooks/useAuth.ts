@@ -54,7 +54,7 @@ export const useAuth = () => {
   const logout = async () => {
     setLoading(true);
     try {
-      const res = await api.delete("/auth/sign_out");
+      await api.delete("/auth/sign_out");
       Cookies.remove("access-token");
       Cookies.remove("client");
       Cookies.remove("uid");
