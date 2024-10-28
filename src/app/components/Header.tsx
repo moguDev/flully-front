@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 export const Header = () => {
   const pathName = usePathname();
-  const router = useRouter();
+  // const router = useRouter();
   const { isAuthenticated, checkAuth } = useAuth();
 
   useEffect(() => {
