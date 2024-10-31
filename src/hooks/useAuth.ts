@@ -1,23 +1,28 @@
-"use client";
 import { api } from "@/lib/axiosInstance";
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
 import Cookies from "js-cookie";
 
-type AuthState = {
+export type AuthState = {
   isAuthenticated: boolean;
   name: string;
   nickname: string;
   email: string;
+  introduction: string;
+  twitter: string;
+  location: string;
 };
 
-const authState = atom<AuthState>({
+export const authState = atom<AuthState>({
   key: "authState",
   default: {
     isAuthenticated: false,
     name: "",
     nickname: "",
     email: "",
+    introduction: "",
+    twitter: "",
+    location: "",
   },
 });
 
@@ -30,12 +35,10 @@ export const useAuth = () => {
     try {
       const res = await api.get("/auth/validate_token");
       const { data } = res;
-      console.log(data.data);
+      console.log(data);
       setAuth({
         isAuthenticated: true,
-        name: data.data.name,
-        nickname: data.data.nickname,
-        email: data.data.email,
+        ...data.data,
       });
     } catch (e) {
       console.error(e);
@@ -72,9 +75,7 @@ export const useAuth = () => {
       Cookies.set("uid", headers["uid"]);
       setAuth({
         isAuthenticated: true,
-        name: data.data.name,
-        nickname: data.data.nickname,
-        email: data.data.email,
+        ...data.data,
       });
     } catch (e) {
       console.error(e);
@@ -95,9 +96,7 @@ export const useAuth = () => {
       Cookies.set("uid", headers["uid"]);
       setAuth({
         isAuthenticated: true,
-        name: data.data.name,
-        nickname: data.data.nickname,
-        email: data.data.email,
+        ...data.data,
       });
     } catch (e) {
       console.error(e);
@@ -118,6 +117,9 @@ export const useAuth = () => {
         name: "",
         nickname: "",
         email: "",
+        introduction: "",
+        twitter: "",
+        location: "",
       });
     } catch (e) {
       console.error(e);

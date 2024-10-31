@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/hooks/useAuth";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -32,6 +33,7 @@ export const Navigation = () => {
   const pathName = usePathname();
   const router = useRouter();
   const [selectIndex, setSelectIndex] = useState<number>(0);
+  const { isAuthenticated, name } = useAuth();
   return (
     <ul
       className={`fixed bottom-0 flex items-center h-16 w-full border-t bg-base border-gray-300 ${pathName === "/" && "hidden"}`}
@@ -69,7 +71,7 @@ export const Navigation = () => {
         selected={selectIndex === 3}
         onClick={() => {
           setSelectIndex(3);
-          // router.push("/mypage");
+          isAuthenticated ? router.push(`/${name}`) : router.push("/signin");
         }}
       />
     </ul>

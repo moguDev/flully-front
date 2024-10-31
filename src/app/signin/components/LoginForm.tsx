@@ -16,7 +16,7 @@ export const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    // formState: { errors },
+    formState: { errors },
   } = useForm({ defaultValues });
 
   const onsubmit = async (data: FormData) => {
@@ -30,35 +30,45 @@ export const LoginForm = () => {
         method="post"
         className="space-y-5 mt-5"
       >
-        <div className="flex items-center border-b border-gray-300 py-2">
-          <span className="material-icons text-main mr-1">email</span>
-          <input
-            type="email"
-            placeholder="メールアドレス"
-            className="w-full bg-base outline-none"
-            {...register("email", {
-              required: "メールアドレスを入力してください",
-              pattern: {
-                value: /^[a-zA-Z\d._%+-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/i,
-                message: "メールアドレスの形式が不正です。",
-              },
-            })}
-          />
+        <div>
+          <div className="flex items-center border-b border-gray-300 py-2">
+            <span className="material-icons text-main mr-1">email</span>
+            <input
+              type="email"
+              placeholder="メールアドレス"
+              className="w-full bg-base outline-none"
+              {...register("email", {
+                required: "メールアドレスを入力してください",
+                pattern: {
+                  value: /^[a-zA-Z\d._%+-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/i,
+                  message: "メールアドレスの形式が不正です。",
+                },
+              })}
+            />
+          </div>
+          <div className="text-red-500 font-bold text-xs p-1">
+            {errors.email?.message}
+          </div>
         </div>
-        <div className="flex items-center border-b border-gray-300 py-2">
-          <span className="material-icons text-main mr-1">key</span>
-          <input
-            type="password"
-            placeholder="パスワード"
-            className="w-full bg-base outline-none"
-            {...register("password", {
-              required: "パスワードを入力してください。",
-              minLength: {
-                value: 8,
-                message: "パスワードは8文字以上にしてください。",
-              },
-            })}
-          />
+        <div>
+          <div className="flex items-center border-b border-gray-300 py-2">
+            <span className="material-icons text-main mr-1">key</span>
+            <input
+              type="password"
+              placeholder="パスワード"
+              className="w-full bg-base outline-none"
+              {...register("password", {
+                required: "パスワードを入力してください。",
+                minLength: {
+                  value: 8,
+                  message: "パスワードは8文字以上にしてください。",
+                },
+              })}
+            />
+          </div>
+          <div className="text-red-500 font-bold text-xs p-1">
+            {errors.password?.message}
+          </div>
         </div>
         <Link href="#" className="text-xs py-1 opacity-60 font-bold underline">
           パスワードを忘れた場合
