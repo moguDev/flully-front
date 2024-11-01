@@ -71,7 +71,11 @@ export const Navigation = () => {
         selected={selectIndex === 3}
         onClick={() => {
           setSelectIndex(3);
-          isAuthenticated ? router.push(`/${name}`) : router.push("/signin");
+          if (isAuthenticated) {
+            router.push(`/${name}`);
+          } else {
+            router.push("/signin");
+          }
         }}
       />
     </ul>
