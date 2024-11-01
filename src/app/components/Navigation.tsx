@@ -21,10 +21,12 @@ const NavigationMenu = ({
       className={`mx-4 my-2 p-1 w-1/4 flex flex-col items-center justify-center transition-all rounded ${selected ? "opacity-100 scale-110 bg-main bg-opacity-30" : "opacity-50"}`}
       onClick={onClick}
     >
-      <p className="material-icons" style={{ fontSize: "28px" }}>
+      <p className="material-icons select-none" style={{ fontSize: "28px" }}>
         {selected ? iconName : iconName}
       </p>
-      <p style={{ fontSize: "8px" }}>{label}</p>
+      <p className="select-none" style={{ fontSize: "8px" }}>
+        {label}
+      </p>
     </li>
   );
 };

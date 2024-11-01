@@ -11,6 +11,7 @@ type UserData = {
   introduction: string;
   twitter: string;
   location: string;
+  avatar: FileList | null;
 };
 
 export const useUserProfiles = (name: string) => {
@@ -34,9 +35,16 @@ export const useUserProfiles = (name: string) => {
   const update = async (newUserData: UserData) => {
     setLoading(true);
     try {
-      const res = await api.put("/auth", newUserData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await api.put(
+        "/auth",
+        {
+          ...newUserData,
+          avatar: newUserData.avatar ? newUserData.avatar[0] : null,
+        },
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       const { headers, data } = res;
       Cookies.set("access-token", headers["access-token"]);
       Cookies.set("client", headers["client"]);
