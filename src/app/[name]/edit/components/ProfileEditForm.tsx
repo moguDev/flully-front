@@ -123,6 +123,9 @@ export const ProfileEditForm = () => {
               })}
             />
           </div>
+          <div className="text-red-500 font-bold text-xs p-1">
+            {errors.name?.message}
+          </div>
         </div>
         <div>
           <label className="text-xs text-main font-bold">
@@ -143,6 +146,9 @@ export const ProfileEditForm = () => {
               })}
             />
           </div>
+          <div className="text-red-500 font-bold text-xs p-1">
+            {errors.nickname?.message}
+          </div>
         </div>
         <div>
           <label className="text-xs text-main font-bold">自己紹介</label>
@@ -157,6 +163,9 @@ export const ProfileEditForm = () => {
                 },
               })}
             />
+          </div>
+          <div className="text-red-500 font-bold text-xs p-1">
+            {errors.introduction?.message}
           </div>
         </div>
         <div>
@@ -184,6 +193,9 @@ export const ProfileEditForm = () => {
               })}
             />
           </div>
+          <div className="text-red-500 font-bold text-xs p-1">
+            {errors.email?.message}
+          </div>
         </div>
         <div>
           <label className="text-xs text-main font-bold">Xアカウント</label>
@@ -195,6 +207,9 @@ export const ProfileEditForm = () => {
               placeholder="https://x.com/***"
               {...register("twitter")}
             />
+          </div>
+          <div className="text-red-500 font-bold text-xs p-1">
+            {errors.twitter?.message}
           </div>
         </div>
         <div>
@@ -211,6 +226,9 @@ export const ProfileEditForm = () => {
               placeholder="東京都新宿区"
               {...register("location")}
             />
+          </div>
+          <div className="text-red-500 font-bold text-xs p-1">
+            {errors.location?.message}
           </div>
         </div>
         <div className="space-y-1">

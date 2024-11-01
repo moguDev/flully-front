@@ -5,12 +5,15 @@ import { useUserProfiles } from "@/hooks/useUserProfiles";
 import { useAuth } from "@/hooks/useAuth";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Loading from "@/app/loading";
 
 export const UserProfiles = () => {
   const { name: nameParams } = useParams();
   const { name: currentUserName } = useAuth();
   const { loading, userData } = useUserProfiles(nameParams as string);
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <div>
       {userData ? (
         <div className="border-b border-gray-300">
