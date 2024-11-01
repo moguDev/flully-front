@@ -9,7 +9,7 @@ import { showModal } from "../map/components/FinishWalkingModal";
 export const Header = () => {
   const pathName = usePathname();
   const { isAuthenticated, checkAuth } = useAuth();
-  const { inProgress, check, finish } = useWalking();
+  const { inProgress, check } = useWalking();
 
   useEffect(() => {
     check();
