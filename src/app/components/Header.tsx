@@ -1,12 +1,19 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
+import { useWalking } from "@/hooks/useWalking";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { showModal } from "../map/components/FinishWalkingModal";
 
 export const Header = () => {
   const pathName = usePathname();
   const { isAuthenticated, checkAuth } = useAuth();
+  const { inProgress, check, finish } = useWalking();
+
+  useEffect(() => {
+    check();
+  }, []);
 
   useEffect(() => {
     checkAuth();
@@ -14,19 +21,34 @@ export const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 h-16 w-full bg-main z-50 ${pathName === "/" && "hidden"}`}
+      className={`fixed top-0 w-full z-50 ${pathName === "/" && "hidden"} ${inProgress ? "bg-orange-400" : "bg-main"}`}
     >
-      <div className="flex items-center justify-between h-full px-3">
-        <h1 className="text-base font-black text-2xl">flully</h1>
+      <div className="flex items-center justify-between h-16 px-3">
+        {inProgress ? (
+          <p className="text-xl font-bold text-base">さんぽ中...</p>
+        ) : (
+          <h1 className="text-base font-black text-2xl">flully</h1>
+        )}
         {isAuthenticated ? (
-          <ul className="flex items-center text-base space-x-2">
-            <li className="material-icons" style={{ fontSize: "32px" }}>
-              notifications
-            </li>
-            <li className="material-icons" style={{ fontSize: "32px" }}>
-              <label htmlFor="drawer-menu">account_circle</label>
-            </li>
-          </ul>
+          inProgress ? (
+            <button
+              className="bg-base text-orange-400 font-bold py-2 px-5 rounded transition-all active:scale-95"
+              onClick={() => {
+                showModal();
+              }}
+            >
+              終了
+            </button>
+          ) : (
+            <ul className="flex items-center text-base space-x-2">
+              <li className="material-icons" style={{ fontSize: "32px" }}>
+                notifications
+              </li>
+              <li className="material-icons" style={{ fontSize: "32px" }}>
+                <label htmlFor="drawer-menu">account_circle</label>
+              </li>
+            </ul>
+          )
         ) : (
           <Link
             href="/signin"
@@ -37,6 +59,17 @@ export const Header = () => {
           </Link>
         )}
       </div>
+      {inProgress && (
+        <div className="bg-orange-400 w-full h-8 flex items-center justify-between text-base font-bold px-3 border-t border-base">
+          <p className="w-1/2">15分経過...</p>
+          <p className="flex items-center">
+            <span className="material-icons" style={{ fontSize: "20px" }}>
+              directions_walk
+            </span>
+            0.2km
+          </p>
+        </div>
+      )}
     </header>
   );
 };
