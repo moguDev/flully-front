@@ -42,7 +42,7 @@ export const UserProfiles = () => {
                 <p className="text-sm">
                   LV<span>{12}</span>
                 </p>
-                <p className="text-sm">
+                <p className="text-xs">
                   次のレベルまで<span>{1234}</span>EXP
                 </p>
               </div>
@@ -60,7 +60,7 @@ export const UserProfiles = () => {
               >
                 location_on
               </span>
-              <p className="font-bold">大阪府</p>
+              <p className="text-sm font-bold">{userData.location}</p>
             </div>
             <div className="flex items-center bg-main p-1 rounded-lg">
               <div
@@ -71,9 +71,7 @@ export const UserProfiles = () => {
               </div>
             </div>
           </div>
-          <div className="text-xs font-bold py-1">
-            ここに自己紹介が入ります。それなりに長い文章も入ります。
-          </div>
+          <div className="text-xs font-bold py-1">{userData.introduction}</div>
           <div className="flex items-center font-bold space-x-2 py-1">
             <p className="text-xs">
               <span className="text-lg mr-0.5">12</span>フォロワー

@@ -23,7 +23,6 @@ export const useUserProfiles = (name: string) => {
     try {
       const res = await api.get(`/users/${name}`);
       const { data } = res;
-      console.log(data);
       setUserData({ ...data });
     } catch (e) {
       console.error(e);
@@ -35,7 +34,9 @@ export const useUserProfiles = (name: string) => {
   const update = async (newUserData: UserData) => {
     setLoading(true);
     try {
-      const res = await api.put("/auth", newUserData);
+      const res = await api.put("/auth", newUserData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       const { headers, data } = res;
       Cookies.set("access-token", headers["access-token"]);
       Cookies.set("client", headers["client"]);

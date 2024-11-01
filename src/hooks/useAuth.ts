@@ -35,7 +35,6 @@ export const useAuth = () => {
     try {
       const res = await api.get("/auth/validate_token");
       const { data } = res;
-      console.log(data);
       setAuth({
         isAuthenticated: true,
         ...data.data,

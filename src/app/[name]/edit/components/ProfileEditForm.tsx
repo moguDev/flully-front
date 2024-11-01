@@ -58,6 +58,7 @@ export const ProfileEditForm = () => {
 
   useEffect(() => {
     if (imageFile && imageFile[0]) {
+      console.log(imageFile);
       const fileReader = new FileReader();
       fileReader.onload = () => {
         setImageSource(fileReader.result as string);
@@ -93,6 +94,7 @@ export const ProfileEditForm = () => {
           <input
             type="file"
             accept="image/*"
+            {...register("avatar")}
             ref={(e: HTMLInputElement) => {
               register("avatar").ref(e);
               fileInputRef.current = e;
@@ -221,6 +223,9 @@ export const ProfileEditForm = () => {
           <button
             type="button"
             className="text-main rounded w-full py-3 font-bold text-sm"
+            onClick={() => {
+              router.push(`/${name}`);
+            }}
           >
             キャンセル
           </button>
