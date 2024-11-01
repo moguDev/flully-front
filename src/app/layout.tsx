@@ -41,7 +41,7 @@ export default function RootLayout({
         <RecoilRootWrapper>
           <SideDrawer>
             <Header />
-            <div className="px-5 pt-20 py-16 w-screen">{children}</div>
+            <div className="px-5 pt-28 py-16 w-screen">{children}</div>
             <Navigation />
           </SideDrawer>
         </RecoilRootWrapper>
