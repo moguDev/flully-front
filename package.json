@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.20.3",
     "axios": "^1.7.7",
     "daisyui": "^4.12.13",
     "js-cookie": "^3.0.5",

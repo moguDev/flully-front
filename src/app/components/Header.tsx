@@ -14,7 +14,7 @@ export const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 h-16 w-full bg-main ${pathName === "/" && "hidden"}`}
+      className={`fixed top-0 h-16 w-full bg-main z-50 ${pathName === "/" && "hidden"}`}
     >
       <div className="flex items-center justify-between h-full px-3">
         <h1 className="text-base font-black text-2xl">flully</h1>
