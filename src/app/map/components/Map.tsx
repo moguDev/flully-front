@@ -6,8 +6,10 @@ import {
   Marker,
   Polyline,
 } from "@react-google-maps/api";
+import { useWalking } from "@/hooks/useWalking";
 
 const Map: React.FC = () => {
+  const { inProgress, sendCheckpoint } = useWalking();
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral | null>(null);
   const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
@@ -25,6 +27,7 @@ const Map: React.FC = () => {
           const { latitude, longitude } = position.coords;
           const newPosition = { lat: latitude, lng: longitude };
           setLocationCount((prevCount) => prevCount + 1);
+
           // 3m以内かどうかをチェック
           if (
             currentPosition &&
@@ -35,8 +38,12 @@ const Map: React.FC = () => {
           ) {
             return; // 3m以内の場合は更新しない
           }
-          console.log(newPosition);
-          if (!currentPosition) setCurrentPosition(newPosition);
+
+          if (!currentPosition) {
+            console.log(newPosition);
+            setCurrentPosition(newPosition);
+            sendCheckpoint(latitude, longitude);
+          }
 
           setPath((prevPath) => [...prevPath, newPosition]);
           setCurrentPosition(newPosition);
@@ -56,11 +63,12 @@ const Map: React.FC = () => {
     if (!currentPosition) {
       getLocation();
     }
-
-    // 5秒おきに位置情報を取得
-    const intervalId = setInterval(getLocation, 5000);
-    return () => clearInterval(intervalId); // クリーンアップ
-  }, [currentPosition]);
+    if (inProgress) {
+      // 5秒おきに位置情報を取得
+      const intervalId = setInterval(getLocation, 5000);
+      return () => clearInterval(intervalId); // クリーンアップ
+    }
+  }, [inProgress, currentPosition]);
 
   return (
     <>
@@ -92,7 +100,7 @@ const Map: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="fixed right-2 bottom-20 z-50">
+      <div className="fixed right-2 bottom-36 z-30">
         <div className="flex flex-col items-center justify-center space-y-2">
           <button className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95">
             <span
