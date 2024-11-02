@@ -37,6 +37,7 @@ export const useWalking = () => {
       console.log(false);
     }
   };
+
   const finish = async () => {
     setLoading(true);
     try {
@@ -51,5 +52,14 @@ export const useWalking = () => {
     }
   };
 
-  return { loading, inProgress, check, start, finish };
+  const sendCheckpoint = async (lat: number, lng: number) => {
+    try {
+      const res = await api.post("/checkpoints", { lat, lng });
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  return { loading, inProgress, check, start, finish, sendCheckpoint };
 };

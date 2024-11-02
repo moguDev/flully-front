@@ -24,7 +24,12 @@ export const StartWalkingModal = () => {
   return (
     <dialog id="startModal" className="modal">
       <div className="modal-box bg-base rounded p-3 relative overflow-hidden">
-        <h3 className="font-bold text-lg py-5">さんぽを開始しますか？</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold text-lg py-5">さんぽを開始しますか？</h3>
+          <span className="material-icons" onClick={closeModal}>
+            close
+          </span>
+        </div>
         <button
           className="bg-orange-400 rounded text-base font-bold w-full p-3 flex items-center justify-center"
           onClick={() => {
