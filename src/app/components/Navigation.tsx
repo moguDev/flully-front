@@ -38,7 +38,7 @@ export const Navigation = () => {
   const { isAuthenticated, name } = useAuth();
   return (
     <ul
-      className={`fixed bottom-0 flex items-center h-16 w-full border-t bg-base border-gray-300 ${pathName === "/" && "hidden"}`}
+      className={`fixed bottom-0 flex items-center h-16 w-full border-t bg-base border-gray-300 z-40 ${pathName === "/" && "hidden"}`}
     >
       <NavigationMenu
         iconName="location_on"

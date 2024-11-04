@@ -7,6 +7,7 @@ import {
   Polyline,
 } from "@react-google-maps/api";
 import { useWalking } from "@/hooks/useWalking";
+import { showPostModal } from "./PostModal";
 
 const Map: React.FC = () => {
   const { inProgress, sendCheckpoint } = useWalking();
@@ -28,7 +29,6 @@ const Map: React.FC = () => {
           const newPosition = { lat: latitude, lng: longitude };
           setLocationCount((prevCount) => prevCount + 1);
 
-          // 3m以内かどうかをチェック
           if (
             currentPosition &&
             google.maps.geometry.spherical.computeDistanceBetween(
@@ -36,7 +36,7 @@ const Map: React.FC = () => {
               new google.maps.LatLng(newPosition)
             ) < 3
           ) {
-            return; // 3m以内の場合は更新しない
+            return;
           }
 
           if (!currentPosition) {
@@ -100,7 +100,7 @@ const Map: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="fixed right-2 bottom-36 z-30">
+      <div className="fixed right-2 bottom-36 z-20">
         <div className="flex flex-col items-center justify-center space-y-2">
           <button className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95">
             <span
@@ -124,7 +124,10 @@ const Map: React.FC = () => {
               ミッション
             </span>
           </button>
-          <button className="rounded-2xl h-16 w-16 bg-main flex flex-col items-center justify-center shadow transition-all active:scale-95">
+          <button
+            className="rounded-2xl h-16 w-16 bg-main flex flex-col items-center justify-center shadow transition-all active:scale-95"
+            onClick={showPostModal}
+          >
             <span
               className="material-icons text-base translate-y-1.5 select-none"
               style={{ fontSize: "36px" }}
