@@ -40,7 +40,7 @@ export const PostModal = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    // formState: { errors },
   } = useForm({ defaultValues });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageFile = watch("image");
