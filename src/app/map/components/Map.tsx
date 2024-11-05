@@ -77,15 +77,13 @@ const Map: React.FC = () => {
   }, [inProgress, currentPosition]);
 
   useEffect(() => {
-    let watchId: number;
-
     if (navigator.geolocation) {
-      watchId = navigator.geolocation.watchPosition(
+      navigator.geolocation.getCurrentPosition(
         (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
 
-          fetchNearByPost(lat, lng);
+          fetchNearByPost(lat, lng); // 初回に1回だけ実行
         },
         (error) => {
           console.error("Error getting location:", error);
@@ -95,12 +93,6 @@ const Map: React.FC = () => {
     } else {
       alert("位置情報が利用できません。");
     }
-
-    return () => {
-      if (watchId) {
-        navigator.geolocation.clearWatch(watchId);
-      }
-    };
   }, []);
 
   return (
@@ -127,7 +119,7 @@ const Map: React.FC = () => {
                 mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
               >
                 <div
-                  className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
+                  className="rounded-full overflow-hidden w-8 h-8 shadow border border-white rela"
                   onClick={() => {
                     setSelectedPost(post);
                     setHarfModalIsOpen(true);
