@@ -1,53 +1,94 @@
 "use client";
-import { useState, useRef } from "react";
+import { Post } from "@/app/types";
+import Image from "next/image";
+import { useState, useRef, useEffect } from "react";
+import { PostDetails } from "./PostDetails";
 
-export const HalfModal = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const startY = useRef<number | null>(null); // スワイプの開始位置を保持するためのref
+export const HalfModal = ({
+  posts,
+  open,
+  selected,
+}: {
+  posts: Post[];
+  open: boolean;
+  selected: Post | null;
+}) => {
+  const [isOpen, setIsOpen] = useState<boolean>(open);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(selected);
+  const startY = useRef<number | null>(null);
+
+  // `open` と `selected` が更新されたら、モーダルを開き選択されたポストをセットする
+  useEffect(() => {
+    setIsOpen(open);
+    setSelectedPost(selected);
+  }, [open, selected]);
 
   const handleTouchStart = (event: React.TouchEvent) => {
-    startY.current = event.touches[0].clientY; // スワイプの開始位置を記録
+    startY.current = event.touches[0].clientY;
   };
 
   const handleTouchMove = (event: React.TouchEvent) => {
-    if (startY.current === null) return; // 開始位置が設定されていない場合は何もしない
+    if (startY.current === null) return;
 
     const currentY = event.touches[0].clientY;
-    const distance = currentY - (startY.current || 0); // 現在の位置との距離を計算
+    const distance = currentY - (startY.current || 0);
 
     if (isOpen && distance > 50) {
-      // 開いているときに下にスワイプしたら閉じる
       setIsOpen(false);
-      startY.current = null; // 終了したらリセット
+      setSelectedPost(null);
+      startY.current = null;
     } else if (!isOpen && distance < -50) {
-      // 閉じているときに上にスワイプしたら開く
       setIsOpen(true);
-      startY.current = null; // 終了したらリセット
+      startY.current = null;
     }
   };
 
   return (
     <div
-      className={`fixed bottom-0 left-0 bg-base w-full rounded-t-lg transition-all duration-300 ${isOpen ? "h-[80vh]" : "h-32"}`}
+      className={`fixed bottom-0 left-0 bg-base w-full rounded-t-lg transition-all duration-300 z-30 ${isOpen ? "h-[70vh]" : "h-32"}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      onClick={() => {
-        setIsOpen(true);
-      }}
+      onClick={() => setIsOpen(true)}
     >
-      <div className={`w-full flex items-center justify-center`}>
+      <div className="h-4 w-full flex items-center justify-center">
         <div className="bg-gray-300 w-16 h-1 rounded-full" />
       </div>
-      <div className="h-10 flex items-center px-3">
+      <div className="h-12 flex items-center px-3">
         <p className="font-bold">近くの情報（大阪市中央区島町）</p>
       </div>
 
-      {/* モーダルが開いている時の内容 */}
-      {isOpen && (
+      {isOpen && selectedPost ? (
+        <PostDetails postId={selectedPost.id} />
+      ) : (
         <div className="flex flex-col">
-          {/* ここにモーダルの内容を追加 */}
           <div className="p-4">
-            <p>モーダルの詳細情報をここに追加できます。</p>
+            <p className="font-bold flex items-center">
+              <span className="material-icons">search</span>
+              この辺りで見つかった
+            </p>
+            <div className="grid grid-cols-4">
+              {posts.map((post, index) => (
+                <div
+                  key={index}
+                  className="w-full h-24 overflow-hidden relative"
+                  onClick={() => setSelectedPost(post)}
+                >
+                  <p>test</p>
+                  <Image
+                    src={post.imageUrl}
+                    alt="image"
+                    className="object-cover"
+                    fill
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="p-4">
+            <p className="font-bold flex items-center">
+              <span className="material-icons">search</span>
+              この辺りのまいご・保護情報
+            </p>
           </div>
         </div>
       )}

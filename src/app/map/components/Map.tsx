@@ -4,16 +4,26 @@ import {
   GoogleMap,
   LoadScript,
   Marker,
+  OverlayView,
   Polyline,
 } from "@react-google-maps/api";
 import { useWalking } from "@/hooks/useWalking";
+import { showPostModal } from "./PostModal";
+import { HalfModal } from "./HarfModal";
+import { usePosts } from "@/hooks/usePosts";
+import { Post } from "@/app/types";
+import Image from "next/image";
 
 const Map: React.FC = () => {
   const { inProgress, sendCheckpoint } = useWalking();
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral | null>(null);
   const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
-  const [locationCount, setLocationCount] = useState(0); // 取得回数をカウント
+  const [locationCount, setLocationCount] = useState(0);
+  const { posts, fetchNearByPost } = usePosts();
+
+  const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   const mapContainerStyle = {
     height: "100vh",
@@ -28,7 +38,6 @@ const Map: React.FC = () => {
           const newPosition = { lat: latitude, lng: longitude };
           setLocationCount((prevCount) => prevCount + 1);
 
-          // 3m以内かどうかをチェック
           if (
             currentPosition &&
             google.maps.geometry.spherical.computeDistanceBetween(
@@ -36,11 +45,10 @@ const Map: React.FC = () => {
               new google.maps.LatLng(newPosition)
             ) < 3
           ) {
-            return; // 3m以内の場合は更新しない
+            return;
           }
 
           if (!currentPosition) {
-            console.log(newPosition);
             setCurrentPosition(newPosition);
             sendCheckpoint(latitude, longitude);
           }
@@ -59,16 +67,41 @@ const Map: React.FC = () => {
   };
 
   useEffect(() => {
-    // 初回のみ現在地を取得して初期位置に設定
     if (!currentPosition) {
       getLocation();
     }
     if (inProgress) {
-      // 5秒おきに位置情報を取得
       const intervalId = setInterval(getLocation, 5000);
-      return () => clearInterval(intervalId); // クリーンアップ
+      return () => clearInterval(intervalId);
     }
   }, [inProgress, currentPosition]);
+
+  useEffect(() => {
+    let watchId: number;
+
+    if (navigator.geolocation) {
+      watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          fetchNearByPost(lat, lng);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          alert("位置情報の取得に失敗しました。");
+        }
+      );
+    } else {
+      alert("位置情報が利用できません。");
+    }
+
+    return () => {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -79,14 +112,36 @@ const Map: React.FC = () => {
         >
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
-            center={currentPosition || { lat: 35.6812, lng: 139.7671 }} // currentPositionがまだ設定されていない場合はデフォルト
-            zoom={currentPosition ? 17 : 5} // 初期位置取得前はズームアウトして表示
+            center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
+            zoom={currentPosition ? 17 : 5}
           >
             {currentPosition && <Marker position={currentPosition} />}
             <Polyline
               path={path}
               options={{ strokeColor: "#90acaf", strokeWeight: 12 }}
             />
+            {posts.map((post, index) => (
+              <OverlayView
+                key={index}
+                position={{ lat: post.lat, lng: post.lng }}
+                mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+              >
+                <div
+                  className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
+                  onClick={() => {
+                    setSelectedPost(post);
+                    setHarfModalIsOpen(true);
+                  }}
+                >
+                  <Image
+                    src={post.imageUrl}
+                    alt="Post Thumbnail"
+                    className="object-cover"
+                    fill
+                  />
+                </div>
+              </OverlayView>
+            ))}
           </GoogleMap>
         </LoadScript>
 
@@ -100,7 +155,7 @@ const Map: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="fixed right-2 bottom-36 z-30">
+      <div className="fixed right-2 bottom-36 z-20">
         <div className="flex flex-col items-center justify-center space-y-2">
           <button className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95">
             <span
@@ -124,7 +179,10 @@ const Map: React.FC = () => {
               ミッション
             </span>
           </button>
-          <button className="rounded-2xl h-16 w-16 bg-main flex flex-col items-center justify-center shadow transition-all active:scale-95">
+          <button
+            className="rounded-2xl h-16 w-16 bg-main flex flex-col items-center justify-center shadow transition-all active:scale-95"
+            onClick={showPostModal}
+          >
             <span
               className="material-icons text-base translate-y-1.5 select-none"
               style={{ fontSize: "36px" }}
@@ -164,6 +222,7 @@ const Map: React.FC = () => {
           </button>
         </div>
       </div>
+      <HalfModal posts={posts} open={harfModalIsOpen} selected={selectedPost} />
     </>
   );
 };

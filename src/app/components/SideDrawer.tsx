@@ -7,7 +7,7 @@ import Link from "next/link";
 export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
   const { name, nickname, logout } = useAuth();
   return (
-    <div className="drawer drawer-end">
+    <div className="drawer drawer-end z-50">
       <input id="drawer-menu" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">{children}</div>
       <div className="drawer-side">
