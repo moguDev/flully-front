@@ -119,18 +119,20 @@ const Map: React.FC = () => {
                 mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
               >
                 <div
-                  className="rounded-full overflow-hidden w-8 h-8 shadow border border-white rela"
+                  className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
                   onClick={() => {
                     setSelectedPost(post);
                     setHarfModalIsOpen(true);
                   }}
                 >
-                  <Image
-                    src={post.imageUrl}
-                    alt="Post Thumbnail"
-                    className="object-cover"
-                    fill
-                  />
+                  {post.imageUrl && (
+                    <Image
+                      src={post.imageUrl}
+                      alt="Post Thumbnail"
+                      className="object-cover"
+                      fill
+                    />
+                  )}
                 </div>
               </OverlayView>
             ))}
