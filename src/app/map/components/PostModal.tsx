@@ -34,7 +34,7 @@ export const PostModal = () => {
     body: "",
     isAnonymous: false,
   };
-  const { postPost } = usePosts();
+  const { loading, postPost } = usePosts();
 
   const {
     register,
@@ -81,7 +81,14 @@ export const PostModal = () => {
     <dialog id="postModal" className="modal space-y-1">
       <div className="modal-box bg-base rounded p-3 relative overflow-hidden">
         <h3 className="font-bold text-lg p-2">みつけた動物</h3>
-        <form method="postPost" onSubmit={handleSubmit(onsubmit)}>
+        <form
+          method="postPost"
+          onSubmit={handleSubmit(onsubmit)}
+          className="relative"
+        >
+          {loading && (
+            <div className="absolute top-0 left-0 h-full w-full bg-white bg-opacity-50 z-10" />
+          )}
           <div
             className="bg-gray-200 flex items-center justify-center w-full h-80 rounded relative"
             onClick={() => {
@@ -169,7 +176,7 @@ export const PostModal = () => {
             </button>
             <button
               type="submit"
-              className="bg-main rounded text-base font-bold w-full p-2 flex items-center justify-center"
+              className="bg-main rounded text-base font-bold w-full p-2 flex items-center justify-center transition-all active:scale-95"
             >
               投稿する
             </button>
