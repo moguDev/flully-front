@@ -3,6 +3,7 @@ import { Post } from "@/app/types";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { PostDetails } from "./PostDetails";
+import defaultImage from "/public/images/default_avatar.png";
 
 export const HalfModal = ({
   posts,
@@ -75,7 +76,7 @@ export const HalfModal = ({
                 >
                   <p>test</p>
                   <Image
-                    src={post.imageUrl}
+                    src={post.imageUrl || defaultImage}
                     alt="image"
                     className="object-cover"
                     fill
