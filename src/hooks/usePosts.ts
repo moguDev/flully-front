@@ -14,12 +14,13 @@ type PostData = {
 
 export const usePosts = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [post, setPost] = useState<Post | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
 
-  const post = async (data: PostData) => {
+  const postPost = async (data: PostData) => {
     setLoading(true);
     try {
-      const res = await api.post(
+      await api.post(
         "/posts",
         {
           post: {
@@ -38,6 +39,21 @@ export const usePosts = () => {
     }
   };
 
+  const fetchPostById = async (postId: number): Promise<Post | null> => {
+    setLoading(true);
+    try {
+      const res = await api.get(`/posts/${postId}`);
+      const { data } = res;
+      setPost({ ...camelcaseKeys(data) });
+      return post;
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+    return null;
+  };
+
   const fetchNearByPost = async (lat: number, lng: number) => {
     setLoading(true);
     try {
@@ -45,11 +61,9 @@ export const usePosts = () => {
         params: { lat, lng },
       });
       const { data } = res;
-      // 外部ライブラリでキャメルケースに変換
-      const camelCasePosts = camelcaseKeys(data.posts, {
+      const camelCasePosts = camelcaseKeys(data, {
         deep: true,
       }) as Post[];
-      console.log(camelCasePosts);
       setPosts(camelCasePosts);
     } catch (e) {
       console.error(e);
@@ -58,5 +72,5 @@ export const usePosts = () => {
     }
   };
 
-  return { posts, loading, post, fetchNearByPost };
+  return { post, posts, loading, postPost, fetchPostById, fetchNearByPost };
 };

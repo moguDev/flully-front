@@ -12,6 +12,7 @@ import { showPostModal } from "./PostModal";
 import { HalfModal } from "./HarfModal";
 import { usePosts } from "@/hooks/usePosts";
 import { Post } from "@/app/types";
+import Image from "next/image";
 
 const Map: React.FC = () => {
   const { inProgress, sendCheckpoint } = useWalking();
@@ -126,20 +127,17 @@ const Map: React.FC = () => {
                 mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
               >
                 <div
-                  className="rounded-full overflow-hidden w-8 h-8 shadow border border-white"
+                  className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
                   onClick={() => {
                     setSelectedPost(post);
                     setHarfModalIsOpen(true);
                   }}
                 >
-                  <img
+                  <Image
                     src={post.imageUrl}
                     alt="Post Thumbnail"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
+                    className="object-cover"
+                    fill
                   />
                 </div>
               </OverlayView>

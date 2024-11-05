@@ -58,7 +58,7 @@ export const HalfModal = ({
       </div>
 
       {isOpen && selectedPost ? (
-        <PostDetails post={selectedPost} />
+        <PostDetails postId={selectedPost.id} />
       ) : (
         <div className="flex flex-col">
           <div className="p-4">

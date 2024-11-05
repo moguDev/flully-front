@@ -5,10 +5,12 @@ export type User = {
 };
 
 export type Post = {
+  id: number;
   imageUrl: string;
   body: string;
   lat: number;
   lng: number;
   isAnonymous: boolean;
   user: User | null;
+  likeCount: number;
 };

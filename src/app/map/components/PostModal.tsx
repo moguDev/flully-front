@@ -34,7 +34,7 @@ export const PostModal = () => {
     body: "",
     isAnonymous: false,
   };
-  const { post } = usePosts();
+  const { postPost } = usePosts();
 
   const {
     register,
@@ -53,7 +53,7 @@ export const PostModal = () => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
 
-          post({ ...data, lat, lng });
+          postPost({ ...data, lat, lng });
           closePostModal();
         },
         (error) => {
@@ -81,7 +81,7 @@ export const PostModal = () => {
     <dialog id="postModal" className="modal space-y-1">
       <div className="modal-box bg-base rounded p-3 relative overflow-hidden">
         <h3 className="font-bold text-lg p-2">みつけた動物</h3>
-        <form method="post" onSubmit={handleSubmit(onsubmit)}>
+        <form method="postPost" onSubmit={handleSubmit(onsubmit)}>
           <div
             className="bg-gray-200 flex items-center justify-center w-full h-80 rounded relative"
             onClick={() => {
