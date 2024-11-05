@@ -1,5 +1,8 @@
+import { Post } from "@/app/types";
 import { api } from "@/lib/axiosInstance";
 import { useState } from "react";
+import camelcaseKeys from "camelcase-keys";
+import snakecaseKeys from "snakecase-keys";
 
 type PostData = {
   image: FileList | null;
@@ -9,25 +12,9 @@ type PostData = {
   isAnonymous: boolean;
 };
 
-// キャメルケースをスネークケースに変換する関数
-const camelToSnakeCase = (str: string) => {
-  return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-};
-
-// オブジェクトのキーをスネークケースに変換する関数
-const convertKeysToSnakeCase = (obj: Record<string, any>) => {
-  return Object.keys(obj).reduce(
-    (acc, key) => {
-      const snakeKey = camelToSnakeCase(key);
-      acc[snakeKey] = obj[key];
-      return acc;
-    },
-    {} as Record<string, any>
-  );
-};
-
 export const usePosts = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   const post = async (data: PostData) => {
     setLoading(true);
@@ -36,7 +23,7 @@ export const usePosts = () => {
         "/posts",
         {
           post: {
-            ...convertKeysToSnakeCase(data),
+            ...snakecaseKeys(data),
             image: data.image ? data.image[0] : null,
           },
         },
@@ -44,7 +31,6 @@ export const usePosts = () => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      console.log(res);
     } catch (e) {
       console.error(e);
     } finally {
@@ -52,5 +38,25 @@ export const usePosts = () => {
     }
   };
 
-  return { loading, post };
+  const fetchNearByPost = async (lat: number, lng: number) => {
+    setLoading(true);
+    try {
+      const res = await api.get("/posts/nearby_posts", {
+        params: { lat, lng },
+      });
+      const { data } = res;
+      // 外部ライブラリでキャメルケースに変換
+      const camelCasePosts = camelcaseKeys(data.posts, {
+        deep: true,
+      }) as Post[];
+      console.log(camelCasePosts);
+      setPosts(camelCasePosts);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { posts, loading, post, fetchNearByPost };
 };

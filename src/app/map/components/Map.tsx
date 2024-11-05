@@ -4,17 +4,25 @@ import {
   GoogleMap,
   LoadScript,
   Marker,
+  OverlayView,
   Polyline,
 } from "@react-google-maps/api";
 import { useWalking } from "@/hooks/useWalking";
 import { showPostModal } from "./PostModal";
+import { HalfModal } from "./HarfModal";
+import { usePosts } from "@/hooks/usePosts";
+import { Post } from "@/app/types";
 
 const Map: React.FC = () => {
   const { inProgress, sendCheckpoint } = useWalking();
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral | null>(null);
   const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
-  const [locationCount, setLocationCount] = useState(0); // 取得回数をカウント
+  const [locationCount, setLocationCount] = useState(0);
+  const { posts, fetchNearByPost } = usePosts();
+
+  const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   const mapContainerStyle = {
     height: "100vh",
@@ -40,7 +48,6 @@ const Map: React.FC = () => {
           }
 
           if (!currentPosition) {
-            console.log(newPosition);
             setCurrentPosition(newPosition);
             sendCheckpoint(latitude, longitude);
           }
@@ -59,16 +66,41 @@ const Map: React.FC = () => {
   };
 
   useEffect(() => {
-    // 初回のみ現在地を取得して初期位置に設定
     if (!currentPosition) {
       getLocation();
     }
     if (inProgress) {
-      // 5秒おきに位置情報を取得
       const intervalId = setInterval(getLocation, 5000);
-      return () => clearInterval(intervalId); // クリーンアップ
+      return () => clearInterval(intervalId);
     }
   }, [inProgress, currentPosition]);
+
+  useEffect(() => {
+    let watchId: number;
+
+    if (navigator.geolocation) {
+      watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          fetchNearByPost(lat, lng);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          alert("位置情報の取得に失敗しました。");
+        }
+      );
+    } else {
+      alert("位置情報が利用できません。");
+    }
+
+    return () => {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -79,14 +111,39 @@ const Map: React.FC = () => {
         >
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
-            center={currentPosition || { lat: 35.6812, lng: 139.7671 }} // currentPositionがまだ設定されていない場合はデフォルト
-            zoom={currentPosition ? 17 : 5} // 初期位置取得前はズームアウトして表示
+            center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
+            zoom={currentPosition ? 17 : 5}
           >
             {currentPosition && <Marker position={currentPosition} />}
             <Polyline
               path={path}
               options={{ strokeColor: "#90acaf", strokeWeight: 12 }}
             />
+            {posts.map((post, index) => (
+              <OverlayView
+                key={index}
+                position={{ lat: post.lat, lng: post.lng }}
+                mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+              >
+                <div
+                  className="rounded-full overflow-hidden w-8 h-8 shadow border border-white"
+                  onClick={() => {
+                    setSelectedPost(post);
+                    setHarfModalIsOpen(true);
+                  }}
+                >
+                  <img
+                    src={post.imageUrl}
+                    alt="Post Thumbnail"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              </OverlayView>
+            ))}
           </GoogleMap>
         </LoadScript>
 
@@ -167,6 +224,7 @@ const Map: React.FC = () => {
           </button>
         </div>
       </div>
+      <HalfModal posts={posts} open={harfModalIsOpen} selected={selectedPost} />
     </>
   );
 };
