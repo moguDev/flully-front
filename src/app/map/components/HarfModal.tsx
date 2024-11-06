@@ -46,7 +46,7 @@ export const HalfModal = ({
 
   return (
     <div
-      className={`fixed bottom-0 left-0 bg-base w-full rounded-t-lg transition-all duration-300 z-30 ${isOpen ? "h-[70vh]" : "h-32"}`}
+      className={`pb-16 fixed bottom-0 left-0 bg-base w-full rounded-t-lg transition-all duration-300 z-30 ${isOpen ? "h-[70vh]" : "h-32"}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onClick={() => setIsOpen(true)}

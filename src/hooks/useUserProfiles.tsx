@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useSetRecoilState } from "recoil";
 import { authState, AuthState } from "./useAuth";
+import { User } from "@/app/types";
+import camelcaseKeys from "camelcase-keys";
 
 type UserData = {
   name: string;
@@ -16,7 +18,7 @@ type UserData = {
 
 export const useUserProfiles = (name: string) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const setAuth = useSetRecoilState<AuthState>(authState);
 
   const fetch = async () => {
@@ -24,7 +26,7 @@ export const useUserProfiles = (name: string) => {
     try {
       const res = await api.get(`/users/${name}`);
       const { data } = res;
-      setUserData({ ...data });
+      setUser({ ...camelcaseKeys(data) });
     } catch (e) {
       console.error(e);
     } finally {
@@ -64,5 +66,5 @@ export const useUserProfiles = (name: string) => {
     fetch();
   }, []);
 
-  return { loading, userData, update };
+  return { loading, user, update };
 };
