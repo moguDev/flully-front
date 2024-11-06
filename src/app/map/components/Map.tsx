@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import {
   GoogleMap,
-  LoadScript,
   Marker,
   OverlayView,
   Polyline,
@@ -13,6 +12,7 @@ import { HalfModal } from "./HarfModal";
 import { usePosts } from "@/hooks/usePosts";
 import { Post } from "@/app/types";
 import Image from "next/image";
+import useGoogleMaps from "@/hooks/useGoogleMaps";
 
 const Map: React.FC = () => {
   const { inProgress, sendCheckpoint } = useWalking();
@@ -21,9 +21,10 @@ const Map: React.FC = () => {
   const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
   const [locationCount, setLocationCount] = useState(0);
   const { posts, fetchNearByPost } = usePosts();
-
   const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+
+  const { isLoaded, loadError } = useGoogleMaps();
 
   const mapContainerStyle = {
     height: "100vh",
@@ -95,51 +96,48 @@ const Map: React.FC = () => {
     }
   }, []);
 
+  if (loadError) return <div>Error loading maps</div>;
+  if (!isLoaded) return <div>Loading...</div>; // ロード中の場合の表示
+
   return (
     <>
       <div className="fixed top-0 left-0 h-screen w-full">
-        <LoadScript
-          googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
-          libraries={["geometry"]}
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
+          zoom={currentPosition ? 17 : 5}
         >
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
-            zoom={currentPosition ? 17 : 5}
-          >
-            {currentPosition && <Marker position={currentPosition} />}
-            <Polyline
-              path={path}
-              options={{ strokeColor: "#90acaf", strokeWeight: 12 }}
-            />
-            {posts.map((post, index) => (
-              <OverlayView
-                key={index}
-                position={{ lat: post.lat, lng: post.lng }}
-                mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+          {currentPosition && <Marker position={currentPosition} />}
+          <Polyline
+            path={path}
+            options={{ strokeColor: "#90acaf", strokeWeight: 12 }}
+          />
+          {posts.map((post, index) => (
+            <OverlayView
+              key={index}
+              position={{ lat: post.lat, lng: post.lng }}
+              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+            >
+              <div
+                className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
+                onClick={() => {
+                  setSelectedPost(post);
+                  setHarfModalIsOpen(true);
+                }}
               >
-                <div
-                  className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
-                  onClick={() => {
-                    setSelectedPost(post);
-                    setHarfModalIsOpen(true);
-                  }}
-                >
-                  {post.imageUrl && (
-                    <Image
-                      src={post.imageUrl}
-                      alt="Post Thumbnail"
-                      className="object-cover"
-                      fill
-                    />
-                  )}
-                </div>
-              </OverlayView>
-            ))}
-          </GoogleMap>
-        </LoadScript>
+                {post.imageUrl && (
+                  <Image
+                    src={post.imageUrl}
+                    alt="Post Thumbnail"
+                    className="object-cover"
+                    fill
+                  />
+                )}
+              </div>
+            </OverlayView>
+          ))}
+        </GoogleMap>
 
-        {/* 現在の緯度経度と取得回数を表示 */}
         <div className="absolute top-28 left-4 bg-white p-2 rounded shadow-md">
           <p>取得回数: {locationCount} 回</p>
           {currentPosition && (

@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/app/loading";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,7 +12,7 @@ type FormData = {
 
 export const LoginForm = () => {
   const router = useRouter();
-  const { login } = useAuth();
+  const { loading, login } = useAuth();
   const defaultValues: FormData = { email: "", password: "" };
   const {
     register,
@@ -28,8 +29,13 @@ export const LoginForm = () => {
       <form
         onSubmit={handleSubmit(onsubmit)}
         method="post"
-        className="space-y-5 mt-5"
+        className="space-y-5 mt-5 relative"
       >
+        {loading && (
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-50 z-10">
+            <Loading />
+          </div>
+        )}
         <div>
           <div className="flex items-center border-b border-gray-300 py-2">
             <span className="material-icons text-main mr-1">email</span>
@@ -91,7 +97,7 @@ export const LoginForm = () => {
       </form>
       <button
         className="w-full font-bold text-sm"
-        onClick={() => router.back()}
+        onClick={() => router.push("/map")}
       >
         キャンセル
       </button>
