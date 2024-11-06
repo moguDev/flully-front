@@ -5,6 +5,7 @@ export type User = {
   avatarUrl: string;
   location: string;
   email: string;
+  twitter: string;
 };
 
 export type Post = {

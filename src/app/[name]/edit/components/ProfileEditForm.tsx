@@ -19,15 +19,15 @@ type FormData = {
 export const ProfileEditForm = () => {
   const router = useRouter();
   const { name } = useParams();
-  const { userData, update } = useUserProfiles(name as string);
+  const { user, update } = useUserProfiles(name as string);
   const defaultValues: FormData = {
     avatar: null,
-    name: userData?.name || "",
-    nickname: userData?.nickname || "",
-    email: userData?.email || "",
-    introduction: userData?.introduction || "",
-    twitter: userData?.twitter || "",
-    location: userData?.location || "",
+    name: user?.name || "",
+    nickname: user?.nickname || "",
+    email: user?.email || "",
+    introduction: user?.introduction || "",
+    twitter: user?.twitter || "",
+    location: user?.location || "",
   };
   const {
     register,
@@ -46,15 +46,15 @@ export const ProfileEditForm = () => {
   };
 
   useEffect(() => {
-    if (userData) {
-      setValue("name", userData.name);
-      setValue("nickname", userData.nickname);
-      setValue("email", userData.email);
-      setValue("introduction", userData.introduction);
-      setValue("twitter", userData.twitter);
-      setValue("location", userData.location);
+    if (user) {
+      setValue("name", user.name);
+      setValue("nickname", user.nickname);
+      setValue("email", user.email);
+      setValue("introduction", user.introduction);
+      setValue("twitter", user.twitter);
+      setValue("location", user.location);
     }
-  }, [userData]);
+  }, [user]);
 
   useEffect(() => {
     if (imageFile && imageFile[0]) {
