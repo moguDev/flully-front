@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/loading";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -14,7 +15,7 @@ type FormData = {
 
 export const SignupForm = () => {
   const router = useRouter();
-  const { signup } = useAuth();
+  const { loading, signup } = useAuth();
   const defaultValues: FormData = {
     name: "",
     nickname: "",
@@ -37,8 +38,13 @@ export const SignupForm = () => {
       <form
         method="post"
         onSubmit={handleSubmit(onsubmit)}
-        className="space-y-4"
+        className="space-y-4 relative"
       >
+        {loading && (
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-50 z-10">
+            <Loading />
+          </div>
+        )}
         <div className="mt-3">
           <label htmlFor="flully-id" className="font-bold text-xs text-main">
             flully ID

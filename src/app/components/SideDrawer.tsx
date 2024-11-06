@@ -3,9 +3,18 @@ import { useAuth } from "@/hooks/useAuth";
 import defaultImage from "/public/images/default_avatar.png";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+const closeDrawer = () => {
+  const drawerCheckbox = document.getElementById(
+    "drawer-menu"
+  ) as HTMLInputElement;
+  if (drawerCheckbox) drawerCheckbox.checked = false;
+};
 
 export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
   const { name, nickname, logout } = useAuth();
+  const router = useRouter();
   return (
     <div className="drawer drawer-end z-50">
       <input id="drawer-menu" type="checkbox" className="drawer-toggle" />
@@ -88,7 +97,13 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           </div>
           <ul className="py-2 space-y-1">
             <li>
-              <button className="w-full bg-main text-base flex items-center justify-center rounded py-2 transition-all active:scale-95">
+              <button
+                className="w-full bg-main text-base flex items-center justify-center rounded py-2 transition-all active:scale-95"
+                onClick={() => {
+                  router.push(`/${name}`);
+                  closeDrawer();
+                }}
+              >
                 <span className="material-icons">person</span>
                 <span className="text-sm">マイページ</span>
               </button>
@@ -98,6 +113,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
                 className="w-full bg-red-500 text-base flex items-center justify-center rounded py-2 transition-all active:scale-95"
                 onClick={() => {
                   logout();
+                  closeDrawer();
                 }}
               >
                 <span className="material-icons">logout</span>
