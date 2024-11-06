@@ -44,7 +44,7 @@ export const usePosts = () => {
     try {
       const res = await api.get(`/posts/${postId}`);
       const { data } = res;
-      setPost({ ...camelcaseKeys(data) });
+      setPost({ ...camelcaseKeys(data, { deep: true }) });
       return post;
     } catch (e) {
       console.error(e);

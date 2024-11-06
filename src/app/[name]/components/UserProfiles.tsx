@@ -10,17 +10,17 @@ import Loading from "@/app/loading";
 export const UserProfiles = () => {
   const { name: nameParams } = useParams();
   const { name: currentUserName } = useAuth();
-  const { loading, userData } = useUserProfiles(nameParams as string);
+  const { loading, user } = useUserProfiles(nameParams as string);
   return loading ? (
     <Loading />
   ) : (
     <div>
-      {userData ? (
+      {user ? (
         <div className="border-b border-gray-300">
           <div className="flex items-center">
             <div className="rounded-full h-24 w-24 min-w-24 relative overflow-hidden">
               <Image
-                src={defaultUserImage}
+                src={user.avatarUrl || defaultUserImage}
                 alt="avatar"
                 className="object-cover"
                 fill
@@ -29,7 +29,7 @@ export const UserProfiles = () => {
             <div className="font-bold w-full ml-1">
               <div className="pb-1">
                 <div className="flex items-center justify-between">
-                  <p className="text-2xl">{userData.nickname}</p>
+                  <p className="text-2xl">{user.nickname}</p>
                   {nameParams === currentUserName && (
                     <Link
                       href={`/${nameParams}/edit`}
@@ -39,7 +39,7 @@ export const UserProfiles = () => {
                     </Link>
                   )}
                 </div>
-                <p className="text-sm opacity-50">@{userData.name}</p>
+                <p className="text-sm opacity-50">@{user.name}</p>
               </div>
               <div className="flex items-center justify-between w-full">
                 <p className="text-sm">
@@ -63,7 +63,7 @@ export const UserProfiles = () => {
               >
                 location_on
               </span>
-              <p className="text-sm font-bold">{userData.location}</p>
+              <p className="text-sm font-bold">{user.location}</p>
             </div>
             <div className="flex items-center bg-main p-1 rounded-lg">
               <div
@@ -74,7 +74,7 @@ export const UserProfiles = () => {
               </div>
             </div>
           </div>
-          <div className="text-xs font-bold py-1">{userData.introduction}</div>
+          <div className="text-xs font-bold py-1">{user.introduction}</div>
           <div className="flex items-center font-bold space-x-2 py-1">
             <p className="text-xs">
               <span className="text-lg mr-0.5">12</span>フォロワー
