@@ -33,8 +33,11 @@ export const NewThreadForm = () => {
     if (isLoaded && mapRef.current && center) {
       const map = new google.maps.Map(mapRef.current, {
         center,
-        zoom: 16, // 初期ズームレベルを高めに設定
-        disableDefaultUI: true, // すべてのデフォルトUIを非表示
+        zoom: 16,
+        disableDefaultUI: true,
+        gestureHandling: "greedy",
+        draggable: true, // ドラッグを有効化
+        scrollwheel: true, // スクロールでズームを有効化
       });
 
       // 地図の中心が移動されたときに中心位置を更新
