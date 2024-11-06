@@ -55,7 +55,7 @@ export const Navigation = () => {
         selected={selectIndex === 1}
         onClick={() => {
           setSelectIndex(1);
-          // router.push("/threads");
+          router.push("/threads");
         }}
       />
       <NavigationMenu
