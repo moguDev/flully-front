@@ -59,17 +59,6 @@ export const Header = () => {
           </Link>
         )}
       </div>
-      {inProgress && (
-        <div className="bg-orange-400 w-full h-8 flex items-center justify-between text-base font-bold px-3 border-t border-base">
-          <p className="w-1/2">15分経過...</p>
-          <p className="flex items-center">
-            <span className="material-icons" style={{ fontSize: "20px" }}>
-              directions_walk
-            </span>
-            0.2km
-          </p>
-        </div>
-      )}
     </header>
   );
 };
