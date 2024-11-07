@@ -29,7 +29,7 @@ export const NewBoardForm = () => {
 
   useEffect(() => {
     if (isLoaded && mapRef.current && center) {
-      const map = new google.maps.Map(mapRef.current, {
+      new google.maps.Map(mapRef.current, {
         center,
         zoom: 16,
         disableDefaultUI: true,
