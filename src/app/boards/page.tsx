@@ -1,7 +1,7 @@
 import { PREFECTURES } from "@/lib/prefectures";
 import { AddThreadButton } from "./components/AddThreadButton";
 
-export default function ThreadsPage() {
+export default function BoardsPage() {
   return (
     <div>
       <section className="border-b border-gray-200">
