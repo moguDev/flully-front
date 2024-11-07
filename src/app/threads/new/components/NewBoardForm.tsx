@@ -7,7 +7,7 @@ import rabbitIcon from "/public/images/ic_rabbit.png";
 import { useEffect, useRef, useState } from "react";
 import useGoogleMaps from "@/hooks/useGoogleMaps";
 
-export const NewThreadForm = () => {
+export const NewBoardForm = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const { isLoaded, loadError } = useGoogleMaps();
   const [center, setCenter] = useState<{ lat: number; lng: number } | null>(
@@ -15,7 +15,6 @@ export const NewThreadForm = () => {
   );
 
   useEffect(() => {
-    // 現在地の取得
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
@@ -23,7 +22,6 @@ export const NewThreadForm = () => {
       },
       (error) => {
         console.error("現在地の取得に失敗しました:", error);
-        // 失敗した場合、東京の座標をデフォルトとして設定
         setCenter({ lat: 35.6895, lng: 139.6917 });
       }
     );
@@ -31,25 +29,25 @@ export const NewThreadForm = () => {
 
   useEffect(() => {
     if (isLoaded && mapRef.current && center) {
-      const map = new google.maps.Map(mapRef.current, {
+      new google.maps.Map(mapRef.current, {
         center,
         zoom: 16,
         disableDefaultUI: true,
         gestureHandling: "greedy",
-        draggable: true, // ドラッグを有効化
-        scrollwheel: true, // スクロールでズームを有効化
+        draggable: true,
+        scrollwheel: true,
       });
 
-      // 地図の中心が移動されたときに中心位置を更新
-      map.addListener("center_changed", () => {
-        const newCenter = map.getCenter();
-        if (newCenter) {
-          setCenter({
-            lat: newCenter.lat(),
-            lng: newCenter.lng(),
-          });
-        }
-      });
+      // // 地図の中心が移動されたときに中心位置を更新
+      // map.addListener("center_changed", () => {
+      //   const newCenter = map.getCenter();
+      //   if (newCenter) {
+      //     setCenter({
+      //       lat: newCenter.lat(),
+      //       lng: newCenter.lng(),
+      //     });
+      //   }
+      // });
     }
   }, [isLoaded, center]);
 

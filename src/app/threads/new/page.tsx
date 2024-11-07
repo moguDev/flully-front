@@ -1,5 +1,5 @@
-import { NewThreadForm } from "./components/NewThreadForm";
+import { NewBoardForm } from "./components/NewBoardForm";
 
-export default function NewThreadPage() {
-  return <NewThreadForm />;
+export default function NewBoardPage() {
+  return <NewBoardForm />;
 }
