@@ -1,7 +1,12 @@
-import { PREFECTURES } from "@/lib/prefectures";
-import { AddThreadButton } from "./components/AddThreadButton";
+"use client";
 
-export default function ThreadsPage() {
+import { PREFECTURES } from "@/lib/prefectures";
+import { AddThreadButton } from "./AddThreadButton";
+import { useBoards } from "@/hooks/useBoards";
+import { BoardItem } from "./BoardItem";
+
+export const BoardList = () => {
+  const { boards } = useBoards();
   return (
     <div>
       <section className="border-b border-gray-200">
@@ -31,8 +36,14 @@ export default function ThreadsPage() {
           </select>
         </div>
       </section>
-      <section>{/* 掲示板一覧 */}</section>
+      <section className="py-2 divide-y divide-gray-200">
+        <div className="grid lg:first:grid-cols-4 grid-cols-1">
+          {boards.map((board, index) => (
+            <BoardItem key={index} board={board} />
+          ))}
+        </div>
+      </section>
       <AddThreadButton />
     </div>
   );
-}
+};

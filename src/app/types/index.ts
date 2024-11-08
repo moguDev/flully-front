@@ -8,6 +8,28 @@ export type User = {
   twitter: string;
 };
 
+export type Board = {
+  id: number;
+  category: string;
+  species: string;
+  status: string;
+  name: string;
+  iconUrl: string;
+  age: number;
+  date: string;
+  lat: number | null;
+  lng: number | null;
+  location: string;
+  isLocationPublic: boolean;
+  body: string;
+  feature: string;
+  createdAt: string;
+  updatedAt: string;
+  breed: string;
+  user: User;
+  bookmarkCount: number;
+};
+
 export type Post = {
   id: number;
   imageUrl: string;
