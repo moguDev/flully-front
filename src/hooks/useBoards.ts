@@ -1,5 +1,7 @@
+import { Board } from "@/app/types";
 import { api } from "@/lib/axiosInstance";
-import { useState } from "react";
+import camelcaseKeys from "camelcase-keys";
+import { use, useEffect, useState } from "react";
 import snakecaseKeys from "snakecase-keys";
 
 type BoardData = {
@@ -20,11 +22,25 @@ type BoardData = {
 
 export const useBoards = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [boards, setBoards] = useState<Board[]>([]);
+
+  const fetchBoards = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get("/boards");
+      const { data } = res;
+      setBoards(camelcaseKeys(data, { deep: true }));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const postNewBoard = async (data: BoardData) => {
     setLoading(true);
     try {
-      const res = await api.post(
+      await api.post(
         "/boards",
         {
           ...snakecaseKeys(data),
@@ -40,5 +56,10 @@ export const useBoards = () => {
       setLoading(false);
     }
   };
-  return { loading, postNewBoard };
+
+  useEffect(() => {
+    fetchBoards();
+  }, []);
+
+  return { loading, boards, postNewBoard };
 };

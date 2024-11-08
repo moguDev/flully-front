@@ -17,7 +17,6 @@ type FormData = {
   icon: FileList | null;
   age: string;
   date: string;
-  images: FileList | null;
   isLocationPublic: boolean;
   body: string;
   feature: string;
@@ -68,7 +67,6 @@ export const NewBoardForm = () => {
     icon: null,
     age: "",
     date: "",
-    images: null,
     isLocationPublic: false,
     body: "",
     feature: "",
@@ -79,9 +77,10 @@ export const NewBoardForm = () => {
     formState: { errors },
     watch,
   } = useForm({ defaultValues });
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const iconInputRef = useRef<HTMLInputElement | null>(null);
   const iconFile = watch("icon");
   const [imageSource, setImageSource] = useState("");
+  const [images, setImages] = useState<FileList | null>(null);
 
   const onsubmit = async (data: FormData) => {
     if (!center) return; // 位置情報がない場合は送信しない
@@ -93,8 +92,8 @@ export const NewBoardForm = () => {
       icon: data.icon,
       age: parseInt(data.age),
       date: data.date,
-      images: data.images,
-      isLocationPublic: data.isLocationPublic,
+      images: images,
+      isLocationPublic: !data.isLocationPublic,
       lat: center.lat,
       lng: center.lng,
       feature: data.feature,
@@ -217,7 +216,7 @@ export const NewBoardForm = () => {
             <div
               className="h-16 w-16 rounded-full bg-gray-200 bg-opacity-50 relative overflow-hidden"
               onClick={() => {
-                fileInputRef.current?.click();
+                iconInputRef.current?.click();
               }}
             >
               {imageSource ? (
@@ -244,7 +243,7 @@ export const NewBoardForm = () => {
               {...register("icon")}
               ref={(e: HTMLInputElement) => {
                 register("icon").ref(e);
-                fileInputRef.current = e;
+                iconInputRef.current = e;
               }}
               hidden
             />
