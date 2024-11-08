@@ -6,12 +6,20 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import defaultUserImage from "/public/images/default_avatar.png";
+import Loading from "@/app/loading";
+import { useBookmark } from "@/hooks/useBookmark";
 
 export const BoardDetail = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [board, setBoard] = useState<Board | null>(null);
   const router = useRouter();
+  const {
+    loading: bookmarkLoading,
+    bookmarked,
+    bookmark,
+    unbookmark,
+  } = useBookmark(parseInt(id as string));
 
   const fetch = async () => {
     setLoading(true);
@@ -37,7 +45,9 @@ export const BoardDetail = () => {
     return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${apiKey}`;
   };
 
-  return board ? (
+  return loading ? (
+    <Loading />
+  ) : board ? (
     <div>
       <section>
         <div className="flex items-center justify-between py-4">
@@ -83,12 +93,26 @@ export const BoardDetail = () => {
             <button className="bg-black text-white px-2 py-1 rounded-md border border-black text-xs font-bold transition-all active:scale-95">
               Xでシェアする
             </button>
-            <button className="text-main px-2 py-1 rounded-md border border-main text-xs font-bold flex items-center transition-all active:scale-95">
-              <span className="material-icons" style={{ fontSize: "14px" }}>
-                bookmark
-              </span>
-              ブックマークする
-            </button>
+            <div className="relative">
+              {bookmarkLoading && (
+                <div className="bg-white opacity-50 h-full w-full absolute top-0 left-0 z-10" />
+              )}
+              <button
+                className={`${bookmarked ? "bg-main text-white" : "text-main"} px-2 py-1 rounded-md border border-main text-xs font-bold flex items-center transition-all active:scale-95`}
+                onClick={() => {
+                  if (bookmarked) {
+                    unbookmark();
+                  } else {
+                    bookmark();
+                  }
+                }}
+              >
+                <span className="material-icons" style={{ fontSize: "14px" }}>
+                  bookmark
+                </span>
+                ブックマーク{bookmarked ? "中" : "する"}
+              </button>
+            </div>
           </div>
           <button
             className="flex items-center"

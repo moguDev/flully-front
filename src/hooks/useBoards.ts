@@ -1,7 +1,7 @@
 import { Board } from "@/app/types";
 import { api } from "@/lib/axiosInstance";
 import camelcaseKeys from "camelcase-keys";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import snakecaseKeys from "snakecase-keys";
 
 type BoardData = {

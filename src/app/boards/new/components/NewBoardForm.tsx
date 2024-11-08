@@ -80,7 +80,7 @@ export const NewBoardForm = () => {
   const iconInputRef = useRef<HTMLInputElement | null>(null);
   const iconFile = watch("icon");
   const [imageSource, setImageSource] = useState("");
-  const [images, setImages] = useState<FileList | null>(null);
+  const [images /*setImages*/] = useState<FileList | null>(null);
 
   const onsubmit = async (data: FormData) => {
     if (!center) return; // 位置情報がない場合は送信しない
