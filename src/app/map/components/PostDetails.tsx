@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { usePosts } from "@/hooks/usePosts";
 import { usePostComments } from "@/hooks/usePostComments";
 import { useAuth } from "@/hooks/useAuth";
-import { useBookmark } from "@/hooks/useBookmark";
 
 type PostDetailsProps = {
   postId: number;
