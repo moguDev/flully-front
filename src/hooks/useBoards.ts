@@ -42,10 +42,17 @@ export const useBoards = () => {
     try {
       const formData = new FormData();
 
+      // snakecaseKeys の結果を型指定
+      const snakeCaseData = snakecaseKeys(data);
+
       // 他のフィールドをFormDataに追加
-      Object.keys(snakecaseKeys(data)).forEach((key) => {
+      Object.keys(snakeCaseData).forEach((key) => {
         if (key !== "images") {
-          formData.append(key, snakecaseKeys(data)[key]);
+          // keyはstring型なので、snakeCaseData[key] の型を明示的に指定
+          formData.append(
+            key,
+            snakeCaseData[key as keyof typeof snakeCaseData] as string | Blob
+          );
         }
       });
 
