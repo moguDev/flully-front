@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import defaultUserImage from "/public/images/default_avatar.png";
 import Loading from "@/app/loading";
 import { useBookmark } from "@/hooks/useBookmark";
+import { HalfModal } from "./HarfModal";
 
 export const BoardDetail = () => {
   const { id } = useParams();
@@ -50,7 +51,7 @@ export const BoardDetail = () => {
   ) : board ? (
     <div>
       <section>
-        <div className="flex items-center justify-between py-4">
+        <div className="flex items-center justify-between pb-4">
           <button
             className="flex items-center text-gray-500"
             onClick={() => router.push("/boards")}
@@ -130,7 +131,38 @@ export const BoardDetail = () => {
           </button>
         </div>
       </section>
-      <section>{/* 画像一覧 */}</section>
+      <section className="py-2">
+        <div className="flex items-center">
+          {board.images.slice(0, 3).map((image, index) => (
+            <div
+              key={index}
+              className={`h-28 w-28 relative overflow-hidden ${index === 0 && "rounded-l"} ${index === 2 && board.images.length < 4 && "rounded-r"}`}
+            >
+              {image ? (
+                <Image
+                  src={image}
+                  alt={`image_${index}`}
+                  className="object-cover"
+                  fill
+                />
+              ) : null}
+            </div>
+          ))}
+          {board.images.length > 3 && (
+            <div className="h-28 w-28 relative overflow-hidden rounded-r">
+              <div className="flex items-center justify-center absolute top-0 left-0 h-full w-full bg-black bg-opacity-50 z-10">
+                <p className="text-white text-xs font-bold">すべて見る</p>
+              </div>
+              <Image
+                src={board.images[3]}
+                alt="more_image"
+                className="object-cover"
+                fill
+              />
+            </div>
+          )}
+        </div>
+      </section>
       <section className="space-y-3">
         <div>
           <label className="text-gray-400 text-sm font-bold">
@@ -162,6 +194,7 @@ export const BoardDetail = () => {
           <p className="text-black font-bold">{board.body}</p>
         </div>
       </section>
+      <HalfModal open={false} boardId={parseInt(id as string)} />
     </div>
   ) : (
     <div>読み込み中...</div>

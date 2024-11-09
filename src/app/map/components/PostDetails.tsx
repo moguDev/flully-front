@@ -109,7 +109,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
               comments.map((comment, index) => (
                 <div key={index}>
                   <div className="flex items-center mb-1">
-                    <div className="h-5 w-5 rounded-full overflow-hidden relative mr-1">
+                    <div className="h-4 w-4 rounded-full overflow-hidden relative mr-1">
                       <Image
                         src={comment.user.avatarUrl || defaultUserImage}
                         alt="user_icon"

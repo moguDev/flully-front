@@ -28,6 +28,15 @@ export type Board = {
   breed: string;
   user: User;
   bookmarkCount: number;
+  images: string[];
+};
+
+export type BoardComment = {
+  id: number;
+  user: User;
+  contentType: string;
+  content: string | { lat: number; lng: number };
+  createdAt: string;
 };
 
 export type Post = {
