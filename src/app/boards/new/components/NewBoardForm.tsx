@@ -20,6 +20,7 @@ type FormData = {
   isLocationPublic: boolean;
   body: string;
   feature: string;
+  images: FileList | null;
 };
 
 const SPECIES_LIST = [
@@ -70,6 +71,7 @@ export const NewBoardForm = () => {
     isLocationPublic: false,
     body: "",
     feature: "",
+    images: null,
   };
   const {
     register,
@@ -79,8 +81,12 @@ export const NewBoardForm = () => {
   } = useForm({ defaultValues });
   const iconInputRef = useRef<HTMLInputElement | null>(null);
   const iconFile = watch("icon");
-  const [imageSource, setImageSource] = useState("");
-  const [images /*setImages*/] = useState<FileList | null>(null);
+  const [iconSource, setIconSource] = useState<string>("");
+
+  const imagesInputRef = useRef<HTMLInputElement | null>(null);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imageSources, setImageSources] = useState<string[]>([]);
+  const images = watch("images");
 
   const onsubmit = async (data: FormData) => {
     if (!center) return; // 位置情報がない場合は送信しない
@@ -92,7 +98,7 @@ export const NewBoardForm = () => {
       icon: data.icon,
       age: parseInt(data.age),
       date: data.date,
-      images: images,
+      images: imageFiles,
       isLocationPublic: !data.isLocationPublic,
       lat: center.lat,
       lng: center.lng,
@@ -106,10 +112,20 @@ export const NewBoardForm = () => {
   useEffect(() => {
     if (iconFile && iconFile[0]) {
       const fileReader = new FileReader();
-      fileReader.onload = () => setImageSource(fileReader.result as string);
+      fileReader.onload = () => setIconSource(fileReader.result as string);
       fileReader.readAsDataURL(iconFile[0]);
     }
   }, [iconFile]);
+
+  useEffect(() => {
+    if (images && images[0]) {
+      const fileReader = new FileReader();
+      fileReader.onload = () =>
+        setImageSources((prev) => [...prev, fileReader.result as string]);
+      setImageFiles((prev) => [...prev, images[0]]);
+      fileReader.readAsDataURL(images[0]);
+    }
+  }, [images]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -219,9 +235,9 @@ export const NewBoardForm = () => {
                 iconInputRef.current?.click();
               }}
             >
-              {imageSource ? (
+              {iconSource ? (
                 <Image
-                  src={imageSource}
+                  src={iconSource}
                   alt="icon"
                   className="object-cover"
                   fill
@@ -239,7 +255,7 @@ export const NewBoardForm = () => {
             </div>
             <input
               type="file"
-              accept="images/*"
+              accept="image/*"
               {...register("icon")}
               ref={(e: HTMLInputElement) => {
                 register("icon").ref(e);
@@ -362,13 +378,44 @@ export const NewBoardForm = () => {
               いなくなったペットの写真
             </label>
             <div className="grid grid-cols-4">
-              <div className="bg-gray-100 w-full h-28 rounded p-1 flex flex-col items-center justify-center text-gray-400">
+              <div
+                className="bg-gray-100 w-full h-28 rounded p-1 flex flex-col items-center justify-center text-gray-400"
+                onClick={() => {
+                  imagesInputRef.current?.click();
+                }}
+              >
                 <span className="material-icons" style={{ fontSize: "36px" }}>
                   camera_alt
                 </span>
                 <p className="text-xs font-bold p-0.5">写真を追加</p>
               </div>
+              {imageSources.map((src, index) => (
+                <div
+                  key={index}
+                  className="relative"
+                  onClick={() => {
+                    setImageSources((prev) => prev.splice(index, index));
+                  }}
+                >
+                  <Image
+                    src={src}
+                    alt={`Preview ${index}`}
+                    className="object-cover"
+                    fill
+                  />
+                </div>
+              ))}
             </div>
+            <input
+              type="file"
+              accept="image/*"
+              {...register("images")}
+              ref={(e: HTMLInputElement) => {
+                register("images").ref(e);
+                imagesInputRef.current = e;
+              }}
+              hidden
+            />
           </div>
         </section>
         <div className="flex items-center">

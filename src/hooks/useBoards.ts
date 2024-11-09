@@ -12,7 +12,7 @@ type BoardData = {
   icon: FileList | null;
   age: number;
   date: string;
-  images: FileList | null;
+  images: File[];
   isLocationPublic: boolean;
   lat: number;
   lng: number;
@@ -40,16 +40,30 @@ export const useBoards = () => {
   const postNewBoard = async (data: BoardData) => {
     setLoading(true);
     try {
-      await api.post(
-        "/boards",
-        {
-          ...snakecaseKeys(data),
-          icon: data.icon ? data.icon[0] : null,
-        },
-        {
-          headers: { "Content-Type": "multipart/form-data" },
+      const formData = new FormData();
+
+      // 他のフィールドをFormDataに追加
+      Object.keys(snakecaseKeys(data)).forEach((key) => {
+        if (key !== "images") {
+          formData.append(key, snakecaseKeys(data)[key]);
         }
-      );
+      });
+
+      // imagesをFormDataに追加
+      if (data.images && data.images.length > 0) {
+        Array.from(data.images).forEach((image) => {
+          formData.append("images[]", image); // 複数の画像を配列として追加
+        });
+      }
+
+      // iconもFormDataに追加
+      if (data.icon) {
+        formData.append("icon", data.icon[0]);
+      }
+
+      await api.post("/boards", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
     } catch (e) {
       console.error(e);
     } finally {
