@@ -1,7 +1,6 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
 import { usePathname, useRouter } from "next/navigation";
-import path from "path";
 import { useEffect, useState } from "react";
 
 interface NavigationMenuProps {
