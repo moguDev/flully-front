@@ -25,7 +25,7 @@ export const StartWalkingModal = () => {
     <dialog id="startModal" className="modal">
       <div className="modal-box bg-base rounded p-3 relative overflow-hidden">
         <div className="flex items-center justify-between">
-          <h3 className="font-bold text-lg py-5">さんぽを開始しますか？</h3>
+          <h3 className="font-bold text-lg py-5">散歩の記録を開始しますか？</h3>
           <span className="material-icons" onClick={closeModal}>
             close
           </span>
