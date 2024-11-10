@@ -9,6 +9,7 @@ import defaultUserImage from "/public/images/default_avatar.png";
 import Loading from "@/app/loading";
 import { useBookmark } from "@/hooks/useBookmark";
 import { HalfModal } from "./HarfModal";
+import { SelectLocationModal } from "./SelectLocationModal";
 
 export const BoardDetail = () => {
   const { id } = useParams();
@@ -28,7 +29,6 @@ export const BoardDetail = () => {
       const res = await api.get(`/boards/${id}`);
       const { data } = res;
       setBoard(camelcaseKeys(data, { deep: true }));
-      console.log(data);
     } catch (e) {
       console.error(e);
     } finally {
@@ -195,6 +195,7 @@ export const BoardDetail = () => {
         </div>
       </section>
       <HalfModal open={false} boardId={parseInt(id as string)} />
+      <SelectLocationModal boardId={parseInt(id as string)} />
     </div>
   ) : (
     <div>読み込み中...</div>
