@@ -9,6 +9,7 @@ export type User = {
   boards?: Board[];
   posts?: Post[];
   walks?: Walk[];
+  currentStreak?: number;
 };
 
 export type Walk = {

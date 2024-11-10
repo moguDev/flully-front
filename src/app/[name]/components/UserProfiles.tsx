@@ -135,7 +135,9 @@ export const UserProfiles = () => {
                 </div>
                 <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex flex-col items-center justify-center p-2 w-1/3">
                   <p className="text-sm font-bold">Current Streak</p>
-                  <p className="font-black text-3xl py-1 pr-0.5">{0}</p>
+                  <p className="font-black text-3xl py-1 pr-0.5">
+                    {user.currentStreak}
+                  </p>
                   <div
                     className="flex items-center justify-center"
                     style={{ fontSize: "9px" }}
