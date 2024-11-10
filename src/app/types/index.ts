@@ -17,6 +17,15 @@ export type Walk = {
   startTime: string;
   finishTime: string;
   totalDistance: number;
+  checkpoints: Checkpoint[];
+  posts: Post[];
+  createdAt: string;
+};
+
+export type Checkpoint = {
+  id: number;
+  lat: number;
+  lng: number;
 };
 
 export type Board = {
