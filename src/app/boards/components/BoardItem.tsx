@@ -46,7 +46,9 @@ export const BoardItem = ({ board }: BoardItemProps) => {
           </ul>
         </div>
       </div>
-      <div className="bg-gray-100 rounded p-2 mt-2">{board.body}</div>
+      <div className="bg-gray-100 text-xs text-gray-600 font-semibold rounded p-2 mt-2">
+        {board.body}
+      </div>
       <div className="flex items-center justify-between py-1">
         <div>
           <p className="flex items-center font-bold text-main">

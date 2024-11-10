@@ -37,7 +37,7 @@ export const BoardList = () => {
         </div>
       </section>
       <section className="py-2 divide-y divide-gray-200">
-        <div className="grid lg:first:grid-cols-4 grid-cols-1">
+        <div className="grid lg:first:grid-cols-4 grid-cols-1 lg:divide-y-0 divide-y divide-gray-200">
           {boards.map((board, index) => (
             <BoardItem key={index} board={board} />
           ))}

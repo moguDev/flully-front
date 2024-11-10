@@ -24,16 +24,25 @@ export const useBoardComments = (boardId: number) => {
   };
 
   const sendComment = async (
-    content: string | FileList | { lat: number; lng: number }
+    content: string | File | { lat: number; lng: number }
   ) => {
     setLoading(true);
     try {
-      if (typeof content === "string" || content instanceof FileList) {
+      if (typeof content === "string") {
         await api.post("/board_comments", snakecaseKeys({ boardId, content }));
+      } else if (content instanceof File) {
+        const formData = new FormData();
+        formData.append("board_id", String(boardId)); // board_id を追加
+        formData.append("content", content);
+
+        await api.post("/board_comments", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       } else if (content && "lat" in content && "lng" in content) {
+        // 位置情報の場合も board_id を追加
         await api.post(
           "/board_comments",
-          snakecaseKeys({ boardId, ...content })
+          snakecaseKeys({ boardId, ...content }) // board_id を含める
         );
       } else {
         console.log("Unknown content type");
