@@ -1,16 +1,20 @@
 "use client";
-import { Post } from "@/app/types";
+import { Board, Post } from "@/app/types";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { PostDetails } from "./PostDetails";
 import defaultImage from "/public/images/default_avatar.png";
+import { BoardItem } from "@/app/boards/components/BoardItem";
+import catIcon from "/public/images/ic_cat.png";
 
 export const HalfModal = ({
   posts,
+  boards,
   open,
   selected,
 }: {
   posts: Post[];
+  boards: Board[];
   open: boolean;
   selected: Post | null;
 }) => {
@@ -18,7 +22,6 @@ export const HalfModal = ({
   const [selectedPost, setSelectedPost] = useState<Post | null>(selected);
   const startY = useRef<number | null>(null);
 
-  // `open` と `selected` が更新されたら、モーダルを開き選択されたポストをセットする
   useEffect(() => {
     setIsOpen(open);
     setSelectedPost(selected);
@@ -51,23 +54,33 @@ export const HalfModal = ({
       onTouchMove={handleTouchMove}
       onClick={() => setIsOpen(true)}
     >
-      <div className="h-4 w-full flex items-center justify-center">
-        <div className="bg-gray-300 w-16 h-1 rounded-full" />
-      </div>
-      <div className="h-12 flex items-center px-3">
-        <p className="font-bold">近くの情報（大阪市中央区島町）</p>
-      </div>
-
+      <section className="border-b border-gray-200">
+        <div className="h-4 w-full flex items-center justify-center">
+          <div className="bg-gray-300 w-16 h-1 rounded-full" />
+        </div>
+        <div className="h-12 flex items-center justify-between px-3">
+          <p className="font-bold flex items-center">
+            <span className="material-icons" style={{ fontSize: "24px" }}>
+              location_on
+            </span>
+            このあたりの情報
+          </p>
+          <p className="text-sm font-bold">（10km以内）</p>
+        </div>
+      </section>
       {isOpen && selectedPost ? (
         <PostDetails postId={selectedPost.id} />
       ) : (
-        <div className="flex flex-col">
-          <div className="p-4">
-            <p className="font-bold flex items-center">
-              <span className="material-icons">search</span>
-              この辺りで見つかった
-            </p>
-            <div className="grid grid-cols-4">
+        <section className="flex flex-col h-full overflow-y-auto relative pb-16">
+          <div className="px-2 mt-2 mb-4">
+            <div className="flex items-center justify-between">
+              <p className="font-bold flex items-center py-1">
+                <span className="material-icons">search</span>
+                見つかった動物
+              </p>
+              <p className="text-sm font-bold">{posts.length}件</p>
+            </div>
+            <div className="grid grid-cols-4 p-1">
               {posts.map((post, index) => (
                 <div
                   key={index}
@@ -85,13 +98,28 @@ export const HalfModal = ({
               ))}
             </div>
           </div>
-          <div className="p-4">
-            <p className="font-bold flex items-center">
-              <span className="material-icons">search</span>
-              この辺りのまいご・保護情報
-            </p>
+          <div className="px-2 py-4">
+            <div className="flex items-center justify-between">
+              <p className="font-bold flex items-center">
+                <div className="h-5 w-5 relative overflow-hidden mr-1">
+                  <Image
+                    src={catIcon}
+                    alt="cat_icon"
+                    className="object-cover"
+                    fill
+                  />
+                </div>
+                まいご・保護情報
+              </p>
+              <p className="text-sm font-bold">{boards.length}件</p>
+            </div>
+            <div>
+              {boards.map((board, index) => (
+                <BoardItem key={index} board={board} />
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
       )}
     </div>
   );

@@ -13,6 +13,7 @@ import { usePosts } from "@/hooks/usePosts";
 import { Post } from "@/app/types";
 import Image from "next/image";
 import useGoogleMaps from "@/hooks/useGoogleMaps";
+import { useBoards } from "@/hooks/useBoards";
 
 const Map: React.FC = () => {
   const { inProgress, sendCheckpoint } = useWalking();
@@ -21,6 +22,7 @@ const Map: React.FC = () => {
   const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
   const [locationCount, setLocationCount] = useState(0);
   const { posts, fetchNearByPost } = usePosts();
+  const { boards, fetchNearbyBoard } = useBoards();
   const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
@@ -84,7 +86,8 @@ const Map: React.FC = () => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
 
-          fetchNearByPost(lat, lng); // 初回に1回だけ実行
+          fetchNearByPost(lat, lng);
+          fetchNearbyBoard(lat, lng);
         },
         (error) => {
           console.error("Error getting location:", error);
@@ -97,7 +100,7 @@ const Map: React.FC = () => {
   }, []);
 
   if (loadError) return <div>Error loading maps</div>;
-  if (!isLoaded) return <div>Loading...</div>; // ロード中の場合の表示
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <>
@@ -214,7 +217,12 @@ const Map: React.FC = () => {
           </button>
         </div>
       </div>
-      <HalfModal posts={posts} open={harfModalIsOpen} selected={selectedPost} />
+      <HalfModal
+        posts={posts}
+        boards={boards}
+        open={harfModalIsOpen}
+        selected={selectedPost}
+      />
     </>
   );
 };
