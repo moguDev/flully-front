@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface NavigationMenuProps {
   iconName: string;
@@ -36,6 +36,16 @@ export const Navigation = () => {
   const router = useRouter();
   const [selectIndex, setSelectIndex] = useState<number>(0);
   const { isAuthenticated, name } = useAuth();
+
+  useEffect(() => {
+    if (name !== "" && pathName.includes(`/${name}`)) {
+      setSelectIndex(3);
+    } else if (pathName.includes("/map")) {
+      setSelectIndex(0);
+    } else if (pathName.includes("/boards")) {
+      setSelectIndex(1);
+    }
+  }, [name]);
   return (
     <ul
       className={`fixed bottom-0 flex items-center h-16 w-full border-t bg-base border-gray-300 z-40 ${pathName === "/" && "hidden"}`}
@@ -58,7 +68,7 @@ export const Navigation = () => {
           router.push("/boards");
         }}
       />
-      <NavigationMenu
+      {/* <NavigationMenu
         iconName="leaderboard"
         label="リーダーボード"
         selected={selectIndex === 2}
@@ -66,7 +76,7 @@ export const Navigation = () => {
           setSelectIndex(2);
           // router.push("/ranking");
         }}
-      />
+      /> */}
       <NavigationMenu
         iconName="person"
         label="マイページ"

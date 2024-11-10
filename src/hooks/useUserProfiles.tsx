@@ -26,7 +26,7 @@ export const useUserProfiles = (name: string) => {
     try {
       const res = await api.get(`/users/${name}`);
       const { data } = res;
-      setUser({ ...camelcaseKeys(data) });
+      setUser({ ...camelcaseKeys(data, { deep: true }) });
     } catch (e) {
       console.error(e);
     } finally {

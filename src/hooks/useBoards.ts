@@ -41,14 +41,10 @@ export const useBoards = () => {
     setLoading(true);
     try {
       const formData = new FormData();
-
-      // snakecaseKeys の結果を型指定
       const snakeCaseData = snakecaseKeys(data);
 
-      // 他のフィールドをFormDataに追加
       Object.keys(snakeCaseData).forEach((key) => {
         if (key !== "images") {
-          // keyはstring型なので、snakeCaseData[key] の型を明示的に指定
           formData.append(
             key,
             snakeCaseData[key as keyof typeof snakeCaseData] as string | Blob
@@ -56,14 +52,12 @@ export const useBoards = () => {
         }
       });
 
-      // imagesをFormDataに追加
       if (data.images && data.images.length > 0) {
         Array.from(data.images).forEach((image) => {
           formData.append("images[]", image); // 複数の画像を配列として追加
         });
       }
 
-      // iconもFormDataに追加
       if (data.icon) {
         formData.append("icon", data.icon[0]);
       }
@@ -78,9 +72,24 @@ export const useBoards = () => {
     }
   };
 
+  const fetchNearbyBoard = async (lat: number, lng: number) => {
+    setLoading(true);
+    try {
+      const res = await api.get("/boards/nearby_boards", {
+        params: { lat, lng },
+      });
+      const { data } = res;
+      setBoards(camelcaseKeys(data, { deep: true }));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchBoards();
   }, []);
 
-  return { loading, boards, postNewBoard };
+  return { loading, boards, postNewBoard, fetchNearbyBoard };
 };

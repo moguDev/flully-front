@@ -6,6 +6,8 @@ export type User = {
   location: string;
   email: string;
   twitter: string;
+  boards?: Board[];
+  posts?: Post[];
 };
 
 export type Board = {
