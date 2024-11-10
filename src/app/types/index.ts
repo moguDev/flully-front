@@ -8,6 +8,14 @@ export type User = {
   twitter: string;
   boards?: Board[];
   posts?: Post[];
+  walks?: Walk[];
+};
+
+export type Walk = {
+  id: number;
+  startTime: string;
+  finishTime: string;
+  totalDistance: number;
 };
 
 export type Board = {

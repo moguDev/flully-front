@@ -93,7 +93,12 @@ export const UserProfiles = () => {
                 <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex flex-col items-center justify-center p-2 w-1/3 overflow-hidden relative">
                   <p className="text-sm font-bold">Total</p>
                   <p className="font-bold py-1">
-                    <span className="text-3xl pr-0.5">{0}</span>
+                    <span className="text-3xl pr-0.5">
+                      {user.walks?.reduce(
+                        (acc, walk) => acc + walk.totalDistance,
+                        0
+                      )}
+                    </span>
                     <span className="text-sm">km</span>
                   </p>
                   <div
@@ -144,7 +149,9 @@ export const UserProfiles = () => {
               <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex items-center justify-between p-2">
                 <div className="flex items-end font-bold text-sm ml-1">
                   <p>Total</p>
-                  <p className="text-3xl px-1 translate-y-[3px]">{24}</p>
+                  <p className="text-3xl px-1 translate-y-[3px]">
+                    {user.walks?.length}
+                  </p>
                   <p>times walking.</p>
                 </div>
                 <button className="text-xs text-main font-bold flex items-center">
