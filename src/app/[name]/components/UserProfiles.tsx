@@ -110,13 +110,13 @@ export const UserProfiles = () => {
                     <p>Present</p>
                   </div>
                   <div
-                    className="material-icons absolute top-1 translate-x-2 text-main opacity-30"
+                    className="material-icons absolute top-1 -translate-x-7 text-main opacity-20"
                     style={{ fontSize: "112px" }}
                   >
                     directions_walk
                   </div>
                 </div>
-                <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex flex-col items-center justify-center p-2 w-1/3">
+                <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex flex-col items-center justify-center p-2 w-1/3 overflow-hidden relative">
                   <p className="text-sm font-bold">Total</p>
                   <p className="font-bold py-1">
                     <span className="text-3xl pr-0.5">
@@ -132,8 +132,14 @@ export const UserProfiles = () => {
                     <p>〜</p>
                     <p>Present</p>
                   </div>
+                  <div
+                    className="material-icons absolute top-1 -translate-x-8 text-main opacity-20"
+                    style={{ fontSize: "96px" }}
+                  >
+                    camera_alt
+                  </div>
                 </div>
-                <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex flex-col items-center justify-center p-2 w-1/3">
+                <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex flex-col items-center justify-center p-2 w-1/3 overflow-hidden relative">
                   <p className="text-sm font-bold">Current Streak</p>
                   <p className="font-black text-3xl py-1 pr-0.5">
                     {user.currentStreak}
@@ -146,9 +152,18 @@ export const UserProfiles = () => {
                     <p>〜</p>
                     <p>Present</p>
                   </div>
+                  <div
+                    className="material-icons absolute top-1 -translate-x-8 text-main opacity-20"
+                    style={{ fontSize: "96px" }}
+                  >
+                    whatshot
+                  </div>
                 </div>
               </div>
-              <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex items-center justify-between p-2">
+              <button
+                className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex items-center justify-between p-2 w-full"
+                onClick={() => router.push("/walks")}
+              >
                 <div className="flex items-end font-bold text-sm ml-1">
                   <p>Total</p>
                   <p className="text-3xl px-1 translate-y-[3px]">
@@ -156,13 +171,13 @@ export const UserProfiles = () => {
                   </p>
                   <p>times walking.</p>
                 </div>
-                <button className="text-xs text-main font-bold flex items-center">
+                <div className="text-xs text-main font-bold flex items-center">
                   散歩記録をみる
                   <span className="material-icons" style={{ fontSize: "16px" }}>
                     keyboard_arrow_right
                   </span>
-                </button>
-              </div>
+                </div>
+              </button>
             </div>
           </section>
           <section className="border-b border-gray-300">

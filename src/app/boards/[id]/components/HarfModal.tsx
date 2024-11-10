@@ -11,7 +11,6 @@ export const HalfModal = ({
   boardId: number;
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(open);
-  const startY = useRef<number | null>(null);
   const [commentText, setCommentText] = useState("");
   const { comments, sendComment } = useBoardComments(boardId);
 
@@ -38,29 +37,6 @@ export const HalfModal = ({
     }
   }, [comments, isOpen]);
 
-  useEffect(() => {
-    setIsOpen(open);
-  }, [open]);
-
-  const handleTouchStart = (event: React.TouchEvent) => {
-    startY.current = event.touches[0].clientY;
-  };
-
-  const handleTouchMove = (event: React.TouchEvent) => {
-    if (startY.current === null) return;
-
-    const currentY = event.touches[0].clientY;
-    const distance = currentY - (startY.current || 0);
-
-    if (isOpen && distance > 50) {
-      setIsOpen(false);
-      startY.current = null;
-    } else if (!isOpen && distance < -50) {
-      setIsOpen(true);
-      startY.current = null;
-    }
-  };
-
   const getMapImageUrl = (lat: number, lng: number) => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY; // ここにGoogle Maps APIキーを入れてください
     return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=400x400&markers=color:red|${lat},${lng}&key=${apiKey}`;
@@ -69,19 +45,22 @@ export const HalfModal = ({
   return (
     <div
       className={`pb-16 fixed bottom-0 left-0 bg-base w-full rounded-t-lg transition-all duration-300 z-30 ${isOpen ? "h-[70vh]" : "h-32"}`}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onClick={() => setIsOpen(true)}
       style={{ boxShadow: "0 -1px 10px rgba(0, 0, 0, 0.10)" }}
     >
-      <div className="h-4 w-full flex items-center justify-center">
-        <div className="bg-gray-300 w-16 h-1 rounded-full" />
-      </div>
-      <div className="h-12 flex items-center px-3">
-        <span className="material-icons mr-1">sms</span>
-        <p className="font-bold">コメント</p>
-      </div>
-
+      <section onClick={() => setIsOpen((prev) => !prev)}>
+        <div className="h-4 w-full flex items-center justify-center">
+          <div className="bg-gray-300 w-16 h-1 rounded-full" />
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="h-12 flex items-center px-3">
+            <span className="material-icons mr-1">sms</span>
+            <p className="font-bold">コメント ({comments.length})</p>
+          </div>
+          <p className="material-icons p-3">
+            {isOpen ? "keyboard_arrow_down" : "keyboard_arrow_up"}
+          </p>
+        </div>
+      </section>
       {isOpen && (
         <section className="h-full pb-32 overflow-y-auto relative">
           <div className="px-4">
