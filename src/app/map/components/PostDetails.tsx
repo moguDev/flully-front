@@ -1,8 +1,7 @@
 import Image from "next/image";
 import defaultUserImage from "/public/images/default_avatar.png";
 import { useLikes } from "@/hooks/useLikes";
-import { useEffect, useState } from "react";
-import { usePosts } from "@/hooks/usePosts";
+import { useState } from "react";
 import { usePostComments } from "@/hooks/usePostComments";
 import { useAuth } from "@/hooks/useAuth";
 import { usePost } from "@/hooks/usePost";
