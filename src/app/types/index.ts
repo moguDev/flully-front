@@ -49,7 +49,7 @@ export type Board = {
   breed: string;
   user: User;
   bookmarkCount: number;
-  images: string[];
+  images: { id: number; url: string }[];
 };
 
 export type BoardComment = {

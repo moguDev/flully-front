@@ -31,6 +31,18 @@ const SPECIES_LIST = [
   { icon: dogIcon, label: "その他" },
 ];
 
+const formattedDate = (date: string) => {
+  const dateObj = new Date(date);
+
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+  const day = String(dateObj.getDate()).padStart(2, "0");
+  const hour = String(dateObj.getHours()).padStart(2, "0");
+  const minute = String(dateObj.getMinutes()).padStart(2, "0");
+
+  return `${year}-${month}-${day}T${hour}:${minute}`;
+};
+
 const SpeciesButton = ({
   icon,
   label,
@@ -75,6 +87,7 @@ export const BoardEditForm = () => {
     feature: "",
     images: null,
   };
+  const [removeImageId, setRemoveImageId] = useState<number[]>([]);
   const {
     register,
     handleSubmit,
@@ -107,6 +120,7 @@ export const BoardEditForm = () => {
       lng: center.lng,
       feature: data.feature,
       body: data.body,
+      removeImageId: removeImageId,
     };
     await update(formData);
     router.push("/boards");
@@ -145,6 +159,7 @@ export const BoardEditForm = () => {
       setValue("date", board.date);
       setCenter({ lat: board.lat as number, lng: board.lng as number });
       setValue("body", board.body);
+      setValue("date", formattedDate(board.date));
     }
   }, [board]);
 
@@ -402,9 +417,9 @@ export const BoardEditForm = () => {
             <label className="text-sm font-bold">
               いなくなったペットの写真
             </label>
-            <div className="grid grid-cols-4 h-max">
+            <div className="flex items-center overflow-x-auto space-x-1 flex-nowrap">
               <div
-                className="bg-gray-100 w-full h-28 rounded p-1 flex flex-col items-center justify-center text-gray-400"
+                className="bg-gray-100 min-w-28 h-32 rounded p-1 flex flex-col items-center justify-center text-gray-400 cursor-pointer"
                 onClick={() => {
                   imagesInputRef.current?.click();
                 }}
@@ -426,29 +441,43 @@ export const BoardEditForm = () => {
                     src={src}
                     alt={`Preview ${index}`}
                     className="object-cover"
-                    fill
+                    width={100} // 横幅を指定
+                    height={100} // 高さを指定
                   />
                 </div>
               ))}
-              {board?.images.map((src, index) => (
-                <div
-                  key={index}
-                  className="relative"
-                  onClick={() => {
-                    setImageSources((prev) => prev.splice(index, index));
-                  }}
-                >
-                  <button className="material-icons rounded-full h-2 w-2 p-1 absolute top-0 right-1 z-10">
-                    <p className="bg-black text-white">close</p>
-                  </button>
-                  <Image
-                    src={src}
-                    alt={`Preview ${index}`}
-                    className="object-cover"
-                    fill
-                  />
-                </div>
-              ))}
+              {board?.images.map(
+                (image, index) =>
+                  !removeImageId.includes(image.id) && (
+                    <div
+                      key={index}
+                      className="relative h-32 min-w-28 overflow-hidden rounded"
+                      onClick={() => {
+                        setImageSources((prev) => prev.splice(index, index));
+                      }}
+                    >
+                      <button
+                        className="material-icons rounded-full h-2 w-2 p-1 absolute top-0 right-4 z-10"
+                        onClick={() => {
+                          setRemoveImageId((prev) => [...prev, image.id]);
+                        }}
+                      >
+                        <p
+                          className="bg-black text-white"
+                          style={{ fontSize: "16px" }}
+                        >
+                          cancel
+                        </p>
+                      </button>
+                      <Image
+                        src={image.url}
+                        alt={`Preview ${index}`}
+                        className="object-cover"
+                        fill
+                      />
+                    </div>
+                  )
+              )}
             </div>
             <input
               type="file"
@@ -476,7 +505,7 @@ export const BoardEditForm = () => {
             type="submit"
             className="bg-main p-3 text-white font-bold w-1/2 rounded"
           >
-            掲示板を作成
+            掲示板を更新
           </button>
         </div>
       </form>

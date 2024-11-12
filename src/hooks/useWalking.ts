@@ -1,3 +1,4 @@
+import { Checkpoint } from "@/app/types";
 import { api } from "@/lib/axiosInstance";
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
@@ -10,6 +11,7 @@ const inProgressState = atom<boolean>({
 export const useWalking = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [inProgress, setInProgress] = useRecoilState<boolean>(inProgressState);
+  const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([]);
 
   const check = async () => {
     setLoading(true);
@@ -17,6 +19,7 @@ export const useWalking = () => {
       const res = await api.get("/walks/in_progress");
       const { data } = res;
       setInProgress(data["in_progress"]);
+      setCheckpoints(data["checkpoints"]);
     } catch (e) {
       console.error(e);
     } finally {
@@ -61,5 +64,13 @@ export const useWalking = () => {
     }
   };
 
-  return { loading, inProgress, check, start, finish, sendCheckpoint };
+  return {
+    loading,
+    inProgress,
+    checkpoints,
+    check,
+    start,
+    finish,
+    sendCheckpoint,
+  };
 };

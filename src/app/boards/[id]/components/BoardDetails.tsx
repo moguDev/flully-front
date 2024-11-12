@@ -137,7 +137,7 @@ export const BoardDetail = () => {
             >
               {image ? (
                 <Image
-                  src={image}
+                  src={image.url}
                   alt={`image_${index}`}
                   className="object-cover"
                   fill
@@ -151,7 +151,7 @@ export const BoardDetail = () => {
                 <p className="text-white text-xs font-bold">すべて見る</p>
               </div>
               <Image
-                src={board.images[3]}
+                src={board.images[3].url}
                 alt="more_image"
                 className="object-cover"
                 fill

@@ -18,7 +18,7 @@ type UpdateData = {
   lng: number;
   body: string;
   feature: string;
-  // removeImageId:
+  removeImageId: number[];
 };
 
 export const useBoard = (boardId: number) => {

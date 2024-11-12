@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 
 const Map: React.FC = () => {
   const router = useRouter();
-  const { inProgress, sendCheckpoint } = useWalking();
+  const { inProgress, checkpoints, sendCheckpoint } = useWalking();
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral | null>(null);
   const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
@@ -64,6 +64,13 @@ const Map: React.FC = () => {
       console.error("Geolocation is not supported by this browser.");
     }
   };
+
+  useEffect(() => {
+    if (checkpoints.length > 0) {
+      console.log(checkpoints);
+      setPath(checkpoints);
+    }
+  }, [checkpoints]);
 
   useEffect(() => {
     if (!currentPosition) {
