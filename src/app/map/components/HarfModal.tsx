@@ -1,4 +1,5 @@
 "use client";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Board, Post } from "@/app/types";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
@@ -6,26 +7,41 @@ import { PostDetails } from "./PostDetails";
 import defaultImage from "/public/images/default_avatar.png";
 import { BoardItem } from "@/app/boards/components/BoardItem";
 import catIcon from "/public/images/ic_cat.png";
+import { usePost } from "@/hooks/usePost";
 
 export const HalfModal = ({
   posts,
   boards,
   open,
-  selected,
 }: {
   posts: Post[];
   boards: Board[];
   open: boolean;
-  selected: Post | null;
 }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const postId = searchParams.get("post_id");
+  const {
+    post: selectedPost,
+    fetch,
+    initPost,
+  } = usePost(postId ? parseInt(postId) : null);
   const [isOpen, setIsOpen] = useState<boolean>(open);
-  const [selectedPost, setSelectedPost] = useState<Post | null>(selected);
   const startY = useRef<number | null>(null);
 
   useEffect(() => {
     setIsOpen(open);
-    setSelectedPost(selected);
-  }, [open, selected]);
+  }, [open]);
+
+  useEffect(() => {
+    if (postId) {
+      setIsOpen(true);
+      fetch();
+    } else {
+      setIsOpen(false);
+      initPost();
+    }
+  }, [postId]);
 
   const handleTouchStart = (event: React.TouchEvent) => {
     startY.current = event.touches[0].clientY;
@@ -39,7 +55,7 @@ export const HalfModal = ({
 
     if (isOpen && distance > 50) {
       setIsOpen(false);
-      setSelectedPost(null);
+      router.replace("?");
       startY.current = null;
     } else if (!isOpen && distance < -50) {
       setIsOpen(true);
@@ -88,7 +104,10 @@ export const HalfModal = ({
                 <div
                   key={index}
                   className="w-full h-24 overflow-hidden relative"
-                  onClick={() => setSelectedPost(post)}
+                  onClick={() => {
+                    setIsOpen(true);
+                    router.replace(`?post_id=${post.id}`);
+                  }}
                 >
                   <p>test</p>
                   <Image

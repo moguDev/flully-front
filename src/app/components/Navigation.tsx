@@ -1,7 +1,6 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 interface NavigationMenuProps {
   iconName: string;
@@ -34,18 +33,7 @@ const NavigationMenu = ({
 export const Navigation = () => {
   const pathName = usePathname();
   const router = useRouter();
-  const [selectIndex, setSelectIndex] = useState<number>(0);
   const { isAuthenticated, name } = useAuth();
-
-  useEffect(() => {
-    if (name !== "" && pathName.includes(`/${name}`)) {
-      setSelectIndex(3);
-    } else if (pathName.includes("/map")) {
-      setSelectIndex(0);
-    } else if (pathName.includes("/boards")) {
-      setSelectIndex(1);
-    }
-  }, [name]);
   return (
     <ul
       className={`fixed bottom-0 flex items-center h-16 w-full border-t bg-base border-gray-300 z-40 ${pathName === "/" && "hidden"}`}
@@ -53,20 +41,14 @@ export const Navigation = () => {
       <NavigationMenu
         iconName="location_on"
         label="マップ"
-        selected={selectIndex === 0}
-        onClick={() => {
-          setSelectIndex(0);
-          router.push("/map");
-        }}
+        selected={pathName.includes("/map")}
+        onClick={() => router.push("/map")}
       />
       <NavigationMenu
         iconName="format_list_bulleted"
         label="まいご掲示板"
-        selected={selectIndex === 1}
-        onClick={() => {
-          setSelectIndex(1);
-          router.push("/boards");
-        }}
+        selected={pathName.includes("/boards")}
+        onClick={() => router.push("/boards")}
       />
       {/* <NavigationMenu
         iconName="leaderboard"
@@ -80,9 +62,8 @@ export const Navigation = () => {
       <NavigationMenu
         iconName="person"
         label="マイページ"
-        selected={selectIndex === 3}
+        selected={name !== "" && pathName.includes(`/${name}`)}
         onClick={() => {
-          setSelectIndex(3);
           if (isAuthenticated) {
             router.push(`/${name}`);
           } else {

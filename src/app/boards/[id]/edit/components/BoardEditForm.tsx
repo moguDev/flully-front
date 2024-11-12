@@ -7,8 +7,8 @@ import rabbitIcon from "/public/images/ic_rabbit.png";
 import { useEffect, useRef, useState } from "react";
 import useGoogleMaps from "@/hooks/useGoogleMaps";
 import { useForm } from "react-hook-form";
-import { useBoards } from "@/hooks/useBoards";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useBoard } from "@/hooks/useBoard";
 
 type FormData = {
   category: number;
@@ -52,15 +52,17 @@ const SpeciesButton = ({
   );
 };
 
-export const NewBoardForm = () => {
+export const BoardEditForm = () => {
   const router = useRouter();
+  const { id } = useParams();
+  const { board, update } = useBoard(parseInt(id as string));
   const mapRef = useRef<HTMLDivElement>(null);
   const { isLoaded, loadError } = useGoogleMaps();
-  const [center, setCenter] = useState<{ lat: number; lng: number } | null>(
-    null
-  );
+  const [center, setCenter] = useState<{ lat: number; lng: number }>({
+    lat: 35.6895,
+    lng: 139.6917,
+  });
   const [selectedSpeciesIndex, setSelectedSpeciesIndex] = useState<number>(0);
-  const { postNewBoard } = useBoards();
   const defaultValues: FormData = {
     category: 0,
     breed: "",
@@ -78,6 +80,7 @@ export const NewBoardForm = () => {
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm({ defaultValues });
   const iconInputRef = useRef<HTMLInputElement | null>(null);
   const iconFile = watch("icon");
@@ -105,7 +108,7 @@ export const NewBoardForm = () => {
       feature: data.feature,
       body: data.body,
     };
-    await postNewBoard(formData);
+    await update(formData);
     router.push("/boards");
   };
 
@@ -118,6 +121,34 @@ export const NewBoardForm = () => {
   }, [iconFile]);
 
   useEffect(() => {
+    if (board) {
+      switch (board.species) {
+        case "犬":
+          setSelectedSpeciesIndex(0);
+          break;
+        case "猫":
+          setSelectedSpeciesIndex(1);
+          break;
+        case "鳥":
+          setSelectedSpeciesIndex(2);
+          break;
+        case "うさぎ":
+          setSelectedSpeciesIndex(3);
+          break;
+        default:
+          break;
+      }
+      setValue("breed", board.breed);
+      setValue("name", board.name);
+      setValue("age", board.age.toString());
+      setValue("feature", board.feature);
+      setValue("date", board.date);
+      setCenter({ lat: board.lat as number, lng: board.lng as number });
+      setValue("body", board.body);
+    }
+  }, [board]);
+
+  useEffect(() => {
     if (images && images[0]) {
       const fileReader = new FileReader();
       fileReader.onload = () =>
@@ -126,19 +157,6 @@ export const NewBoardForm = () => {
       fileReader.readAsDataURL(images[0]);
     }
   }, [images]);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setCenter({ lat: latitude, lng: longitude });
-      },
-      (error) => {
-        console.error("現在地の取得に失敗しました:", error);
-        setCenter({ lat: 35.6895, lng: 139.6917 });
-      }
-    );
-  }, []);
 
   useEffect(() => {
     if (isLoaded && mapRef.current && center) {
@@ -161,12 +179,12 @@ export const NewBoardForm = () => {
     <div className="max-w-3xl mx-auto">
       <button
         className="text-main flex items-center"
-        onClick={() => router.push("/boards")}
+        onClick={() => router.push(`/boards/${board?.id}`)}
       >
         <span className="material-icons">keyboard_arrow_left</span>
-        掲示板一覧
+        掲示板にもどる
       </button>
-      <h1 className="text-2xl font-bold my-4">掲示板を作成</h1>
+      <h1 className="text-2xl font-bold my-4">掲示板を編集</h1>
       <form method="post" onSubmit={handleSubmit(onsubmit)}>
         <section className="divide-y">
           <div className="flex items-center space-x-2 py-1">
@@ -242,9 +260,9 @@ export const NewBoardForm = () => {
                 iconInputRef.current?.click();
               }}
             >
-              {iconSource ? (
+              {iconSource || board?.iconUrl ? (
                 <Image
-                  src={iconSource}
+                  src={iconSource || (board?.iconUrl as string)}
                   alt="icon"
                   className="object-cover"
                   fill
@@ -384,7 +402,7 @@ export const NewBoardForm = () => {
             <label className="text-sm font-bold">
               いなくなったペットの写真
             </label>
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-4 h-max">
               <div
                 className="bg-gray-100 w-full h-28 rounded p-1 flex flex-col items-center justify-center text-gray-400"
                 onClick={() => {
@@ -412,6 +430,25 @@ export const NewBoardForm = () => {
                   />
                 </div>
               ))}
+              {board?.images.map((src, index) => (
+                <div
+                  key={index}
+                  className="relative"
+                  onClick={() => {
+                    setImageSources((prev) => prev.splice(index, index));
+                  }}
+                >
+                  <button className="material-icons rounded-full h-2 w-2 p-1 absolute top-0 right-1 z-10">
+                    <p className="bg-black text-white">close</p>
+                  </button>
+                  <Image
+                    src={src}
+                    alt={`Preview ${index}`}
+                    className="object-cover"
+                    fill
+                  />
+                </div>
+              ))}
             </div>
             <input
               type="file"
@@ -426,7 +463,13 @@ export const NewBoardForm = () => {
           </div>
         </section>
         <div className="flex items-center">
-          <button type="button" className="p-3 w-1/2 font-bold">
+          <button
+            type="button"
+            className="p-3 w-1/2 font-bold"
+            onClick={() => {
+              router.back();
+            }}
+          >
             キャンセル
           </button>
           <button

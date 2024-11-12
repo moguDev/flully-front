@@ -36,6 +36,7 @@ export type Board = {
   name: string;
   iconUrl: string;
   age: number;
+  formatedDate: string;
   date: string;
   lat: number | null;
   lng: number | null;

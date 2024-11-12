@@ -16,16 +16,16 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
   const { name, nickname, logout } = useAuth();
   const router = useRouter();
   return (
-    <div className="drawer drawer-end z-50">
+    <div className="drawer drawer-end ">
       <input id="drawer-menu" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">{children}</div>
-      <div className="drawer-side">
+      <div className="drawer-side z-50">
         <label
           htmlFor="drawer-menu"
           aria-label="close sidebar"
           className="drawer-overlay"
         />
-        <div className="bg-base font-bold h-auto w-72 rounded-lg mt-[72px] mr-2 p-5 shadow-lg">
+        <div className="bg-base bg-opacity-90 font-bold h-full w-80 shadow-lg px-5  py-10">
           <div className="flex items-center">
             <div className="h-12 w-12 rounded relative">
               <Image
@@ -55,13 +55,13 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           </div>
           <div className="flex items-center space-x-2 py-1">
             <p className="text-lg">
-              12
+              {0}
               <span className="ml-0.5" style={{ fontSize: "10px" }}>
                 フォロワー
               </span>
             </p>
             <p className="text-lg">
-              34
+              {0}
               <span className="ml-0.5" style={{ fontSize: "10px" }}>
                 フォロー中
               </span>

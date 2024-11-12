@@ -1,20 +1,18 @@
 "use client";
-import { Board } from "@/app/types";
-import { api } from "@/lib/axiosInstance";
-import camelcaseKeys from "camelcase-keys";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import defaultUserImage from "/public/images/default_avatar.png";
 import Loading from "@/app/loading";
 import { useBookmark } from "@/hooks/useBookmark";
 import { HalfModal } from "./HarfModal";
 import { SelectLocationModal } from "./SelectLocationModal";
+import { useBoard } from "@/hooks/useBoard";
+import { useAuth } from "@/hooks/useAuth";
 
 export const BoardDetail = () => {
   const { id } = useParams();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [board, setBoard] = useState<Board | null>(null);
+  const { name: userName } = useAuth();
+  const { loading, board } = useBoard(parseInt(id as string));
   const router = useRouter();
   const {
     loading: bookmarkLoading,
@@ -23,24 +21,6 @@ export const BoardDetail = () => {
     unbookmark,
   } = useBookmark(parseInt(id as string));
 
-  const fetch = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get(`/boards/${id}`);
-      const { data } = res;
-      setBoard(camelcaseKeys(data, { deep: true }));
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetch();
-  }, []);
-
-  // Google Maps Static APIのURLを生成
   const getGoogleMapImageUrl = (lat: number, lng: number, zoom = 16) => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY; // 環境変数にAPIキーを設定
     return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${apiKey}`;
@@ -52,13 +32,23 @@ export const BoardDetail = () => {
     <div>
       <section>
         <div className="flex items-center justify-between pb-4">
-          <button
-            className="flex items-center text-gray-500"
-            onClick={() => router.push("/boards")}
-          >
-            <span className="material-icons">keyboard_arrow_left</span>
-            <p>掲示板一覧</p>
-          </button>
+          <div className="flex items-center justify-between w-full">
+            <button
+              className="flex items-center text-gray-500"
+              onClick={() => router.push("/boards")}
+            >
+              <span className="material-icons">keyboard_arrow_left</span>
+              <p>掲示板一覧</p>
+            </button>
+            {board.user.name === userName && (
+              <button
+                className="border border-main text-main py-0.5 px-3 rounded-full text-sm font-bold"
+                onClick={() => router.push(`/boards/${board.id}/edit`)}
+              >
+                編集する
+              </button>
+            )}
+          </div>
         </div>
         <div className="flex">
           <div className="h-28 min-w-28 overflow-hidden rounded-full relative">
@@ -72,9 +62,16 @@ export const BoardDetail = () => {
           <div className="pl-2 py-1 w-full">
             <div className="flex items-center justify-between pb-1">
               <p className="text-2xl font-bold">{board?.name}</p>
-              <p className="bg-red-500 px-3 py-0.5 rounded-full text-white text-xs font-bold">
-                {board.category}情報
-              </p>
+              <div className="flex items-center space-x-1">
+                <p
+                  className={`px-2 py-0.5 rounded-md text-white text-xs font-bold ${board.category === "迷子" ? "bg-red-500" : board.category === "保護" ? "bg-blue-500" : "bg-green-500"}`}
+                >
+                  {board.category}
+                </p>
+                <p className="bg-gray-400 px-3 py-0.5 rounded-md text-white text-xs font-bold">
+                  {board.status}
+                </p>
+              </div>
             </div>
             <ul>
               <li className="text-base font-bold text-gray-400">
@@ -168,7 +165,7 @@ export const BoardDetail = () => {
           <label className="text-gray-400 text-sm font-bold">
             いなくなった日時
           </label>
-          <p className="text-black font-bold">{board.date} 頃</p>
+          <p className="text-black font-bold">{board.formatedDate} 頃</p>
         </div>
         <div>
           <label className="text-gray-400 text-sm font-bold">

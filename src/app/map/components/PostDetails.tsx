@@ -1,10 +1,10 @@
 import Image from "next/image";
 import defaultUserImage from "/public/images/default_avatar.png";
 import { useLikes } from "@/hooks/useLikes";
-import { useEffect, useState } from "react";
-import { usePosts } from "@/hooks/usePosts";
+import { useState } from "react";
 import { usePostComments } from "@/hooks/usePostComments";
 import { useAuth } from "@/hooks/useAuth";
+import { usePost } from "@/hooks/usePost";
 
 type PostDetailsProps = {
   postId: number;
@@ -13,7 +13,7 @@ type PostDetailsProps = {
 export const PostDetails = ({ postId }: PostDetailsProps) => {
   const { name } = useAuth();
   const { isLiked, like, dislike } = useLikes(postId);
-  const { post, fetchPostById } = usePosts();
+  const { post, fetch } = usePost(postId);
   const { comments, sendComment } = usePostComments(postId);
 
   const [commentText, setCommentText] = useState("");
@@ -24,20 +24,16 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
     } else {
       await like();
     }
-    fetchPostById(postId);
+    fetch();
   };
 
   const handleSendComment = async () => {
     if (commentText.trim()) {
       await sendComment(commentText);
-      setCommentText(""); // コメント送信後に入力フィールドをクリア
-      fetchPostById(postId); // コメント数更新のため再取得
+      setCommentText("");
+      fetch();
     }
   };
-
-  useEffect(() => {
-    fetchPostById(postId);
-  }, []);
 
   return post ? (
     <>
@@ -91,7 +87,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
           <p>{post.body}</p>
         </section>
         <section className="space-y-1">
-          <p className="flex items-center text-xs font-bold pb-3">
+          <p className="flex items-center text-xs font-bold p-1">
             <span
               className="material-icons mr-0.5"
               style={{ fontSize: "16px" }}
@@ -100,14 +96,14 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
             </span>
             コメント
           </p>
-          <div className="w-full">
+          <div className="w-full h-80 overflow-y-auto rounded-md border border-gray-200 bg-gray-100">
             {comments.length === 0 ? (
               <p className="font-bold text-center text-gray-400 text-sm">
                 コメントがありません。
               </p>
             ) : (
               comments.map((comment, index) => (
-                <div key={index}>
+                <div key={index} className="p-2">
                   <div className="flex items-center mb-1">
                     <div className="h-4 w-4 rounded-full overflow-hidden relative mr-1">
                       <Image
@@ -119,21 +115,23 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
                     </div>
                     <p className="text-xs">{comment.user.nickname}</p>
                   </div>
-                  <div
-                    className={`${comment.user.name === name ? "bg-main" : "bg-gray-200"} rounded-[24px] px-5 py-3 relative`}
-                  >
+                  <div className="flex items-end pl-1">
                     <div
-                      className={`${comment.user.name === name ? "bg-main" : "bg-gray-200"} absolute top-0 left-0 rounded-md h-1/2 w-1/2 -z-10`}
-                    />
-                    <p
-                      className={`${comment.user.name === name && "text-base"} font-bold w-full break-words`}
+                      className={`${comment.user.name === name ? "bg-main" : "bg-gray-200"} w-max max-w-[75%] rounded-[24px] px-5 py-3 relative z-10`}
                     >
-                      {comment.body}
+                      <div
+                        className={`${comment.user.name === name ? "bg-main" : "bg-gray-200"} absolute top-0 left-0 rounded-md h-1/2 w-1/2 -z-10`}
+                      />
+                      <p
+                        className={`${comment.user.name === name && "text-base"} font-bold w-full break-words z-10`}
+                      >
+                        {comment.body}
+                      </p>
+                    </div>
+                    <p className="text-right p-1" style={{ fontSize: "10px" }}>
+                      {comment.createdAt}
                     </p>
                   </div>
-                  <p className="text-right p-1" style={{ fontSize: "10px" }}>
-                    {comment.createdAt}
-                  </p>
                 </div>
               ))
             )}

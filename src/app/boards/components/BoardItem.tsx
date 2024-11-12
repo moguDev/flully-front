@@ -26,9 +26,16 @@ export const BoardItem = ({ board }: BoardItemProps) => {
         <div className="w-full">
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold">{board.name}</p>
-            <p className="text-xs bg-red-500 px-2 py-1 text-white font-bold rounded-md">
-              {board.category}情報
-            </p>
+            <div className="flex items-center space-x-1">
+              <p
+                className={`text-xs px-2 py-1 text-white font-bold rounded-md ${board.category === "迷子" ? "bg-red-500" : board.category === "保護" ? "bg-blue-500" : "bg-green-500"}`}
+              >
+                {board.category}
+              </p>
+              <p className="text-xs bg-gray-400 px-2 py-1 text-white font-bold rounded-md">
+                {board.status}
+              </p>
+            </div>
           </div>
           <ul>
             <li className="text-sm font-bold text-gray-400">
@@ -38,7 +45,7 @@ export const BoardItem = ({ board }: BoardItemProps) => {
               特徴：<span className="text-black">{board.feature}</span>
             </li>
             <li className="text-sm font-bold text-gray-400">
-              日時：<span className="text-black">{board.date} 頃</span>
+              日時：<span className="text-black">{board.formatedDate} 頃</span>
             </li>
             <li className="text-sm font-bold text-gray-400">
               場所：<span className="text-black">{board.location}</span>
@@ -51,8 +58,8 @@ export const BoardItem = ({ board }: BoardItemProps) => {
       </div>
       <div className="flex items-center justify-between py-1">
         <div>
-          <p className="flex items-center font-bold text-main">
-            <span className="material-icons" style={{ fontSize: "20px" }}>
+          <p className="flex items-center font-bold text-xs text-main">
+            <span className="material-icons" style={{ fontSize: "16px" }}>
               bookmark
             </span>
             {board.bookmarkCount}

@@ -79,10 +79,10 @@ export const UserProfiles = () => {
             <div className="text-xs font-bold py-1">{user.introduction}</div>
             <div className="flex items-center font-bold space-x-2 py-1">
               <p className="text-xs">
-                <span className="text-lg mr-0.5">12</span>フォロワー
+                <span className="text-lg mr-0.5">{0}</span>フォロワー
               </p>
               <p className="text-xs">
-                <span className="text-lg mr-0.5">34</span>フォロー中
+                <span className="text-lg mr-0.5">{0}</span>フォロー中
               </p>
             </div>
           </section>
@@ -223,6 +223,7 @@ export const UserProfiles = () => {
                   <button
                     key={index}
                     className="h-24 w-24 overflow-hidden relative"
+                    onClick={() => router.push(`/map?post_id=${post.id}`)}
                   >
                     <Image
                       src={post.imageUrl}

@@ -8,7 +8,7 @@ export default function Home() {
   };
 
   return (
-    <main className="bg-main min-h-screen w-screen pt-24">
+    <main className="bg-main">
       <div>
         <h1 className="text-base text-center text-9xl font-bold">flully</h1>
       </div>
