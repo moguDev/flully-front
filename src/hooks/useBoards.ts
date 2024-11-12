@@ -37,6 +37,19 @@ export const useBoards = () => {
     }
   };
 
+  const fetchSearchResults = async (keyword: string) => {
+    setLoading(true);
+    try {
+      const res = await api.get("/boards/search", { params: { keyword } });
+      const { data } = res;
+      setBoards(camelcaseKeys(data, { deep: true }));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const postNewBoard = async (data: BoardData) => {
     setLoading(true);
     try {
@@ -91,5 +104,11 @@ export const useBoards = () => {
     fetchBoards();
   }, []);
 
-  return { loading, boards, postNewBoard, fetchNearbyBoard };
+  return {
+    loading,
+    boards,
+    postNewBoard,
+    fetchNearbyBoard,
+    fetchSearchResults,
+  };
 };
