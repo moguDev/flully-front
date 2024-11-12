@@ -51,13 +51,9 @@ const Map: React.FC = () => {
             return;
           }
 
-          if (!currentPosition) {
-            setCurrentPosition(newPosition);
-            sendCheckpoint(latitude, longitude);
-          }
-
           setPath((prevPath) => [...prevPath, newPosition]);
           setCurrentPosition(newPosition);
+          sendCheckpoint(latitude, longitude);
         },
         (error) => {
           console.error("Error obtaining location:", error);
