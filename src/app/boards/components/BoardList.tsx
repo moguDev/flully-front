@@ -6,7 +6,12 @@ import { useBoards } from "@/hooks/useBoards";
 import { BoardItem } from "./BoardItem";
 
 export const BoardList = () => {
-  const { boards } = useBoards();
+  const { boards, fetchSearchResults } = useBoards();
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    fetchSearchResults(event.target.value);
+  };
+
   return (
     <div>
       <section className="border-b border-gray-200">
@@ -16,6 +21,7 @@ export const BoardList = () => {
             type="text"
             className="w-full bg-gray-200 bg-opacity-0 outline-none"
             placeholder="キーワードで検索"
+            onChange={handleSearchChange}
           />
         </div>
         <div className="flex items-center px-1 py-2">
