@@ -5,6 +5,7 @@ import { Header } from "./components/Header";
 import { Navigation } from "./components/Navigation";
 import { RecoilRootWrapper } from "./components/RecoilRootWrapper";
 import { SideDrawer } from "./components/SideDrawer";
+import { SideNavigation } from "./components/SideNavigation";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -41,7 +42,12 @@ export default function RootLayout({
         <RecoilRootWrapper>
           <SideDrawer>
             <Header />
-            <div className="px-3 py-20 w-screen">{children}</div>
+            <div className="flex">
+              <div className="w-96 lg:flex hidden">
+                <SideNavigation />
+              </div>
+              <div className="w-full px-3 py-20">{children}</div>
+            </div>
             <Navigation />
           </SideDrawer>
         </RecoilRootWrapper>

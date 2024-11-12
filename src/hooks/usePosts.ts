@@ -14,7 +14,6 @@ type PostData = {
 
 export const usePosts = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [post, setPost] = useState<Post | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
 
   const postPost = async (data: PostData) => {
@@ -39,21 +38,6 @@ export const usePosts = () => {
     }
   };
 
-  const fetchPostById = async (postId: number): Promise<Post | null> => {
-    setLoading(true);
-    try {
-      const res = await api.get(`/posts/${postId}`);
-      const { data } = res;
-      setPost({ ...camelcaseKeys(data, { deep: true }) });
-      return post;
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-    return null;
-  };
-
   const fetchNearByPost = async (lat: number, lng: number) => {
     setLoading(true);
     try {
@@ -72,5 +56,5 @@ export const usePosts = () => {
     }
   };
 
-  return { post, posts, loading, postPost, fetchPostById, fetchNearByPost };
+  return { posts, loading, postPost, fetchNearByPost };
 };

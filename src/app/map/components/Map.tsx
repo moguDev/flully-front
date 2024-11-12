@@ -10,12 +10,13 @@ import { useWalking } from "@/hooks/useWalking";
 import { showPostModal } from "./PostModal";
 import { HalfModal } from "./HarfModal";
 import { usePosts } from "@/hooks/usePosts";
-import { Post } from "@/app/types";
 import Image from "next/image";
 import useGoogleMaps from "@/hooks/useGoogleMaps";
 import { useBoards } from "@/hooks/useBoards";
+import { useRouter } from "next/navigation";
 
 const Map: React.FC = () => {
+  const router = useRouter();
   const { inProgress, sendCheckpoint } = useWalking();
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral | null>(null);
@@ -24,7 +25,6 @@ const Map: React.FC = () => {
   const { posts, fetchNearByPost } = usePosts();
   const { boards, fetchNearbyBoard } = useBoards();
   const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   const { isLoaded, loadError } = useGoogleMaps();
 
@@ -124,8 +124,8 @@ const Map: React.FC = () => {
               <div
                 className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
                 onClick={() => {
-                  setSelectedPost(post);
                   setHarfModalIsOpen(true);
+                  router.replace(`?post_id=${post.id}`);
                 }}
               >
                 {post.imageUrl && (
@@ -217,12 +217,7 @@ const Map: React.FC = () => {
           </button>
         </div>
       </div>
-      <HalfModal
-        posts={posts}
-        boards={boards}
-        open={harfModalIsOpen}
-        selected={selectedPost}
-      />
+      <HalfModal posts={posts} boards={boards} open={harfModalIsOpen} />
     </>
   );
 };

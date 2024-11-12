@@ -38,7 +38,7 @@ export const HalfModal = ({
   }, [comments, isOpen]);
 
   const getMapImageUrl = (lat: number, lng: number) => {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY; // ここにGoogle Maps APIキーを入れてください
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=400x400&markers=color:red|${lat},${lng}&key=${apiKey}`;
   };
 
