@@ -11,7 +11,7 @@ export const BoardItem = ({ board }: BoardItemProps) => {
   const router = useRouter();
   return (
     <div
-      className="py-3 lg:px-2"
+      className="py-3 lg:px-4 cursor-pointer transition-all hover:translate-x-1"
       onClick={() => router.push(`/boards/${board.id}`)}
     >
       <div className="flex space-x-2">

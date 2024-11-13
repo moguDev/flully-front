@@ -14,6 +14,7 @@ import Image from "next/image";
 import useGoogleMaps from "@/hooks/useGoogleMaps";
 import { useBoards } from "@/hooks/useBoards";
 import { useRouter } from "next/navigation";
+import { NearbyInformation } from "@/app/components/NearbyInformation";
 
 const Map: React.FC = () => {
   const router = useRouter();
@@ -107,7 +108,10 @@ const Map: React.FC = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 h-screen w-full">
+      <div className="flex absolute top-0 left-0 h-full w-full">
+        <div className="lg:block hidden">
+          <NearbyInformation posts={posts} boards={boards} />
+        </div>
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
@@ -144,7 +148,7 @@ const Map: React.FC = () => {
           ))}
         </GoogleMap>
 
-        <div className="absolute top-28 left-4 bg-white p-2 rounded shadow-md">
+        <div className="absolute top-28 right-4 bg-white p-2 rounded shadow-md">
           <p>取得回数: {locationCount} 回</p>
           {currentPosition && (
             <p>
@@ -220,7 +224,9 @@ const Map: React.FC = () => {
           </button>
         </div>
       </div>
-      <HalfModal posts={posts} boards={boards} open={harfModalIsOpen} />
+      <div className="lg:hidden">
+        <HalfModal posts={posts} boards={boards} open={harfModalIsOpen} />
+      </div>
     </>
   );
 };

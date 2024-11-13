@@ -1,21 +1,14 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "./components/Header";
 import { Navigation } from "./components/Navigation";
 import { RecoilRootWrapper } from "./components/RecoilRootWrapper";
 import { SideDrawer } from "./components/SideDrawer";
-import { SideNavigation } from "./components/SideNavigation";
+import { Zen_Kaku_Gothic_New } from "next/font/google";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+export const font = Zen_Kaku_Gothic_New({
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
 });
 
 export const metadata: Metadata = {
@@ -36,18 +29,11 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${font.className} antialiased`}>
         <RecoilRootWrapper>
           <SideDrawer>
             <Header />
-            <div className="flex">
-              <div className="w-96 lg:flex hidden">
-                <SideNavigation />
-              </div>
-              <div className="w-full px-3 py-20">{children}</div>
-            </div>
+            <div className="lg:pl-16 lb:pb-0 w-full">{children}</div>
             <Navigation />
           </SideDrawer>
         </RecoilRootWrapper>
