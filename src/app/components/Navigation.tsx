@@ -17,7 +17,7 @@ const NavigationMenu = ({
 }: NavigationMenuProps) => {
   return (
     <li
-      className={`mx-4 my-2 p-1 w-full flex flex-col items-center justify-center transition-all rounded ${selected ? "opacity-100 scale-125 bg-main bg-opacity-30" : "opacity-50"}`}
+      className={`mx-4 my-2 p-1 w-full flex flex-col items-center justify-center transition-all rounded ${selected ? "opacity-100 scale-125 bg-main bg-opacity-30" : "opacity-50"} cursor-pointer hover:scale-125`}
       onClick={onClick}
     >
       <p className="material-icons select-none" style={{ fontSize: "24px" }}>

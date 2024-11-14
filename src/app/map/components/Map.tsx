@@ -34,6 +34,10 @@ const Map: React.FC = () => {
     width: "100%",
   };
 
+  {
+    /**現在の位置情報を取得して、現在地の更新、経路の描画、チェックポイントの送信を実施
+    ただし、前回の位置から3メートル以内だった場合更新しない */
+  }
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -68,7 +72,6 @@ const Map: React.FC = () => {
 
   useEffect(() => {
     if (checkpoints.length > 0) {
-      console.log(checkpoints);
       setPath(checkpoints);
     }
   }, [checkpoints]);
@@ -157,7 +160,7 @@ const Map: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="fixed right-2 bottom-36 z-20">
+      <div className="fixed lg:bottom-10 lg:right-4 bottom-36 right-2 z-20">
         <div className="flex flex-col items-center justify-center space-y-2">
           <button className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95">
             <span

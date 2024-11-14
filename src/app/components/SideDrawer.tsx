@@ -2,8 +2,8 @@
 import { useAuth } from "@/hooks/useAuth";
 import defaultImage from "/public/images/default_avatar.png";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useUserProfiles } from "@/hooks/useUserProfiles";
 
 const closeDrawer = () => {
   const drawerCheckbox = document.getElementById(
@@ -14,6 +14,7 @@ const closeDrawer = () => {
 
 export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
   const { name, nickname, logout } = useAuth();
+  const { user } = useUserProfiles(name);
   const router = useRouter();
   return (
     <div className="drawer drawer-end ">
@@ -25,19 +26,19 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           aria-label="close sidebar"
           className="drawer-overlay"
         />
-        <div className="bg-base bg-opacity-90 font-bold h-full w-80 shadow-lg px-5  py-10">
+        <div className="bg-white font-bold h-full lg:w-96 w-80 shadow-lg px-5  py-10">
           <div className="flex items-center">
             <div className="h-12 w-12 rounded relative">
               <Image
-                src={defaultImage}
+                src={user?.avatarUrl || defaultImage}
                 alt="user_icon"
                 className="object-cover rounded-full"
                 fill
               />
             </div>
             <div className="ml-1.5">
-              <p className="text-xl font-bold">{nickname}</p>
-              <p className="text-xs opacity-50">@{name}</p>
+              <p className="text-2xl font-bold">{nickname}</p>
+              <p className="text-sm opacity-50">@{name}</p>
             </div>
           </div>
           <div className="flex items-center justify-between">
@@ -95,40 +96,95 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
               <p style={{ fontSize: "8px" }}>2024.10.24</p>
             </div>
           </div>
-          <ul className="py-2 space-y-1">
+          <ul className="my-2 py-2 space-y-1 border-t border-gray-200">
             <li>
               <button
-                className="w-full bg-main text-base flex items-center justify-center rounded py-2 transition-all active:scale-95"
+                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
                 onClick={() => {
                   router.push(`/${name}`);
                   closeDrawer();
                 }}
               >
-                <span className="material-icons">person</span>
+                <span className="material-icons mr-1">person</span>
                 <span className="text-sm">マイページ</span>
               </button>
             </li>
             <li>
               <button
-                className="w-full bg-red-500 text-base flex items-center justify-center rounded py-2 transition-all active:scale-95"
+                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
                 onClick={() => {
                   logout();
                   closeDrawer();
                 }}
               >
-                <span className="material-icons">logout</span>
+                <span className="material-icons mr-1">logout</span>
                 <span className="text-sm">ログアウト</span>
               </button>
             </li>
           </ul>
-          <div className="flex items-center justify-center text-xs mt-3">
-            <Link href="#" className="p-2">
-              ご利用規約
-            </Link>
-            <Link href="#" className="p-2">
-              プライバシーポリシー
-            </Link>
-          </div>
+          <ul className="my-2 py-2 space-y-1 border-t border-gray-200">
+            <li>
+              <button
+                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                onClick={() => {
+                  router.push("/map");
+                  closeDrawer();
+                }}
+              >
+                <span className="material-icons mr-1">location_on</span>
+                <span className="text-sm">マップ</span>
+              </button>
+            </li>
+            <li>
+              <button
+                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                onClick={() => {
+                  router.push("/boards");
+                  closeDrawer();
+                }}
+              >
+                <span className="material-icons mr-1">
+                  format_list_bulleted
+                </span>
+                <span className="text-sm">まいご掲示板</span>
+              </button>
+            </li>
+          </ul>
+          <ul className="my-2 py-2 space-y-1 border-t border-gray-200">
+            <li>
+              <button
+                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                onClick={() => {
+                  closeDrawer();
+                }}
+              >
+                <span className="material-icons mr-1">description</span>
+                <span className="text-sm">ご利用規約</span>
+              </button>
+            </li>
+            <li>
+              <button
+                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                onClick={() => {
+                  closeDrawer();
+                }}
+              >
+                <span className="material-icons mr-1">verified_user</span>
+                <span className="text-sm">プライバシーポリシー</span>
+              </button>
+            </li>
+            <li>
+              <button
+                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                onClick={() => {
+                  closeDrawer();
+                }}
+              >
+                <span className="material-icons mr-1">mail</span>
+                <span className="text-sm">お問い合わせ</span>
+              </button>
+            </li>
+          </ul>
           <p className="text-center font-bold text-xs">©️ flully 2024</p>
         </div>
       </div>

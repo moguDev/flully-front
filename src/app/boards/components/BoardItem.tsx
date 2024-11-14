@@ -53,10 +53,7 @@ export const BoardItem = ({ board }: BoardItemProps) => {
           </ul>
         </div>
       </div>
-      <div className="bg-gray-100 text-xs text-gray-600 font-semibold rounded p-2 mt-2">
-        {board.body}
-      </div>
-      <div className="flex items-center justify-between py-1">
+      <div className="flex items-center justify-between px-1 py-2">
         <div>
           <p className="flex items-center font-bold text-xs text-main">
             <span className="material-icons" style={{ fontSize: "16px" }}>

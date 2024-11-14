@@ -158,7 +158,7 @@ export const NewBoardForm = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div>
       <button
         className="text-main flex items-center"
         onClick={() => router.push("/boards")}

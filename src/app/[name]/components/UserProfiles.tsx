@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Loading from "@/app/loading";
+import XIcon from "@mui/icons-material/X";
 
 export const UserProfiles = () => {
   const { name: nameParams } = useParams();
@@ -17,7 +18,7 @@ export const UserProfiles = () => {
   ) : (
     <div>
       {user ? (
-        <div>
+        <div className="max-w-2xl mx-auto">
           <section className="border-b border-gray-300">
             <div className="flex items-center">
               <div className="rounded-full h-24 w-24 min-w-24 relative overflow-hidden">
@@ -67,9 +68,18 @@ export const UserProfiles = () => {
                 </span>
                 <p className="font-bold">{user.location}</p>
               </div>
-              <div className="flex items-center bg-main p-1 rounded-lg">
+              <div className="flex items-center space-x-1">
+                {user.twitter && (
+                  <a
+                    href={user.twitter}
+                    target="_blank"
+                    className="text-base bg-black p-1 rounded-lg flex items-center"
+                  >
+                    <XIcon style={{ fontSize: "24px" }} />
+                  </a>
+                )}
                 <div
-                  className="material-icons text-base"
+                  className="material-icons text-base bg-main p-1 rounded-lg"
                   style={{ fontSize: "24px" }}
                 >
                   email
@@ -218,11 +228,11 @@ export const UserProfiles = () => {
                 <p className="font-bold mb-1">見つけた動物</p>
                 <p className="text-sm font-bold">{user.posts?.length}件</p>
               </div>
-              <div className="grid grid-cols-4">
+              <div className="grid grid-cols-4 gap-0.5">
                 {user.posts?.map((post, index) => (
                   <button
                     key={index}
-                    className="h-24 w-24 overflow-hidden relative"
+                    className="md:h-44 h-24 w-full overflow-hidden relative rounded"
                     onClick={() => router.push(`/map?post_id=${post.id}`)}
                   >
                     <Image

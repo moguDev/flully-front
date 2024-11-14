@@ -34,26 +34,32 @@ export const NearbyInformation = ({
   }, [postId]);
 
   return (
-    <div className="w-96 h-screen relative border-r border-gray-300">
+    <div className="w-96 pt-16 p-2 h-screen relative border-r border-gray-300 max-h-[100vh] overflow-y-auto">
+      <div className="flex items-center justify-between px-2 py-4 border-b border-gray-200">
+        <p className="flex items-center font-bold text-lg">
+          <span className="material-icons">location_on</span>このあたりの情報
+        </p>
+        <p className="font-bold text-gray-500">(10km以内)</p>
+      </div>
       {selectedPost ? (
         <div>
           <PostDetails postId={selectedPost.id} />
         </div>
       ) : (
-        <section className="pt-16 p-2 flex flex-col max-h-[100vh] overflow-y-auto">
+        <section className="flex flex-col">
           <div className="px-2 mt-2 mb-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between py-1">
               <p className="font-bold flex items-center py-1">
                 <span className="material-icons">search</span>
                 見つかった動物
               </p>
               <p className="text-sm font-bold">{posts.length}件</p>
             </div>
-            <div className="grid grid-cols-4 p-1">
+            <div className="grid grid-cols-4 gap-0.5">
               {posts.map((post, index) => (
                 <div
                   key={index}
-                  className="w-full h-24 overflow-hidden relative"
+                  className="w-full h-24 overflow-hidden rounded relative cursor-pointer transition-all hover:-translate-y-1"
                   onClick={() => {
                     router.replace(`?post_id=${post.id}`);
                   }}
@@ -69,9 +75,9 @@ export const NearbyInformation = ({
               ))}
             </div>
           </div>
-          <div className="px-2 py-4">
-            <div className="flex items-center justify-between">
-              <p className="font-bold flex items-center">
+          <div className="py-4">
+            <div className="px-2 flex items-center justify-between">
+              <p className="font-bold flex items-center py-1">
                 <div className="h-5 w-5 relative overflow-hidden mr-1">
                   <Image
                     src={catIcon}

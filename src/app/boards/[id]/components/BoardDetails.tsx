@@ -23,15 +23,15 @@ export const BoardDetail = () => {
   } = useBookmark(parseInt(id as string));
 
   const getGoogleMapImageUrl = (lat: number, lng: number, zoom = 16) => {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY; // 環境変数にAPIキーを設定
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${apiKey}`;
   };
 
   return loading ? (
     <Loading />
   ) : board ? (
-    <div className="lg:flex">
-      <div className="max-w-3xl mx-auto p-2">
+    <div className="lg:flex relative">
+      <div className="lg:pb-0 pb-32 max-w-3xl lg:w-2/3 w-full mx-auto p-2">
         <section>
           <div className="flex items-center justify-between pb-4">
             <div className="flex items-center justify-between w-full">
@@ -175,13 +175,12 @@ export const BoardDetail = () => {
             </label>
             <p className="text-black font-bold">{board.location}</p>
             {board.lat && board.lng && (
-              <div className="mt-2">
+              <div className="mt-2 overflow-hidden rounded-md border border-main relative w-full h-72">
                 <Image
                   src={getGoogleMapImageUrl(board.lat, board.lng)}
                   alt="Google Map"
-                  width={600}
-                  height={300}
-                  className="rounded-md border border-main"
+                  className="object-cover"
+                  fill
                 />
               </div>
             )}
@@ -194,12 +193,24 @@ export const BoardDetail = () => {
           </div>
         </section>
       </div>
-      <div className="max-w-2xl mx-auto lg:block hidden border border-gray-300 rounded-lg">
-        <div></div>
-        <div className="max-h-96 overflow-y-auto">
+      {/* PCの場合のコメント欄 */}
+      <div className="w-1/3 lg:block hidden">
+        <div>
+          <p className="font-bold p-2 flex items-center text-lg">
+            <span
+              className="material-icons mr-0.5"
+              style={{ fontSize: "18px" }}
+            >
+              sms
+            </span>
+            コメント
+          </p>
+        </div>
+        <div className="h-[80vh] border border-gray-300 rounded-lg overflow-hidden">
           <CommentViewer boardId={parseInt(id as string)} />
         </div>
       </div>
+      {/* スマホの場合のハーフモーダル */}
       <div className="lg:hidden">
         <HalfModal open={false}>
           <CommentViewer boardId={parseInt(id as string)} />

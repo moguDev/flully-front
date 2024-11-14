@@ -36,67 +36,69 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
   };
 
   return (
-    <section className="h-full pb-32 overflow-y-auto relative">
-      <div className="px-4">
-        {comments.reverse().map((comment, index) => (
-          <div key={index} className="my-2">
-            <div className="flex items-center mb-1">
-              <div className="h-5 w-5 overflow-hidden rounded-full relative mr-0.5">
-                <Image
-                  src={comment.user.avatarUrl}
-                  alt={comment.user.nickname}
-                  className="object-cover"
-                  fill
-                />
+    <div className="relative h-full w-full">
+      <section className="absolute h-full w-full lg:pb-16 pb-32 overflow-y-auto">
+        <div className="px-4">
+          {comments.reverse().map((comment, index) => (
+            <div key={index} className="my-2">
+              <div className="flex items-center mb-1">
+                <div className="h-5 w-5 overflow-hidden rounded-full relative mr-0.5">
+                  <Image
+                    src={comment.user.avatarUrl}
+                    alt={comment.user.nickname}
+                    className="object-cover"
+                    fill
+                  />
+                </div>
+                <p className="text-xs font-bold">{comment.user.nickname}</p>
               </div>
-              <p className="text-xs font-bold">{comment.user.nickname}</p>
+              <div className="flex items-end">
+                {comment.contentType === "text" ? (
+                  <div className="bg-gray-200 w-max max-w-[70%] px-5 py-2 rounded-[24px] relative mx-2">
+                    <div
+                      className={`h-1/2 w-1/2 rounded-md absolute top-0 -z-10 ${"left-0 bg-gray-200"}`}
+                    />
+                    <p className="text-sm font-bold w-full break-words">
+                      {comment.content as string}
+                    </p>
+                  </div>
+                ) : comment.contentType === "image" ? (
+                  <div className="relative overflow-hidden h-64 w-56 rounded mx-2">
+                    <Image
+                      src={comment.content as string}
+                      alt={`image ${comment.id}`}
+                      className="object-cover"
+                      fill
+                    />
+                  </div>
+                ) : comment.contentType === "location" ? (
+                  <div className="relative overflow-hidden h-56 w-56 rounded mx-2">
+                    <Image
+                      src={getMapImageUrl(
+                        (comment.content as { lat: number; lng: number }).lat,
+                        (comment.content as { lat: number; lng: number }).lng
+                      )}
+                      alt={`Location map`}
+                      className="object-cover"
+                      fill
+                    />
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+                <p
+                  className="text-gray-400 font-bold text-right"
+                  style={{ fontSize: "10px" }}
+                >
+                  {comment.createdAt}
+                </p>
+              </div>
             </div>
-            <div className="flex items-end">
-              {comment.contentType === "text" ? (
-                <div className="bg-gray-200 w-max max-w-[70%] px-5 py-2 rounded-[24px] relative mx-2">
-                  <div
-                    className={`h-1/2 w-1/2 rounded-md absolute top-0 -z-10 ${"left-0 bg-gray-200"}`}
-                  />
-                  <p className="text-sm font-bold w-full break-words">
-                    {comment.content as string}
-                  </p>
-                </div>
-              ) : comment.contentType === "image" ? (
-                <div className="relative overflow-hidden h-64 w-56 rounded mx-2">
-                  <Image
-                    src={comment.content as string}
-                    alt={`image ${comment.id}`}
-                    className="object-cover"
-                    fill
-                  />
-                </div>
-              ) : comment.contentType === "location" ? (
-                <div className="relative overflow-hidden h-56 w-56 rounded mx-2">
-                  <Image
-                    src={getMapImageUrl(
-                      (comment.content as { lat: number; lng: number }).lat,
-                      (comment.content as { lat: number; lng: number }).lng
-                    )}
-                    alt={`Location map`}
-                    className="object-cover"
-                    fill
-                  />
-                </div>
-              ) : (
-                <div></div>
-              )}
-              <p
-                className="text-gray-400 font-bold text-right"
-                style={{ fontSize: "10px" }}
-              >
-                {comment.createdAt}
-              </p>
-            </div>
-          </div>
-        ))}
-        <div ref={commentsEndRef} />
-      </div>
-      <div className="lg:absolute fixed bottom-16 left-0 h-max w-full bg-base p-2 border-t border-gray-200">
+          ))}
+          <div ref={commentsEndRef} />
+        </div>
+      </section>
+      <div className="lg:absolute fixed lg:bottom-0 bottom-16 left-0 h-max w-full bg-base p-2 border-t border-gray-200">
         <div className="flex items-center">
           <div className="bg-gray-100 p-2 px-2 rounded-full w-full flex items-center">
             <label className="material-icons text-main opacity-60 px-1 transition-all active:scale-95">
@@ -131,6 +133,6 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
           </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
