@@ -5,7 +5,7 @@ import { StartWalkingModal } from "./components/StartWalkingModal";
 
 export default function MapPage() {
   return (
-    <main className="bg-base w-full">
+    <main className="bg-base w-full relative">
       <Map />
       <PostModal />
       <StartWalkingModal />

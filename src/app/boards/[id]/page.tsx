@@ -1,5 +1,9 @@
 import { BoardDetail } from "./components/BoardDetails";
 
 export default function BoardDetailsPage() {
-  return <BoardDetail />;
+  return (
+    <div className="py-20 p-4">
+      <BoardDetail />
+    </div>
+  );
 }

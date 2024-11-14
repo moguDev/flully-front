@@ -13,7 +13,10 @@ export const WalkDetails = () => {
 
   return (
     <div>
-      <button className="font-bold text-main flex items-center py-3">
+      <button
+        className="font-bold text-main flex items-center py-3 transition-all hover:brightness-125"
+        onClick={() => router.push("/walks")}
+      >
         <span className="material-icons">keyboard_arrow_left</span> 一覧に戻る
       </button>
       <div className="h-[450px] w-full rounded-md overflow-hidden relative">

@@ -17,13 +17,16 @@ const NavigationMenu = ({
 }: NavigationMenuProps) => {
   return (
     <li
-      className={`mx-4 my-2 p-1 w-1/4 flex flex-col items-center justify-center transition-all rounded ${selected ? "opacity-100 scale-125 bg-main bg-opacity-30" : "opacity-50"}`}
+      className={`mx-4 my-2 p-1 w-full flex flex-col items-center justify-center transition-all rounded ${selected ? "opacity-100 scale-125 bg-main bg-opacity-30" : "opacity-50"} cursor-pointer hover:scale-125`}
       onClick={onClick}
     >
       <p className="material-icons select-none" style={{ fontSize: "24px" }}>
         {selected ? iconName : iconName}
       </p>
-      <p className="select-none font-bold" style={{ fontSize: "7px" }}>
+      <p
+        className="lg:hidden select-none font-bold"
+        style={{ fontSize: "7px" }}
+      >
         {label}
       </p>
     </li>
@@ -36,7 +39,7 @@ export const Navigation = () => {
   const { isAuthenticated, name } = useAuth();
   return (
     <ul
-      className={`fixed bottom-0 flex items-center h-16 w-full border-t bg-base border-gray-300 z-40 ${pathName === "/" && "hidden"}`}
+      className={`shadow-lg fixed lg:pt-20 lg:top-0 lg:h-full lg:w-16 lg:flex-col bottom-0 flex items-center h-16 w-full border-t bg-base border-gray-300 z-30 overflow-hidden ${pathName === "/" && "hidden"}`}
     >
       <NavigationMenu
         iconName="location_on"

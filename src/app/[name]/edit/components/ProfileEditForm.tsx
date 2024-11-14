@@ -85,7 +85,7 @@ export const ProfileEditForm = () => {
             }}
           >
             <Image
-              src={imageSource || defaultUserImage}
+              src={imageSource || user?.avatarUrl || defaultUserImage}
               alt="アイコン"
               className="object-cover"
               fill

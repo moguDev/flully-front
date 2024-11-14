@@ -5,6 +5,10 @@ import { useState } from "react";
 import { usePostComments } from "@/hooks/usePostComments";
 import { useAuth } from "@/hooks/useAuth";
 import { usePost } from "@/hooks/usePost";
+import XIcon from "@mui/icons-material/X";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import { useRouter } from "next/navigation";
 
 type PostDetailsProps = {
   postId: number;
@@ -15,6 +19,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
   const { isLiked, like, dislike } = useLikes(postId);
   const { post, fetch } = usePost(postId);
   const { comments, sendComment } = usePostComments(postId);
+  const router = useRouter();
 
   const [commentText, setCommentText] = useState("");
 
@@ -37,57 +42,58 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
 
   return post ? (
     <>
-      <div className="p-3 pb-36 space-y-3 h-full overflow-y-auto">
+      <div className="p-3 lg:pb-0 pb-20 space-y-3 h-full overflow-y-auto">
         <section className="space-y-1">
-          <div className="flex items-center py-1">
-            <div className="h-5 w-5 overflow-hidden rounded-full relative mr-0.5">
-              <Image
-                src={
-                  post.user && post.user.avatarUrl
-                    ? post.user.avatarUrl
-                    : defaultUserImage
-                }
-                alt="avatar"
-                className="object-cover"
-                fill
-              />
-            </div>
-            <p className="font-bold">
-              {post.user ? post.user.nickname : "非公開"}
-            </p>
-          </div>
-          <div className="w-full h-80 overflow-hidden relative rounded">
+          <button
+            className="flex items-center text-sm text-gray-600 py-2"
+            onClick={() => router.push("/map")}
+          >
+            <span className="material-icons">keyboard_arrow_left</span>
+            <p>一覧にもどる</p>
+          </button>
+          <div className="w-full h-96 overflow-hidden relative rounded">
             <Image
               src={post.imageUrl}
               alt={"image"}
               className="object-cover"
               fill
             />
-            <div className="flex items-center absolute bottom-0 left-0 m-1 space-x-2">
-              <button className="bg-black rounded text-white p-2 py-1 text-sm font-bold transition-all active:scale-95">
-                Xでシェア
+            <div className="absolute top-0 right-0 p-1 flex flex-col space-y-1 font-bold">
+              <button className="h-14 w-14 text-white bg-black rounded-full p-1 transition-all active:scale-110">
+                <XIcon />
+                <p style={{ fontSize: "10px" }}>シェア</p>
               </button>
               <button
-                className="bg-main rounded text-white p-2 text-xs flex items-center transition-all active:scale-95"
+                className="h-14 w-14 text-white bg-main rounded-full p-1 transition-all active:scale-110"
                 onClick={() => {
                   handleLiked();
                 }}
               >
-                <span
-                  className="material-icons mr-0.5"
-                  style={{ fontSize: "16px" }}
-                >
-                  {isLiked ? "thumb_up" : "thumb_up_off_alt"}
-                </span>
-                <span className="text-xs font-bold mr-1">いいね</span>
-                <span>{post.likeCount}</span>
+                {isLiked ? <ThumbUpIcon /> : <ThumbUpOffAltIcon />}
+                <p style={{ fontSize: "10px" }}>{post.likeCount}</p>
               </button>
             </div>
+            <div className="w-full absolute bottom-0 left-0 p-2 bg-black bg-opacity-30 text-white font-bold">
+              <div className="flex items-center">
+                <div className="h-4 w-4 rounded-full overflow-hidden relative mr-0.5">
+                  <Image
+                    src={post.user?.avatarUrl || defaultUserImage}
+                    alt={post.user?.nickname || "undefined"}
+                    className="object-cover"
+                    fill
+                  />
+                </div>
+                <p className="text-xs">
+                  {post.user ? post.user.nickname : "非公開"}
+                </p>
+              </div>
+              <p className="px-2 py-1">{post.body}</p>
+              <p className="text-xs text-right">{post.createdAt}</p>
+            </div>
           </div>
-          <p>{post.body}</p>
         </section>
-        <section className="space-y-1">
-          <p className="flex items-center text-xs font-bold p-1">
+        <section className="space-y-1 relative rounded-md overflow-hidden border border-gray-200 bg-gray-100">
+          <p className="flex items-center text-xs font-bold p-2">
             <span
               className="material-icons mr-0.5"
               style={{ fontSize: "16px" }}
@@ -96,11 +102,13 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
             </span>
             コメント
           </p>
-          <div className="w-full h-80 overflow-y-auto rounded-md border border-gray-200 bg-gray-100">
+          <div className="w-full pb-16 h-96 overflow-y-auto">
             {comments.length === 0 ? (
-              <p className="font-bold text-center text-gray-400 text-sm">
-                コメントがありません。
-              </p>
+              <div className="h-full flex items-center justify-center">
+                <p className="font-bold text-center text-gray-400 text-sm">
+                  コメントがありません。
+                </p>
+              </div>
             ) : (
               comments.map((comment, index) => (
                 <div key={index} className="p-2">
@@ -113,7 +121,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
                         fill
                       />
                     </div>
-                    <p className="text-xs">{comment.user.nickname}</p>
+                    <p className="text-xs font-bold">{comment.user.nickname}</p>
                   </div>
                   <div className="flex items-end pl-1">
                     <div
@@ -136,27 +144,27 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
               ))
             )}
           </div>
-        </section>
-      </div>
-      <div className="fixed bottom-16 left-0 h-max w-full bg-base p-2 border-t border-gray-200">
-        <div className="flex items-center">
-          <div className="bg-gray-100 p-2 px-4 rounded-full w-full">
-            <input
-              type="text"
-              className="w-full bg-gray-100 outline-none"
-              placeholder="コメントを入力..."
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-            />
+          <div className="absolute bottom-0 left-0 h-max w-full bg-base p-2 border-t border-gray-200 z-20">
+            <div className="flex items-center">
+              <div className="bg-gray-100 p-2 px-4 rounded-full w-full">
+                <input
+                  type="text"
+                  className="w-full bg-gray-100 outline-none"
+                  placeholder="コメントを入力..."
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                />
+              </div>
+              <button
+                className="material-icons ml-1 text-main transition-all active:scale-95"
+                style={{ fontSize: "32px" }}
+                onClick={handleSendComment}
+              >
+                send
+              </button>
+            </div>
           </div>
-          <button
-            className="material-icons ml-1 text-main transition-all active:scale-95"
-            style={{ fontSize: "32px" }}
-            onClick={handleSendComment}
-          >
-            send
-          </button>
-        </div>
+        </section>
       </div>
     </>
   ) : (

@@ -21,9 +21,9 @@ export const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 w-full z-40 ${pathName === "/" && "hidden"} ${inProgress ? "bg-orange-400" : "bg-main"}`}
+      className={`fixed top-0 w-full z-40 shadow-lg ${pathName === "/" && "hidden"} ${inProgress ? "bg-orange-400" : "bg-main"}`}
     >
-      <div className="flex items-center justify-between h-16 px-3">
+      <div className="flex items-center justify-between h-16 lg:px-5 px-3">
         {inProgress ? (
           <p className="text-xl font-bold text-base">さんぽ中...</p>
         ) : (
@@ -41,11 +41,16 @@ export const Header = () => {
             </button>
           ) : (
             <ul className="flex items-center text-base space-x-2">
-              <li className="material-icons" style={{ fontSize: "32px" }}>
+              <li
+                className="material-icons cursor-pointer"
+                style={{ fontSize: "32px" }}
+              >
                 notifications
               </li>
               <li className="material-icons" style={{ fontSize: "32px" }}>
-                <label htmlFor="drawer-menu">account_circle</label>
+                <label htmlFor="drawer-menu" className="cursor-pointer">
+                  menu
+                </label>
               </li>
             </ul>
           )

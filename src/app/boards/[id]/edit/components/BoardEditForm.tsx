@@ -191,7 +191,7 @@ export const BoardEditForm = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div>
       <button
         className="text-main flex items-center"
         onClick={() => router.push(`/boards/${board?.id}`)}
@@ -382,7 +382,6 @@ export const BoardEditForm = () => {
             {isLoaded && center ? (
               <div className="relative border border-gray-200 bg-gray-100 rounded w-full h-64">
                 <div ref={mapRef} className="absolute inset-0"></div>
-                {/* 中央の「+」マーク */}
                 <div
                   className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-500"
                   style={{ fontSize: "24px" }}
@@ -432,7 +431,7 @@ export const BoardEditForm = () => {
               {imageSources.map((src, index) => (
                 <div
                   key={index}
-                  className="relative"
+                  className="relative h-32 min-w-28 overflow-hidden rounded"
                   onClick={() => {
                     setImageSources((prev) => prev.splice(index, index));
                   }}
@@ -441,8 +440,7 @@ export const BoardEditForm = () => {
                     src={src}
                     alt={`Preview ${index}`}
                     className="object-cover"
-                    width={100} // 横幅を指定
-                    height={100} // 高さを指定
+                    fill
                   />
                 </div>
               ))}

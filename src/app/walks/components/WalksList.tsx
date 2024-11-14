@@ -15,7 +15,7 @@ const GridItem = ({ walk }: { walk: Walk }) => {
       onClick={() => router.push(`/walks/${walk.id}`)}
       className="transition-all active:scale-95"
     >
-      <div className="w-full h-32 bg-gray-200 border-2 border-main border-opacity-90 rounded-md relative">
+      <div className="w-full lg:h-52 h-32 bg-gray-200 border-2 border-main border-opacity-90 rounded-md relative">
         <Image
           src={mapUrl}
           alt="Walk route map"
@@ -63,7 +63,7 @@ export const WalksList = () => {
         <p className="text-2xl font-bold px-1 py-2">散歩した記録</p>
         <p className="font-bold">{walks.length}件</p>
       </div>
-      <div className="grid grid-cols-3 gap-1">
+      <div className="grid lg:grid-cols-6 grid-cols-3 gap-1">
         {walks.map((walk, index) => (
           <GridItem key={index} walk={walk} />
         ))}

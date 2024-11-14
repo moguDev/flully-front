@@ -14,6 +14,7 @@ import Image from "next/image";
 import useGoogleMaps from "@/hooks/useGoogleMaps";
 import { useBoards } from "@/hooks/useBoards";
 import { useRouter } from "next/navigation";
+import { NearbyInformation } from "@/app/components/NearbyInformation";
 
 const Map: React.FC = () => {
   const router = useRouter();
@@ -33,6 +34,10 @@ const Map: React.FC = () => {
     width: "100%",
   };
 
+  {
+    /**現在の位置情報を取得して、現在地の更新、経路の描画、チェックポイントの送信を実施
+    ただし、前回の位置から3メートル以内だった場合更新しない */
+  }
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -67,7 +72,6 @@ const Map: React.FC = () => {
 
   useEffect(() => {
     if (checkpoints.length > 0) {
-      console.log(checkpoints);
       setPath(checkpoints);
     }
   }, [checkpoints]);
@@ -107,7 +111,10 @@ const Map: React.FC = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 h-screen w-full">
+      <div className="flex absolute top-0 left-0 h-full w-full">
+        <div className="lg:block hidden">
+          <NearbyInformation posts={posts} boards={boards} />
+        </div>
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
@@ -144,7 +151,7 @@ const Map: React.FC = () => {
           ))}
         </GoogleMap>
 
-        <div className="absolute top-28 left-4 bg-white p-2 rounded shadow-md">
+        <div className="absolute top-28 right-4 bg-white p-2 rounded shadow-md">
           <p>取得回数: {locationCount} 回</p>
           {currentPosition && (
             <p>
@@ -153,7 +160,7 @@ const Map: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="fixed right-2 bottom-36 z-20">
+      <div className="fixed lg:bottom-10 lg:right-4 bottom-36 right-2 z-20">
         <div className="flex flex-col items-center justify-center space-y-2">
           <button className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95">
             <span
@@ -220,7 +227,9 @@ const Map: React.FC = () => {
           </button>
         </div>
       </div>
-      <HalfModal posts={posts} boards={boards} open={harfModalIsOpen} />
+      <div className="lg:hidden">
+        <HalfModal posts={posts} boards={boards} open={harfModalIsOpen} />
+      </div>
     </>
   );
 };

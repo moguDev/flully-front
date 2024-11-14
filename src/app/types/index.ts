@@ -69,6 +69,7 @@ export type Post = {
   isAnonymous: boolean;
   user: User | null;
   likeCount: number;
+  createdAt: string;
 };
 
 export type Comment = {
