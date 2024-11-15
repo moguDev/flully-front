@@ -1,7 +1,7 @@
 "use client";
 import { useWalking } from "@/hooks/useWalking";
 
-export const showModal = () => {
+export const showStartWalkingModal = () => {
   const dialog = document.getElementById(
     "startModal"
   ) as HTMLDialogElement | null;
@@ -10,7 +10,7 @@ export const showModal = () => {
   }
 };
 
-export const closeModal = () => {
+export const closeStartWalkingModal = () => {
   const dialog = document.getElementById(
     "startModal"
   ) as HTMLDialogElement | null;
@@ -26,7 +26,7 @@ export const StartWalkingModal = () => {
       <div className="modal-box bg-base rounded p-3 relative overflow-hidden">
         <div className="flex items-center justify-between">
           <h3 className="font-bold text-lg py-5">散歩の記録を開始しますか？</h3>
-          <span className="material-icons" onClick={closeModal}>
+          <span className="material-icons" onClick={closeStartWalkingModal}>
             close
           </span>
         </div>
@@ -34,7 +34,7 @@ export const StartWalkingModal = () => {
           className="bg-orange-400 rounded text-base font-bold w-full p-3 flex items-center justify-center"
           onClick={() => {
             start();
-            closeModal();
+            closeStartWalkingModal();
           }}
         >
           <span className="material-icons">directions_walk</span>散歩を開始する

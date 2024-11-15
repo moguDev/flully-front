@@ -40,7 +40,7 @@ export const BoardList = () => {
 
   return (
     <div>
-      <section className="border-b border-gray-200">
+      <section className="max-w-2xl mx-auto border-b border-gray-200">
         <div className="bg-gray-200 bg-opacity-50 w-full rounded-full flex items-center p-2">
           <span className="material-icons mx-1 text-gray-400 select-none">
             search

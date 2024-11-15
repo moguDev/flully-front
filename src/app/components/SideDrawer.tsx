@@ -4,6 +4,7 @@ import defaultImage from "/public/images/default_avatar.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useUserProfiles } from "@/hooks/useUserProfiles";
+import { useToast } from "@/hooks/useToast";
 
 const closeDrawer = () => {
   const drawerCheckbox = document.getElementById(
@@ -16,6 +17,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
   const { name, nickname, logout } = useAuth();
   const { user } = useUserProfiles(name);
   const router = useRouter();
+  const { showSuccess } = useToast();
   return (
     <div className="drawer drawer-end ">
       <input id="drawer-menu" type="checkbox" className="drawer-toggle" />
@@ -115,6 +117,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
                 onClick={() => {
                   logout();
                   closeDrawer();
+                  showSuccess("ログアウトしました");
                 }}
               >
                 <span className="material-icons mr-1">logout</span>

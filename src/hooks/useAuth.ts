@@ -77,7 +77,7 @@ export const useAuth = () => {
         ...data.data,
       });
     } catch (e) {
-      console.error(e);
+      throw e;
     } finally {
       setLoading(false);
     }
@@ -98,7 +98,7 @@ export const useAuth = () => {
         ...data.data,
       });
     } catch (e) {
-      console.error(e);
+      throw e;
     } finally {
       setLoading(false);
     }

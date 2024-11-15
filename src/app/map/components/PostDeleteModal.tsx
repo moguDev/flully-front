@@ -29,7 +29,7 @@ export const PostDeleteModal = () => {
   const handleDelete = async () => {
     await destroy();
     closePostDeleteModal();
-    router.back();
+    router.push("/map");
   };
 
   return (

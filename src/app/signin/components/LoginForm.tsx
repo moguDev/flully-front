@@ -1,6 +1,7 @@
 "use client";
 import Loading from "@/app/loading";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/useToast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -14,6 +15,7 @@ export const LoginForm = () => {
   const router = useRouter();
   const { loading, login } = useAuth();
   const defaultValues: FormData = { email: "", password: "" };
+  const { showSuccess, showAlert } = useToast();
   const {
     register,
     handleSubmit,
@@ -21,7 +23,13 @@ export const LoginForm = () => {
   } = useForm({ defaultValues });
 
   const onsubmit = async (data: FormData) => {
-    await login(data.email, data.password).then(() => router.back());
+    try {
+      await login(data.email, data.password);
+      router.back();
+      showSuccess("ログインしました");
+    } catch {
+      showAlert("ログインに失敗しました");
+    }
   };
 
   return (

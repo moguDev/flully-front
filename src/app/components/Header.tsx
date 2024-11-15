@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { showModal } from "../map/components/FinishWalkingModal";
+import { Toast } from "./Toast";
 
 export const Header = () => {
   const pathName = usePathname();
@@ -64,6 +65,7 @@ export const Header = () => {
           </Link>
         )}
       </div>
+      <Toast />
     </header>
   );
 };

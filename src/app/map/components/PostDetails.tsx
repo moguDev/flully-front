@@ -10,17 +10,19 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import { useRouter } from "next/navigation";
 import { showPostDeleteModal } from "./PostDeleteModal";
+import { useToast } from "@/hooks/useToast";
 
 type PostDetailsProps = {
   postId: number;
 };
 
 export const PostDetails = ({ postId }: PostDetailsProps) => {
-  const { name } = useAuth();
+  const { isAuthenticated, name } = useAuth();
   const { isLiked, like, dislike } = useLikes(postId);
   const { post, fetch } = usePost(postId);
   const { comments, sendComment } = usePostComments(postId);
   const router = useRouter();
+  const { requireSignin } = useToast();
 
   const [commentText, setCommentText] = useState("");
 
@@ -67,14 +69,18 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
               <button
                 className="h-14 w-14 text-white bg-main rounded-full p-1 transition-all active:scale-110"
                 onClick={() => {
-                  handleLiked();
+                  if (isAuthenticated) {
+                    handleLiked();
+                  } else {
+                    requireSignin();
+                  }
                 }}
               >
                 {isLiked ? <ThumbUpIcon /> : <ThumbUpOffAltIcon />}
                 <p style={{ fontSize: "10px" }}>{post.likeCount}</p>
               </button>
             </div>
-            <div className="w-full absolute bottom-0 left-0 p-2 bg-black bg-opacity-30 text-white font-bold">
+            <div className="w-full absolute bottom-0 left-0 p-2 bg-black bg-opacity-60 text-white font-bold">
               <div className="flex items-center">
                 <div className="h-4 w-4 rounded-full overflow-hidden relative mr-0.5">
                   <Image

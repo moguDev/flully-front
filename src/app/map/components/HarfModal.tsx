@@ -90,35 +90,43 @@ export const HalfModal = ({
       {isOpen && selectedPost ? (
         <PostDetails postId={selectedPost.id} />
       ) : (
-        <section className="flex flex-col h-full overflow-y-auto relative pb-16">
+        <section className="flex flex-col h-full overflow-y-auto relative pb-16 p-1">
           <div className="px-2 mt-2 mb-4">
             <div className="flex items-center justify-between">
               <p className="font-bold flex items-center py-1">
                 <span className="material-icons">search</span>
-                見つかった動物
+                みつかった動物
               </p>
               <p className="text-sm font-bold">{posts.length}件</p>
             </div>
-            <div className="grid grid-cols-4 p-1">
-              {posts.map((post, index) => (
-                <div
-                  key={index}
-                  className="w-full h-24 overflow-hidden relative"
-                  onClick={() => {
-                    setIsOpen(true);
-                    router.replace(`?post_id=${post.id}`);
-                  }}
-                >
-                  <p>test</p>
-                  <Image
-                    src={post.imageUrl || defaultImage}
-                    alt="image"
-                    className="object-cover"
-                    fill
-                  />
-                </div>
-              ))}
-            </div>
+            {posts.length > 0 ? (
+              <div className="grid grid-cols-4 p-1">
+                {posts.map((post, index) => (
+                  <div
+                    key={index}
+                    className="w-full h-24 overflow-hidden relative"
+                    onClick={() => {
+                      setIsOpen(true);
+                      router.replace(`?post_id=${post.id}`);
+                    }}
+                  >
+                    <p>test</p>
+                    <Image
+                      src={post.imageUrl || defaultImage}
+                      alt="image"
+                      className="object-cover"
+                      fill
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center">
+                <p className="p-2 font-bold text-black text-sm text-opacity-50">
+                  まだみつかった動物はいません
+                </p>
+              </div>
+            )}
           </div>
           <div className="px-2 py-4">
             <div className="flex items-center justify-between">

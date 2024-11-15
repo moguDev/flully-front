@@ -1,6 +1,7 @@
 "use client";
 import { usePosts } from "@/hooks/usePosts";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -45,6 +46,7 @@ export const PostModal = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageFile = watch("image");
   const [imageSource, setImageSource] = useState("");
+  const router = useRouter();
 
   const onsubmit = (data: FormData) => {
     if (navigator.geolocation) {

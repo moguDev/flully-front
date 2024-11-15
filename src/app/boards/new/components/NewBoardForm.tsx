@@ -426,7 +426,11 @@ export const NewBoardForm = () => {
           </div>
         </section>
         <div className="flex items-center">
-          <button type="button" className="p-3 w-1/2 font-bold">
+          <button
+            type="button"
+            className="p-3 w-1/2 font-bold"
+            onClick={() => router.push("/boards")}
+          >
             キャンセル
           </button>
           <button

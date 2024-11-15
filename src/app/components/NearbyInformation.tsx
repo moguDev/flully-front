@@ -51,29 +51,37 @@ export const NearbyInformation = ({
             <div className="flex items-center justify-between py-1">
               <p className="font-bold flex items-center py-1">
                 <span className="material-icons">search</span>
-                見つかった動物
+                みつかった動物
               </p>
               <p className="text-sm font-bold">{posts.length}件</p>
             </div>
-            <div className="grid grid-cols-4 gap-0.5">
-              {posts.map((post, index) => (
-                <div
-                  key={index}
-                  className="w-full h-24 overflow-hidden rounded relative cursor-pointer transition-all hover:-translate-y-1"
-                  onClick={() => {
-                    router.replace(`?post_id=${post.id}`);
-                  }}
-                >
-                  <p>test</p>
-                  <Image
-                    src={post.imageUrl || defaultImage}
-                    alt="image"
-                    className="object-cover"
-                    fill
-                  />
-                </div>
-              ))}
-            </div>
+            {posts.length > 0 ? (
+              <div className="grid grid-cols-4 gap-0.5">
+                {posts.map((post, index) => (
+                  <div
+                    key={index}
+                    className="w-full h-24 overflow-hidden rounded relative cursor-pointer transition-all hover:-translate-y-1"
+                    onClick={() => {
+                      router.replace(`?post_id=${post.id}`);
+                    }}
+                  >
+                    <p>test</p>
+                    <Image
+                      src={post.imageUrl || defaultImage}
+                      alt="image"
+                      className="object-cover"
+                      fill
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center">
+                <p className="p-2 font-bold text-black text-sm text-opacity-50">
+                  まだみつかった動物はいません
+                </p>
+              </div>
+            )}
           </div>
           <div className="py-4">
             <div className="px-2 flex items-center justify-between">
@@ -90,11 +98,17 @@ export const NearbyInformation = ({
               </p>
               <p className="text-sm font-bold">{boards.length}件</p>
             </div>
-            <div>
-              {boards.map((board, index) => (
+            {boards.length > 0 ? (
+              boards.map((board, index) => (
                 <BoardItem key={index} board={board} />
-              ))}
-            </div>
+              ))
+            ) : (
+              <div className="flex items-center justify-center">
+                <p className="p-2 font-bold text-black text-sm text-opacity-50">
+                  まいご・保護情報はありません
+                </p>
+              </div>
+            )}
           </div>
         </section>
       )}
