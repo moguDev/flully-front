@@ -15,6 +15,9 @@ import useGoogleMaps from "@/hooks/useGoogleMaps";
 import { useBoards } from "@/hooks/useBoards";
 import { useRouter } from "next/navigation";
 import { NearbyInformation } from "@/app/components/NearbyInformation";
+import { useToast } from "@/hooks/useToast";
+import { useAuth } from "@/hooks/useAuth";
+import { showStartWalkingModal } from "./StartWalkingModal";
 
 const Map: React.FC = () => {
   const router = useRouter();
@@ -26,6 +29,8 @@ const Map: React.FC = () => {
   const { posts, fetchNearByPost } = usePosts();
   const { boards, fetchNearbyBoard } = useBoards();
   const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
+  const { isAuthenticated } = useAuth();
+  const { requireSignin } = useToast();
 
   const { isLoaded, loadError } = useGoogleMaps();
 
@@ -186,7 +191,13 @@ const Map: React.FC = () => {
           </button>
           <button
             className="rounded-2xl h-16 w-16 bg-main flex flex-col items-center justify-center shadow transition-all active:scale-95"
-            onClick={showPostModal}
+            onClick={() => {
+              if (isAuthenticated) {
+                showPostModal();
+              } else {
+                requireSignin();
+              }
+            }}
           >
             <span
               className="material-icons text-base translate-y-1.5 select-none"
@@ -204,11 +215,10 @@ const Map: React.FC = () => {
           <button
             className="rounded-2xl h-16 w-16 bg-orange-400 flex flex-col items-center justify-center shadow transition-all active:scale-95"
             onClick={() => {
-              const dialog = document.getElementById(
-                "startModal"
-              ) as HTMLDialogElement | null;
-              if (dialog) {
-                dialog.showModal();
+              if (isAuthenticated) {
+                showStartWalkingModal();
+              } else {
+                requireSignin();
               }
             }}
           >

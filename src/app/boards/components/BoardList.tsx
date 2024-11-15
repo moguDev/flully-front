@@ -40,9 +40,11 @@ export const BoardList = () => {
 
   return (
     <div>
-      <section className="border-b border-gray-200">
+      <section className="max-w-2xl mx-auto border-b border-gray-200">
         <div className="bg-gray-200 bg-opacity-50 w-full rounded-full flex items-center p-2">
-          <span className="material-icons mx-1 text-gray-400">search</span>
+          <span className="material-icons mx-1 text-gray-400 select-none">
+            search
+          </span>
           <input
             type="text"
             className="w-full bg-gray-200 bg-opacity-0 outline-none"
@@ -51,7 +53,9 @@ export const BoardList = () => {
           />
         </div>
         <div className="flex items-center px-1 py-2">
-          <span className="material-icons text-main">filter_alt</span>
+          <span className="material-icons text-main select-none">
+            filter_alt
+          </span>
           <select
             className="select select-ghost text-xs font-bold w-full max-w-xs outline-none"
             onChange={handleCategoryChange}

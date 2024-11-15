@@ -9,17 +9,20 @@ import XIcon from "@mui/icons-material/X";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import { useRouter } from "next/navigation";
+import { showPostDeleteModal } from "./PostDeleteModal";
+import { useToast } from "@/hooks/useToast";
 
 type PostDetailsProps = {
   postId: number;
 };
 
 export const PostDetails = ({ postId }: PostDetailsProps) => {
-  const { name } = useAuth();
+  const { isAuthenticated, name } = useAuth();
   const { isLiked, like, dislike } = useLikes(postId);
   const { post, fetch } = usePost(postId);
   const { comments, sendComment } = usePostComments(postId);
   const router = useRouter();
+  const { requireSignin } = useToast();
 
   const [commentText, setCommentText] = useState("");
 
@@ -58,7 +61,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
               className="object-cover"
               fill
             />
-            <div className="absolute top-0 right-0 p-1 flex flex-col space-y-1 font-bold">
+            <div className="absolute top-0 right-0 p-2 flex flex-col space-y-1 font-bold">
               <button className="h-14 w-14 text-white bg-black rounded-full p-1 transition-all active:scale-110">
                 <XIcon />
                 <p style={{ fontSize: "10px" }}>シェア</p>
@@ -66,14 +69,18 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
               <button
                 className="h-14 w-14 text-white bg-main rounded-full p-1 transition-all active:scale-110"
                 onClick={() => {
-                  handleLiked();
+                  if (isAuthenticated) {
+                    handleLiked();
+                  } else {
+                    requireSignin();
+                  }
                 }}
               >
                 {isLiked ? <ThumbUpIcon /> : <ThumbUpOffAltIcon />}
                 <p style={{ fontSize: "10px" }}>{post.likeCount}</p>
               </button>
             </div>
-            <div className="w-full absolute bottom-0 left-0 p-2 bg-black bg-opacity-30 text-white font-bold">
+            <div className="w-full absolute bottom-0 left-0 p-2 bg-black bg-opacity-60 text-white font-bold">
               <div className="flex items-center">
                 <div className="h-4 w-4 rounded-full overflow-hidden relative mr-0.5">
                   <Image
@@ -165,6 +172,17 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
             </div>
           </div>
         </section>
+        {name === post.user?.name && (
+          <button
+            className="bg-red-500 rounded py-3 text-white flex items-center justify-center w-full font-bold transition-all active:scale-95 text-sm"
+            onClick={showPostDeleteModal}
+          >
+            <span className="material-icons" style={{ fontSize: "20 px" }}>
+              delete
+            </span>
+            投稿を削除する
+          </button>
+        )}
       </div>
     </>
   ) : (

@@ -72,8 +72,19 @@ export const useBoard = (boardId: number) => {
     }
   };
 
+  const destroy = async () => {
+    setLoading(true);
+    try {
+      await api.delete(`/boards/${boardId}`);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetch();
   }, []);
-  return { loading, board, update };
+  return { loading, board, update, destroy };
 };

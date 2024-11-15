@@ -9,6 +9,7 @@ import useGoogleMaps from "@/hooks/useGoogleMaps";
 import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
 import { useBoard } from "@/hooks/useBoard";
+import { showBoardDeleteModal } from "./BoardDeleteModal";
 
 type FormData = {
   category: number;
@@ -383,7 +384,7 @@ export const BoardEditForm = () => {
               <div className="relative border border-gray-200 bg-gray-100 rounded w-full h-64">
                 <div ref={mapRef} className="absolute inset-0"></div>
                 <div
-                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-500"
+                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-main font-black"
                   style={{ fontSize: "24px" }}
                 >
                   +
@@ -391,12 +392,6 @@ export const BoardEditForm = () => {
               </div>
             ) : (
               <p>地図を読み込んでいます...</p>
-            )}
-            {center && (
-              <p className="text-xs mt-2">
-                中心の位置: 緯度 {center.lat.toFixed(6)}, 経度{" "}
-                {center.lng.toFixed(6)}
-              </p>
             )}
           </div>
           <div className="py-2">
@@ -504,6 +499,18 @@ export const BoardEditForm = () => {
             className="bg-main p-3 text-white font-bold w-1/2 rounded"
           >
             掲示板を更新
+          </button>
+        </div>
+        <div className="flex items-center justify-center">
+          <button
+            type="button"
+            className="text-red-500 text-sm font-bold p-4 flex items-center transition-all active:scale-95"
+            onClick={showBoardDeleteModal}
+          >
+            <span className="material-icons" style={{ fontSize: "20px" }}>
+              delete
+            </span>
+            掲示板を削除する
           </button>
         </div>
       </form>
