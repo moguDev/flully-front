@@ -9,6 +9,7 @@ import XIcon from "@mui/icons-material/X";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import { useRouter } from "next/navigation";
+import { showPostDeleteModal } from "./PostDeleteModal";
 
 type PostDetailsProps = {
   postId: number;
@@ -58,7 +59,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
               className="object-cover"
               fill
             />
-            <div className="absolute top-0 right-0 p-1 flex flex-col space-y-1 font-bold">
+            <div className="absolute top-0 right-0 p-2 flex flex-col space-y-1 font-bold">
               <button className="h-14 w-14 text-white bg-black rounded-full p-1 transition-all active:scale-110">
                 <XIcon />
                 <p style={{ fontSize: "10px" }}>シェア</p>
@@ -165,6 +166,17 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
             </div>
           </div>
         </section>
+        {name === post.user?.name && (
+          <button
+            className="bg-red-500 rounded py-3 text-white flex items-center justify-center w-full font-bold transition-all active:scale-95 text-sm"
+            onClick={showPostDeleteModal}
+          >
+            <span className="material-icons" style={{ fontSize: "20 px" }}>
+              delete
+            </span>
+            投稿を削除する
+          </button>
+        )}
       </div>
     </>
   ) : (

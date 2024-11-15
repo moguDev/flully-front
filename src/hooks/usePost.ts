@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 export const usePost = (postId: number | null) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [post, setPost] = useState<Post | null>(null);
+
+  const initPost = () => setPost(null);
+
   const fetch = async () => {
     setLoading(true);
     try {
@@ -19,11 +22,20 @@ export const usePost = (postId: number | null) => {
     }
   };
 
-  const initPost = () => setPost(null);
+  const destroy = async () => {
+    setLoading(true);
+    await api.delete(`/posts/${postId}`);
+    try {
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetch();
   }, []);
 
-  return { loading, post, initPost, fetch };
+  return { loading, post, initPost, fetch, destroy };
 };
