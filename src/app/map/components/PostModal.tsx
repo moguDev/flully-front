@@ -46,7 +46,6 @@ export const PostModal = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageFile = watch("image");
   const [imageSource, setImageSource] = useState("");
-  const router = useRouter();
 
   const onsubmit = (data: FormData) => {
     if (navigator.geolocation) {
