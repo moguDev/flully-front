@@ -1,6 +1,6 @@
 "use client";
 import { usePost } from "@/hooks/usePost";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const showPostDeleteModal = () => {
   const dialog = document.getElementById(
