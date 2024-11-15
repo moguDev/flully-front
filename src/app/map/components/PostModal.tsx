@@ -1,7 +1,6 @@
 "use client";
 import { usePosts } from "@/hooks/usePosts";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
