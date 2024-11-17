@@ -2,7 +2,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useWalking } from "@/hooks/useWalking";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { showModal } from "../map/components/FinishWalkingModal";
 import { Toast } from "./Toast";

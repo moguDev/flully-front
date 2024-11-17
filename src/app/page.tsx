@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import app_qr from "/public/images/app_qr.png";
+// import app_qr from "/public/images/app_qr.png";
 import bg_image from "/public/images/bg_top.jpg";
 import dev_icon from "/public/images/developer_icon.jpg";
 import Image from "next/image";

@@ -1,8 +1,8 @@
 import { api } from "@/lib/axiosInstance";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Cookies from "js-cookie";
 import { useSetRecoilState } from "recoil";
-import { authState, AuthState, useAuth } from "./useAuth";
+import { authState, AuthState } from "./useAuth";
 import { User } from "@/app/types";
 import camelcaseKeys from "camelcase-keys";
 import snakecaseKeys from "snakecase-keys";
