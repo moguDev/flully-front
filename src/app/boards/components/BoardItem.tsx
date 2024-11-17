@@ -25,7 +25,11 @@ export const BoardItem = ({ board }: BoardItemProps) => {
         </div>
         <div className="w-full">
           <div className="flex items-center justify-between">
-            <p className="text-2xl font-bold">{board.name}</p>
+            <p
+              className={`text-2xl font-bold ${!board.name && "text-gray-400"}`}
+            >
+              {board.name || "(未登録)"}
+            </p>
             <div className="flex items-center space-x-1">
               <p
                 className={`text-xs px-2 py-1 text-white font-bold rounded-md ${board.category === "迷子" ? "bg-red-500" : board.category === "保護" ? "bg-blue-500" : "bg-green-500"}`}

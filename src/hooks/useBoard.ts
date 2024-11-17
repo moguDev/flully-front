@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import snakecaseKeys from "snakecase-keys";
 
 type UpdateData = {
-  category: number;
+  category: string;
   species: number;
   breed: string;
   name: string;

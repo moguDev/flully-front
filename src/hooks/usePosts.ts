@@ -32,7 +32,7 @@ export const usePosts = () => {
         }
       );
     } catch (e) {
-      console.error(e);
+      throw e;
     } finally {
       setLoading(false);
     }

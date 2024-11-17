@@ -2,10 +2,14 @@ import { useBoardComments } from "@/hooks/useBoardComments";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { showModal } from "./SelectLocationModal";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export const CommentViewer = ({ boardId }: { boardId: number }) => {
   const [commentText, setCommentText] = useState("");
   const { comments, sendComment } = useBoardComments(boardId);
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
 
   const handleSendTextComment = async () => {
     if (commentText.trim()) {
@@ -99,39 +103,51 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
         </div>
       </section>
       <div className="lg:absolute fixed lg:bottom-0 bottom-16 left-0 h-max w-full bg-base p-2 border-t border-gray-200">
-        <div className="flex items-center">
-          <div className="bg-gray-100 p-2 px-2 rounded-full w-full flex items-center">
-            <label className="material-icons text-main opacity-60 px-1 transition-all active:scale-95">
-              image
+        {isAuthenticated ? (
+          <div className="flex items-center">
+            <div className="bg-gray-100 p-2 px-2 rounded-full w-full flex items-center">
+              <label className="material-icons text-main opacity-60 px-1 transition-all active:scale-95">
+                image
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={handleImageChange}
+                />
+              </label>
+              <button
+                className="material-icons text-main opacity-60 px-1 transition-all active:scale-95"
+                onClick={showModal}
+              >
+                location_on
+              </button>
               <input
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={handleImageChange}
+                type="text"
+                className="w-full bg-gray-100 outline-none ml-1"
+                placeholder="コメントを入力..."
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
               />
-            </label>
+            </div>
             <button
-              className="material-icons text-main opacity-60 px-1 transition-all active:scale-95"
-              onClick={showModal}
+              className="material-icons ml-1 text-main transition-all active:scale-95"
+              style={{ fontSize: "32px" }}
+              onClick={handleSendTextComment}
             >
-              location_on
+              send
             </button>
-            <input
-              type="text"
-              className="w-full bg-gray-100 outline-none ml-1"
-              placeholder="コメントを入力..."
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-            />
           </div>
+        ) : (
           <button
-            className="material-icons ml-1 text-main transition-all active:scale-95"
-            style={{ fontSize: "32px" }}
-            onClick={handleSendTextComment}
+            className="bg-main rounded w-full transition-all active:scale-95"
+            onClick={() => router.push("/signin")}
           >
-            send
+            <p className="text-white font-bold text-sm p-3 flex items-center justify-center">
+              <span className="material-icons mr-1">login</span>
+              ログインしてコメントする
+            </p>
           </button>
-        </div>
+        )}
       </div>
     </div>
   );

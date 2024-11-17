@@ -24,9 +24,9 @@ export const Toast = () => {
       }`}
     >
       <div
-        className={`px-2 py-3 rounded-lg bg-opacity-80 backdrop-blur ${toast.toastType === "success" ? "bg-blue-400" : "bg-red-400"}`}
+        className={`px-3 py-2 rounded-full bg-opacity-80 backdrop-blur ${toast.toastType === "success" ? "bg-blue-400" : "bg-red-400"}`}
       >
-        <p className="text-white font-bold">{toast.message}</p>
+        <p className="text-white font-bold text-sm">{toast.message}</p>
       </div>
     </div>
   );

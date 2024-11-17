@@ -33,24 +33,27 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 bg-white rounded-lg lg:px-10 px-5 py-10 border border-main border-opacity-30">
+      <h1 className="text-main font-bold flex items-center text-xl">
+        flullyアカウントでログイン
+      </h1>
       <form
         onSubmit={handleSubmit(onsubmit)}
         method="post"
-        className="space-y-5 mt-5 relative"
+        className="mt-5 relative"
       >
         {loading && (
           <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-50 z-10">
             <Loading />
           </div>
         )}
-        <div>
+        <div className="my-6">
           <div className="flex items-center border-b border-gray-300 py-2">
             <span className="material-icons text-main mr-1">email</span>
             <input
               type="email"
               placeholder="メールアドレス"
-              className="w-full bg-base outline-none"
+              className="w-full bg-white outline-none"
               {...register("email", {
                 required: "メールアドレスを入力してください",
                 pattern: {
@@ -64,13 +67,13 @@ export const LoginForm = () => {
             {errors.email?.message}
           </div>
         </div>
-        <div>
+        <div className="my-6">
           <div className="flex items-center border-b border-gray-300 py-2">
             <span className="material-icons text-main mr-1">key</span>
             <input
               type="password"
               placeholder="パスワード"
-              className="w-full bg-base outline-none"
+              className="w-full bg-white outline-none"
               {...register("password", {
                 required: "パスワードを入力してください。",
                 minLength: {
@@ -83,10 +86,13 @@ export const LoginForm = () => {
           <div className="text-red-500 font-bold text-xs p-1">
             {errors.password?.message}
           </div>
+          <Link
+            href="#"
+            className="text-xs py-1 opacity-60 font-bold underline"
+          >
+            パスワードを忘れた場合
+          </Link>
         </div>
-        <Link href="#" className="text-xs py-1 opacity-60 font-bold underline">
-          パスワードを忘れた場合
-        </Link>
         <div className="space-y-2">
           <button
             type="submit"
@@ -103,10 +109,7 @@ export const LoginForm = () => {
           </button>
         </div>
       </form>
-      <button
-        className="w-full font-bold text-sm"
-        onClick={() => router.push("/map")}
-      >
+      <button className="w-full" onClick={() => router.push("/map")}>
         キャンセル
       </button>
     </div>

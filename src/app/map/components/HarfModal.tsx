@@ -110,10 +110,9 @@ export const HalfModal = ({
                       router.replace(`?post_id=${post.id}`);
                     }}
                   >
-                    <p>test</p>
                     <Image
                       src={post.imageUrl || defaultImage}
-                      alt="image"
+                      alt={`post-${post.id}`}
                       className="object-cover"
                       fill
                     />

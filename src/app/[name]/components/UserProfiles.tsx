@@ -7,12 +7,17 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Loading from "@/app/loading";
 import XIcon from "@mui/icons-material/X";
+import { useEffect } from "react";
 
 export const UserProfiles = () => {
   const { name: nameParams } = useParams();
   const { name: currentUserName } = useAuth();
-  const { loading, user } = useUserProfiles(nameParams as string);
+  const { loading, user, fetch } = useUserProfiles(nameParams as string);
   const router = useRouter();
+
+  useEffect(() => {
+    fetch();
+  }, []);
   return loading ? (
     <Loading />
   ) : (
@@ -78,12 +83,14 @@ export const UserProfiles = () => {
                     <XIcon style={{ fontSize: "24px" }} />
                   </a>
                 )}
-                <div
-                  className="material-icons text-base bg-main p-1 rounded-lg"
-                  style={{ fontSize: "24px" }}
-                >
-                  email
-                </div>
+                {user.email && (
+                  <div
+                    className="material-icons text-base bg-main p-1 rounded-lg"
+                    style={{ fontSize: "24px" }}
+                  >
+                    email
+                  </div>
+                )}
               </div>
             </div>
             <div className="text-xs font-bold py-1">{user.introduction}</div>
@@ -225,7 +232,7 @@ export const UserProfiles = () => {
           <section>
             <div className="py-4">
               <div className="flex items-center justify-between">
-                <p className="font-bold mb-1">見つけた動物</p>
+                <p className="font-bold mb-1">みつけた動物</p>
                 <p className="text-sm font-bold">{user.posts?.length}件</p>
               </div>
               <div className="grid grid-cols-4 gap-0.5">

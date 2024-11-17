@@ -10,6 +10,8 @@ export type User = {
   posts?: Post[];
   walks?: Walk[];
   currentStreak?: number;
+  isMailPublic?: boolean;
+  isLocationPublic?: boolean;
 };
 
 export type Walk = {

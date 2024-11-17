@@ -1,5 +1,6 @@
 "use client";
 import { usePosts } from "@/hooks/usePosts";
+import { useToast } from "@/hooks/useToast";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -45,6 +46,7 @@ export const PostModal = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageFile = watch("image");
   const [imageSource, setImageSource] = useState("");
+  const { showSuccess, showAlert } = useToast();
 
   const onsubmit = (data: FormData) => {
     if (navigator.geolocation) {
@@ -52,9 +54,14 @@ export const PostModal = () => {
         (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-
-          postPost({ ...data, lat, lng });
-          closePostModal();
+          try {
+            postPost({ ...data, lat, lng });
+            closePostModal();
+            showSuccess("みつけた動物を投稿しました");
+          } catch (e) {
+            console.error(e);
+            showAlert("投稿に失敗しました");
+          }
         },
         (error) => {
           console.error("Error getting location:", error);

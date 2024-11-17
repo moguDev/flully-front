@@ -7,6 +7,14 @@
   --foreground: #333;
 }
 
+.top-background {
+  background-image: url("/public/images/bg_top.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

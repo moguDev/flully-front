@@ -14,12 +14,14 @@ type FormData = {
   introduction: string;
   twitter: string;
   location: string;
+  isLocationPublic: boolean;
+  isMailPublic: boolean;
 };
 
 export const ProfileEditForm = () => {
   const router = useRouter();
   const { name } = useParams();
-  const { user, update } = useUserProfiles(name as string);
+  const { user, update, fetchCurrentUser } = useUserProfiles(name as string);
   const defaultValues: FormData = {
     avatar: null,
     name: user?.name || "",
@@ -28,6 +30,8 @@ export const ProfileEditForm = () => {
     introduction: user?.introduction || "",
     twitter: user?.twitter || "",
     location: user?.location || "",
+    isLocationPublic: user?.isLocationPublic || false,
+    isMailPublic: user?.isMailPublic || false,
   };
   const {
     register,
@@ -44,6 +48,10 @@ export const ProfileEditForm = () => {
     await update(data);
     router.push(`/${name}`);
   };
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -120,6 +128,10 @@ export const ProfileEditForm = () => {
                   value: 4,
                   message: "flully IDは4文字以上にしてください",
                 },
+                maxLength: {
+                  value: 16,
+                  message: "flully IDは16文字以内にしてください",
+                },
               })}
             />
           </div>
@@ -173,7 +185,11 @@ export const ProfileEditForm = () => {
             メールアドレス<span className="text-red-600">【必須】</span>
           </label>
           <div className="flex items-center p-0.5">
-            <input type="checkbox" className="mr-1" />
+            <input
+              type="checkbox"
+              className="mr-1"
+              {...register("isMailPublic")}
+            />
             <label className="text-xs font-bold">
               メールアドレスを公開する
             </label>
@@ -205,7 +221,12 @@ export const ProfileEditForm = () => {
               type="text"
               className="w-full outline-none bg-base"
               placeholder="https://x.com/***"
-              {...register("twitter")}
+              {...register("twitter", {
+                maxLength: {
+                  value: 128,
+                  message: "128文字以内で入力してください",
+                },
+              })}
             />
           </div>
           <div className="text-red-500 font-bold text-xs p-1">
@@ -215,7 +236,11 @@ export const ProfileEditForm = () => {
         <div>
           <label className="text-xs text-main font-bold">位置情報</label>
           <div className="flex items-center p-0.5">
-            <input type="checkbox" className="mr-1" />
+            <input
+              type="checkbox"
+              className="mr-1"
+              {...register("isLocationPublic")}
+            />
             <label className="text-xs font-bold">位置情報を公開する</label>
           </div>
           <div className="flex items-center border-b border-gray-300 p-1">
