@@ -41,7 +41,7 @@ export const PostModal = () => {
     register,
     handleSubmit,
     watch,
-    // formState: { errors },
+    formState: { errors },
   } = useForm({ defaultValues });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageFile = watch("image");
@@ -113,10 +113,13 @@ export const PostModal = () => {
               <p className="text-gray-400 font-bold">写真を追加</p>
             )}
           </div>
+          <div className="text-red-500 font-bold text-xs p-1">
+            {errors.image?.message}
+          </div>
           <input
             type="file"
             accept="image/*"
-            {...register("image")}
+            {...register("image", { required: "画像を選択してください" })}
             ref={(e: HTMLInputElement) => {
               register("image").ref(e);
               fileInputRef.current = e;
@@ -155,6 +158,9 @@ export const PostModal = () => {
                     },
                   })}
                 />
+              </div>
+              <div className="text-red-500 font-bold text-xs p-1">
+                {errors.body?.message}
               </div>
             </div>
             <div className="flex items-center py-2">

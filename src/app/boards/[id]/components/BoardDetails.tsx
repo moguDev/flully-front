@@ -32,7 +32,7 @@ export const BoardDetail = () => {
   return loading ? (
     <Loading />
   ) : board ? (
-    <div className="lg:flex relative">
+    <div className="lg:flex bg-white rounded-lg p-5 relative">
       <div className="lg:pb-0 pb-32 max-w-3xl lg:w-2/3 w-full mx-auto p-2">
         <section>
           <div className="flex items-center justify-between pb-4">

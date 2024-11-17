@@ -21,9 +21,9 @@ export const UserProfiles = () => {
   return loading ? (
     <Loading />
   ) : (
-    <div>
+    <div className="bg-white rounded-lg border border-main border-opacity-30 p-5">
       {user ? (
-        <div className="max-w-2xl mx-auto">
+        <div>
           <section className="border-b border-gray-300">
             <div className="flex items-center">
               <div className="rounded-full h-24 w-24 min-w-24 relative overflow-hidden">

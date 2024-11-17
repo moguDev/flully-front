@@ -61,6 +61,8 @@ export const ProfileEditForm = () => {
       setValue("introduction", user.introduction);
       setValue("twitter", user.twitter);
       setValue("location", user.location);
+      setValue("isLocationPublic", user.isLocationPublic!);
+      setValue("isMailPublic", user.isMailPublic!);
     }
   }, [user]);
 

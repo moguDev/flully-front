@@ -12,7 +12,7 @@ export const WalkDetails = () => {
   const router = useRouter();
 
   return (
-    <div>
+    <div className="bg-white rounded-lg p-4 border border-main border-opacity-30">
       <button
         className="font-bold text-main flex items-center py-3 transition-all hover:brightness-125"
         onClick={() => router.push("/walks")}
@@ -74,7 +74,7 @@ export const WalkDetails = () => {
           <p className="font-bold py-1">みつけた動物</p>
         </div>
         <div className="flex items-center space-x-1">
-          {walk?.posts.length! > 0 ? (
+          {walk?.posts.length ? (
             walk?.posts.map((post, index) => (
               <button
                 key={index}
@@ -103,7 +103,7 @@ export const WalkDetails = () => {
         <p className="font-bold py-2 flex items-center">
           <span className="material-icons">edit_note</span>メモ
         </p>
-        <div className="w-full min-h-32 p-3 flex items-center justify-center bg-gray-100 rounded">
+        <div className="w-full min-h-32 p-3 flex items-center justify-center bg-gray-50 rounded">
           <p className="font-bold text-sm text-gray-400">メモはありません</p>
         </div>
       </section>
