@@ -12,7 +12,7 @@ export const WalkDetails = () => {
   const router = useRouter();
 
   return (
-    <div>
+    <div className="bg-white rounded-lg p-4 border border-main border-opacity-30">
       <button
         className="font-bold text-main flex items-center py-3 transition-all hover:brightness-125"
         onClick={() => router.push("/walks")}
@@ -21,10 +21,12 @@ export const WalkDetails = () => {
       </button>
       <div className="h-[450px] w-full rounded-md overflow-hidden relative">
         {mapUrl && (
-          <img
+          <Image
             src={mapUrl}
             alt="Walk Route Map"
-            className="w-full h-full object-cover rounded-md"
+            className="object-cover rounded-md"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         )}
         <div className="absolute bottom-0 flex items-center overflow-hidden w-full h-24 bg-main bg-opacity-90">
@@ -72,27 +74,48 @@ export const WalkDetails = () => {
           <p className="font-bold py-1">みつけた動物</p>
         </div>
         <div className="flex items-center space-x-1">
-          {walk?.posts.map((post, index) => (
-            <button
-              key={index}
-              className="w-24 h-24 relative overflow-hidden rounded"
-              onClick={() => router.push(`/map?post_id=${post.id}`)}
-            >
-              <Image
-                src={post.imageUrl}
-                alt={`post-${post.id}`}
-                className="object-cover"
-                fill
-              />
-            </button>
-          ))}
+          {walk?.posts.length ? (
+            walk?.posts.map((post, index) => (
+              <button
+                key={index}
+                className="w-24 h-24 relative overflow-hidden rounded"
+                onClick={() => router.push(`/map?post_id=${post.id}`)}
+              >
+                <Image
+                  src={post.imageUrl}
+                  alt={`post-${post.id}`}
+                  className="object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                />
+              </button>
+            ))
+          ) : (
+            <div className="p-3 w-full flex items-center justify-center">
+              <p className="font-bold text-sm text-gray-400">
+                みつけた動物はいません
+              </p>
+            </div>
+          )}
         </div>
       </div>
-      <div>
+      <section>
         <p className="font-bold py-2 flex items-center">
           <span className="material-icons">edit_note</span>メモ
         </p>
-        <div className="w-full p-2 bg-gray-100 rounded"></div>
+        <div className="w-full min-h-32 p-3 flex items-center justify-center bg-gray-50 rounded">
+          <p className="font-bold text-sm text-gray-400">メモはありません</p>
+        </div>
+      </section>
+      <div className="w-full p-3 text-red-400 flex items-center justify-center">
+        <button className="px-6 py-2 bg-red-50 rounded-lg transition-all active:scale-95">
+          <p className="flex items-center text-sm font-bold">
+            <span className="material-icons" style={{ fontSize: "20px" }}>
+              delete
+            </span>
+            散歩記録を削除
+          </p>
+        </button>
       </div>
     </div>
   );

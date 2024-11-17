@@ -1,5 +1,6 @@
 "use client";
 import { usePosts } from "@/hooks/usePosts";
+import { useToast } from "@/hooks/useToast";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -40,11 +41,12 @@ export const PostModal = () => {
     register,
     handleSubmit,
     watch,
-    // formState: { errors },
+    formState: { errors },
   } = useForm({ defaultValues });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageFile = watch("image");
   const [imageSource, setImageSource] = useState("");
+  const { showSuccess, showAlert } = useToast();
 
   const onsubmit = (data: FormData) => {
     if (navigator.geolocation) {
@@ -52,9 +54,14 @@ export const PostModal = () => {
         (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-
-          postPost({ ...data, lat, lng });
-          closePostModal();
+          try {
+            postPost({ ...data, lat, lng });
+            closePostModal();
+            showSuccess("みつけた動物を投稿しました");
+          } catch (e) {
+            console.error(e);
+            showAlert("投稿に失敗しました");
+          }
         },
         (error) => {
           console.error("Error getting location:", error);
@@ -106,10 +113,13 @@ export const PostModal = () => {
               <p className="text-gray-400 font-bold">写真を追加</p>
             )}
           </div>
+          <div className="text-red-500 font-bold text-xs p-1">
+            {errors.image?.message}
+          </div>
           <input
             type="file"
             accept="image/*"
-            {...register("image")}
+            {...register("image", { required: "画像を選択してください" })}
             ref={(e: HTMLInputElement) => {
               register("image").ref(e);
               fileInputRef.current = e;
@@ -148,6 +158,9 @@ export const PostModal = () => {
                     },
                   })}
                 />
+              </div>
+              <div className="text-red-500 font-bold text-xs p-1">
+                {errors.body?.message}
               </div>
             </div>
             <div className="flex items-center py-2">

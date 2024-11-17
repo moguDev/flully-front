@@ -1,10 +1,11 @@
 import { api } from "@/lib/axiosInstance";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Cookies from "js-cookie";
 import { useSetRecoilState } from "recoil";
 import { authState, AuthState } from "./useAuth";
 import { User } from "@/app/types";
 import camelcaseKeys from "camelcase-keys";
+import snakecaseKeys from "snakecase-keys";
 
 type UserData = {
   name: string;
@@ -14,6 +15,8 @@ type UserData = {
   twitter: string;
   location: string;
   avatar: FileList | null;
+  isMailPublic: boolean;
+  isLocationPublic: boolean;
 };
 
 export const useUserProfiles = (name: string) => {
@@ -34,15 +37,28 @@ export const useUserProfiles = (name: string) => {
     }
   };
 
+  const fetchCurrentUser = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get("/myprofile");
+      const { data } = res;
+      setUser({ ...camelcaseKeys(data, { deep: true }) });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const update = async (newUserData: UserData) => {
     setLoading(true);
     try {
       const res = await api.put(
         "/auth",
-        {
+        snakecaseKeys({
           ...newUserData,
           avatar: newUserData.avatar ? newUserData.avatar[0] : null,
-        },
+        }),
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
@@ -62,9 +78,5 @@ export const useUserProfiles = (name: string) => {
     }
   };
 
-  useEffect(() => {
-    fetch();
-  }, []);
-
-  return { loading, user, update };
+  return { loading, user, fetch, update, fetchCurrentUser };
 };

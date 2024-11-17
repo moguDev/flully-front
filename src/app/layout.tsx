@@ -5,6 +5,7 @@ import { Navigation } from "./components/Navigation";
 import { RecoilRootWrapper } from "./components/RecoilRootWrapper";
 import { SideDrawer } from "./components/SideDrawer";
 import { Zen_Kaku_Gothic_New } from "next/font/google";
+import { BaseWrapper } from "./components/BaseWrapper";
 
 export const font = Zen_Kaku_Gothic_New({
   subsets: ["latin"],
@@ -33,7 +34,7 @@ export default function RootLayout({
         <RecoilRootWrapper>
           <SideDrawer>
             <Header />
-            <div className="lg:pl-16 lb:pb-0 w-full">{children}</div>
+            <BaseWrapper>{children}</BaseWrapper>
             <Navigation />
           </SideDrawer>
         </RecoilRootWrapper>

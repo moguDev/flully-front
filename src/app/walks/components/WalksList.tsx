@@ -58,9 +58,9 @@ const GridItem = ({ walk }: { walk: Walk }) => {
 export const WalksList = () => {
   const { walks } = useWalks();
   return (
-    <div>
+    <div className="bg-white p-5 rounded-lg min-h-[80vh]">
       <div className="flex items-center justify-between">
-        <p className="text-2xl font-bold px-1 py-2">散歩した記録</p>
+        <p className="text-2xl font-bold px-1 py-5">散歩した記録</p>
         <p className="font-bold">{walks.length}件</p>
       </div>
       <div className="grid lg:grid-cols-6 grid-cols-3 gap-1">

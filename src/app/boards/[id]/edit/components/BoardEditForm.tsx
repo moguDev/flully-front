@@ -12,7 +12,7 @@ import { useBoard } from "@/hooks/useBoard";
 import { showBoardDeleteModal } from "./BoardDeleteModal";
 
 type FormData = {
-  category: number;
+  category: string;
   breed: string;
   name: string;
   icon: FileList | null;
@@ -66,6 +66,7 @@ const SpeciesButton = ({
 };
 
 export const BoardEditForm = () => {
+  const [categoryText, setCategoryText] = useState<string>("いなくなった");
   const router = useRouter();
   const { id } = useParams();
   const { board, update } = useBoard(parseInt(id as string));
@@ -77,7 +78,7 @@ export const BoardEditForm = () => {
   });
   const [selectedSpeciesIndex, setSelectedSpeciesIndex] = useState<number>(0);
   const defaultValues: FormData = {
-    category: 0,
+    category: "0",
     breed: "",
     name: "",
     icon: null,
@@ -104,6 +105,7 @@ export const BoardEditForm = () => {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imageSources, setImageSources] = useState<string[]>([]);
   const images = watch("images");
+  const category = watch("category");
 
   const onsubmit = async (data: FormData) => {
     if (!center) return;
@@ -128,6 +130,23 @@ export const BoardEditForm = () => {
   };
 
   useEffect(() => {
+    switch (category) {
+      case "0":
+        setCategoryText("いなくなった");
+        break;
+      case "1":
+        setCategoryText("保護した");
+        break;
+      case "2":
+        setCategoryText("目撃した");
+        break;
+      default:
+        setCategoryText("いなくなった");
+        break;
+    }
+  }, [category]);
+
+  useEffect(() => {
     if (iconFile && iconFile[0]) {
       const fileReader = new FileReader();
       fileReader.onload = () => setIconSource(fileReader.result as string);
@@ -137,6 +156,19 @@ export const BoardEditForm = () => {
 
   useEffect(() => {
     if (board) {
+      switch (board.category) {
+        case "迷子":
+          setValue("category", "0");
+          break;
+        case "保護":
+          setValue("category", "1");
+          break;
+        case "目撃":
+          setValue("category", "2");
+          break;
+        default:
+          break;
+      }
       switch (board.species) {
         case "犬":
           setSelectedSpeciesIndex(0);
@@ -271,7 +303,7 @@ export const BoardEditForm = () => {
           <div className="py-2">
             <label className="text-sm font-bold">掲載用のアイコン</label>
             <div
-              className="h-16 w-16 rounded-full bg-gray-200 bg-opacity-50 relative overflow-hidden"
+              className="h-16 w-16 rounded-full bg-gray-200 bg-opacity-50 relative overflow-hidden cursor-pointer"
               onClick={() => {
                 iconInputRef.current?.click();
               }}
@@ -305,41 +337,47 @@ export const BoardEditForm = () => {
               hidden
             />
           </div>
+          {category === "0" && (
+            <>
+              <div className="py-2">
+                <label className="text-sm font-bold">名前</label>
+                <div>
+                  <input
+                    type="text"
+                    placeholder={`${categoryText}ペットの名前`}
+                    className="w-full p-2 bg-gray-100 rounded outline-none"
+                    {...register("name", {
+                      required: "ペットの名前を入力してください",
+                    })}
+                  />
+                </div>
+                <div className="text-red-500 font-bold text-xs p-1">
+                  {errors.name?.message}
+                </div>
+              </div>
+              <div className="py-2">
+                <label className="text-sm font-bold">年齢</label>
+                <div>
+                  <input
+                    type="number"
+                    placeholder="年齢"
+                    className="p-2 bg-gray-100 rounded mr-1 w-14 outline-none"
+                    {...register("age", {
+                      required: "ペットの年齢を入力してください。",
+                    })}
+                  />
+                  <label className="font-bold">歳</label>
+                </div>
+                <div className="text-red-500 font-bold text-xs p-1">
+                  {errors.age?.message}
+                </div>
+              </div>
+            </>
+          )}
           <div className="py-2">
-            <label className="text-sm font-bold">名前</label>
-            <div>
-              <input
-                type="text"
-                placeholder="いなくなったペットの名前"
-                className="w-full p-2 bg-gray-100 rounded outline-none"
-                {...register("name", {
-                  required: "ペットの名前を入力してください",
-                })}
-              />
-            </div>
-            <div className="text-red-500 font-bold text-xs p-1">
-              {errors.name?.message}
-            </div>
-          </div>
-          <div className="py-2">
-            <label className="text-sm font-bold">年齢</label>
-            <div>
-              <input
-                type="number"
-                placeholder="年齢"
-                className="p-2 bg-gray-100 rounded mr-1 w-14 outline-none"
-                {...register("age", {
-                  required: "ペットの年齢を入力してください。",
-                })}
-              />
-              <label className="font-bold">歳</label>
-            </div>
-            <div className="text-red-500 font-bold text-xs p-1">
-              {errors.age?.message}
-            </div>
-          </div>
-          <div className="py-2">
-            <label className="text-sm font-bold">ペットの特徴</label>
+            <label className="text-sm font-bold">
+              {categoryText}ペットの特徴
+            </label>
             <div>
               <input
                 type="text"
@@ -355,7 +393,7 @@ export const BoardEditForm = () => {
             </div>
           </div>
           <div className="py-2">
-            <label className="text-sm font-bold">いなくなった日時</label>
+            <label className="text-sm font-bold">{categoryText}日時</label>
             <div>
               <input
                 type="datetime-local"
@@ -371,7 +409,7 @@ export const BoardEditForm = () => {
             </div>
           </div>
           <div className="py-2">
-            <label className="text-sm font-bold">いなくなった場所</label>
+            <label className="text-sm font-bold">{categoryText}場所</label>
             <div className="flex items-center p-1">
               <input
                 type="checkbox"
@@ -395,10 +433,10 @@ export const BoardEditForm = () => {
             )}
           </div>
           <div className="py-2">
-            <label className="text-sm font-bold">いなくなった時の状況</label>
+            <label className="text-sm font-bold">{categoryText}時の状況</label>
             <div>
               <textarea
-                placeholder="いなくなった時の状況を記述してください。"
+                placeholder={`${categoryText}時の状況を記述してください。`}
                 className="w-full p-2 bg-gray-100 rounded outline-none"
                 {...register("body")}
               />
@@ -409,7 +447,7 @@ export const BoardEditForm = () => {
           </div>
           <div className="py-2">
             <label className="text-sm font-bold">
-              いなくなったペットの写真
+              {categoryText}ペットの写真
             </label>
             <div className="flex items-center overflow-x-auto space-x-1 flex-nowrap">
               <div

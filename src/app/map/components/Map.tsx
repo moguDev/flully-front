@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   GoogleMap,
   Marker,
@@ -19,6 +19,32 @@ import { useToast } from "@/hooks/useToast";
 import { useAuth } from "@/hooks/useAuth";
 import { showStartWalkingModal } from "./StartWalkingModal";
 
+const FixedSizeCircles = ({
+  position,
+}: {
+  position: { lat: number; lng: number };
+}) => {
+  const iconSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+      <!-- 薄い円 -->
+      <circle cx="20" cy="20" r="18" fill="#90acaf" fill-opacity="0.2" />
+      <!-- 濃い円 -->
+      <circle cx="20" cy="20" r="7" fill="#90acaf" stroke="#fafafa" stroke-width="1.5" />
+    </svg>
+  `;
+
+  return (
+    <Marker
+      position={position}
+      icon={{
+        url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(iconSvg),
+        scaledSize: new google.maps.Size(40, 40), // サイズをピクセル単位で指定
+        anchor: new google.maps.Point(20, 20), // アイコンの中心を基準点に
+      }}
+    />
+  );
+};
+
 const Map: React.FC = () => {
   const router = useRouter();
   const { inProgress, checkpoints, sendCheckpoint } = useWalking();
@@ -30,19 +56,16 @@ const Map: React.FC = () => {
   const { boards, fetchNearbyBoard } = useBoards();
   const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
   const { isAuthenticated } = useAuth();
-  const { requireSignin } = useToast();
+  const { showAlert, requireSignin } = useToast();
 
   const { isLoaded, loadError } = useGoogleMaps();
+  const mapRef = useRef<google.maps.Map | null>(null); // マップの ref を追加
 
   const mapContainerStyle = {
     height: "100vh",
     width: "100%",
   };
 
-  {
-    /**現在の位置情報を取得して、現在地の更新、経路の描画、チェックポイントの送信を実施
-    ただし、前回の位置から3メートル以内だった場合更新しない */
-  }
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -124,8 +147,11 @@ const Map: React.FC = () => {
           mapContainerStyle={mapContainerStyle}
           center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
           zoom={currentPosition ? 17 : 5}
+          onLoad={(map) => {
+            mapRef.current = map; // mapRef.current に map を代入
+          }}
         >
-          {currentPosition && <Marker position={currentPosition} />}
+          {currentPosition && <FixedSizeCircles position={currentPosition} />}
           <Polyline
             path={path}
             options={{ strokeColor: "#90acaf", strokeWeight: 12 }}
@@ -167,7 +193,14 @@ const Map: React.FC = () => {
       </div>
       <div className="fixed lg:bottom-10 lg:right-4 bottom-36 right-2 z-20">
         <div className="flex flex-col items-center justify-center space-y-2">
-          <button className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95">
+          <button
+            className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95"
+            onClick={() => {
+              if (mapRef.current && currentPosition) {
+                mapRef.current.panTo(currentPosition); // currentPosition にマップを移動
+              }
+            }}
+          >
             <span
               className="material-icons select-none"
               style={{ fontSize: "32px" }}
@@ -175,7 +208,10 @@ const Map: React.FC = () => {
               my_location
             </span>
           </button>
-          <button className="rounded-2xl h-16 w-16 bg-blue-500 flex flex-col items-center justify-center shadow transition-all active:scale-95">
+          <button
+            className="rounded-2xl h-16 w-16 bg-blue-500 flex flex-col items-center justify-center shadow transition-all active:scale-95"
+            onClick={() => showAlert("開発中の機能です")}
+          >
             <span
               className="material-icons text-base translate-y-1.5 select-none"
               style={{ fontSize: "36px" }}

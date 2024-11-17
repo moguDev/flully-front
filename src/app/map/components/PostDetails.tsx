@@ -152,24 +152,36 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
             )}
           </div>
           <div className="absolute bottom-0 left-0 h-max w-full bg-base p-2 border-t border-gray-200 z-20">
-            <div className="flex items-center">
-              <div className="bg-gray-100 p-2 px-4 rounded-full w-full">
-                <input
-                  type="text"
-                  className="w-full bg-gray-100 outline-none"
-                  placeholder="コメントを入力..."
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                />
+            {isAuthenticated ? (
+              <div className="flex items-center">
+                <div className="bg-gray-100 p-2 px-4 rounded-full w-full">
+                  <input
+                    type="text"
+                    className="w-full bg-gray-100 outline-none"
+                    placeholder="コメントを入力..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                  />
+                </div>
+                <button
+                  className="material-icons ml-1 text-main transition-all active:scale-95"
+                  style={{ fontSize: "32px" }}
+                  onClick={handleSendComment}
+                >
+                  send
+                </button>
               </div>
+            ) : (
               <button
-                className="material-icons ml-1 text-main transition-all active:scale-95"
-                style={{ fontSize: "32px" }}
-                onClick={handleSendComment}
+                className="bg-main rounded w-full transition-all active:scale-95"
+                onClick={() => router.push("/signin")}
               >
-                send
+                <p className="text-white font-bold text-sm p-3 flex items-center justify-center">
+                  <span className="material-icons mr-1">login</span>
+                  ログインしてコメントする
+                </p>
               </button>
-            </div>
+            )}
           </div>
         </section>
         {name === post.user?.name && (

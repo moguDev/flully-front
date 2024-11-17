@@ -9,12 +9,14 @@ import { SelectLocationModal } from "./SelectLocationModal";
 import { useBoard } from "@/hooks/useBoard";
 import { useAuth } from "@/hooks/useAuth";
 import { CommentViewer } from "./CommentViewer";
+import { useToast } from "@/hooks/useToast";
 
 export const BoardDetail = () => {
   const { id } = useParams();
-  const { name: userName } = useAuth();
+  const { isAuthenticated, name: userName } = useAuth();
   const { loading, board } = useBoard(parseInt(id as string));
   const router = useRouter();
+  const { requireSignin } = useToast();
   const {
     loading: bookmarkLoading,
     bookmarked,
@@ -30,7 +32,7 @@ export const BoardDetail = () => {
   return loading ? (
     <Loading />
   ) : board ? (
-    <div className="lg:flex relative">
+    <div className="lg:flex bg-white rounded-lg p-5 relative">
       <div className="lg:pb-0 pb-32 max-w-3xl lg:w-2/3 w-full mx-auto p-2">
         <section>
           <div className="flex items-center justify-between pb-4">
@@ -63,7 +65,9 @@ export const BoardDetail = () => {
             </div>
             <div className="pl-2 py-1 w-full">
               <div className="flex items-center justify-between pb-1">
-                <p className="text-2xl font-bold">{board?.name}</p>
+                <p className="text-2xl font-bold">
+                  {board?.name || "(未登録)"}
+                </p>
                 <div className="flex items-center space-x-1">
                   <p
                     className={`px-2 py-0.5 rounded-md text-white text-xs font-bold ${board.category === "迷子" ? "bg-red-500" : board.category === "保護" ? "bg-blue-500" : "bg-green-500"}`}
@@ -79,9 +83,14 @@ export const BoardDetail = () => {
                 <li className="text-base font-bold text-gray-400">
                   分類：<span className="text-black">{board.breed}</span>
                 </li>
-                <li className="text-base font-bold text-gray-400">
-                  年齢：<span className="text-black">{board.age}歳</span>
-                </li>
+                {board.category === "迷子" && (
+                  <li className="text-base font-bold text-gray-400">
+                    年齢：
+                    <span className="text-black">
+                      {`${board.age}歳` || "(未登録)"}
+                    </span>
+                  </li>
+                )}
                 <li className="text-base font-bold text-gray-400">
                   特徴：<span className="text-black">{board.feature}</span>
                 </li>
@@ -100,7 +109,9 @@ export const BoardDetail = () => {
                 <button
                   className={`${bookmarked ? "bg-main text-white" : "text-main"} px-2 py-1 rounded-md border border-main text-xs font-bold flex items-center transition-all active:scale-95`}
                   onClick={() => {
-                    if (bookmarked) {
+                    if (!isAuthenticated) {
+                      requireSignin();
+                    } else if (bookmarked) {
                       unbookmark();
                     } else {
                       bookmark();

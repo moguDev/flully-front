@@ -34,18 +34,21 @@ export const SignupForm = () => {
   };
 
   return (
-    <div>
+    <div className="bg-white px-5 lg:px-10 py-10 border border-main border-opacity-30 rounded-lg">
+      <h1 className="text-main font-bold flex items-center text-xl">
+        flullyアカウントを作成
+      </h1>
       <form
         method="post"
         onSubmit={handleSubmit(onsubmit)}
-        className="space-y-4 relative"
+        className="relative"
       >
         {loading && (
           <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-50 z-10">
             <Loading />
           </div>
         )}
-        <div className="mt-3">
+        <div className="my-6">
           <label htmlFor="flully-id" className="font-bold text-xs text-main">
             flully ID
           </label>
@@ -55,7 +58,7 @@ export const SignupForm = () => {
             </span>
             <input
               type="text"
-              className="w-full bg-base outline-none"
+              className="w-full bg-white outline-none"
               placeholder="半角英数字4文字以上"
               {...register("name", {
                 required: "flully IDを入力してください",
@@ -64,8 +67,8 @@ export const SignupForm = () => {
                   message: "flully IDは4文字以上にしてください。",
                 },
                 maxLength: {
-                  value: 24,
-                  message: "flully IDは24文字以内にしてください。",
+                  value: 16,
+                  message: "flully IDは16文字以内にしてください。",
                 },
               })}
             />
@@ -74,7 +77,7 @@ export const SignupForm = () => {
             {errors.name?.message}
           </div>
         </div>
-        <div>
+        <div className="my-6">
           <label htmlFor="flully-id" className="font-bold text-xs text-main">
             アカウント名
           </label>
@@ -82,10 +85,14 @@ export const SignupForm = () => {
             <span className="material-icons text-main mr-1">person</span>
             <input
               type="text"
-              className="w-full bg-base outline-none"
+              className="w-full bg-white outline-none"
               placeholder="アカウント名"
               {...register("nickname", {
                 required: "アカウント名を入力してください。",
+                minLength: {
+                  value: 2,
+                  message: "アカウント名は2文字以上にしてください",
+                },
                 maxLength: {
                   value: 32,
                   message: "アカウント名は32文字以内にしてください。",
@@ -97,7 +104,7 @@ export const SignupForm = () => {
             {errors.nickname?.message}
           </div>
         </div>
-        <div>
+        <div className="my-6">
           <label htmlFor="flully-id" className="font-bold text-xs text-main">
             メールアドレス
           </label>
@@ -105,7 +112,7 @@ export const SignupForm = () => {
             <span className="material-icons text-main mr-1">email</span>
             <input
               type="email"
-              className="w-full bg-base outline-none"
+              className="w-full bg-white outline-none"
               placeholder="example@flully.jp"
               {...register("email", {
                 required: "メールアドレスを入力してください。",
@@ -120,7 +127,7 @@ export const SignupForm = () => {
             {errors.email?.message}
           </div>
         </div>
-        <div>
+        <div className="my-6">
           <label htmlFor="flully-id" className="font-bold text-xs text-main">
             パスワード
           </label>
@@ -128,7 +135,7 @@ export const SignupForm = () => {
             <span className="material-icons text-main mr-1">key</span>
             <input
               type="password"
-              className="w-full bg-base outline-none"
+              className="w-full bg-white outline-none"
               placeholder="半角英数字8文字以上"
               {...register("password", {
                 required: "パスワードを入力してください。",
@@ -143,7 +150,7 @@ export const SignupForm = () => {
             {errors.password?.message}
           </div>
         </div>
-        <div>
+        <div className="my-6">
           <label htmlFor="flully-id" className="font-bold text-xs text-main">
             パスワード（確認用）
           </label>
@@ -151,7 +158,7 @@ export const SignupForm = () => {
             <span className="material-icons text-main mr-1">key</span>
             <input
               type="password"
-              className="w-full bg-base outline-none"
+              className="w-full bg-white outline-none"
               placeholder="半角英数字8文字以上"
               {...register("passwordConfirmation", {
                 required: "パスワード（確認用）を入力してください。",
@@ -164,16 +171,13 @@ export const SignupForm = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-main text-base font-bold py-3 rounded text-sm flex items-center justify-center"
+          className="w-full bg-main text-base font-bold py-3 rounded flex items-center justify-center"
         >
           <span className="material-icons mr-1">person_add</span>
           アカウントを作成
         </button>
       </form>
-      <button
-        className="w-full text-sm py-3 mt-2"
-        onClick={() => router.back()}
-      >
+      <button className="w-full py-3 mt-2" onClick={() => router.back()}>
         キャンセル
       </button>
     </div>
