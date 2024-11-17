@@ -21,10 +21,12 @@ export const WalkDetails = () => {
       </button>
       <div className="h-[450px] w-full rounded-md overflow-hidden relative">
         {mapUrl && (
-          <img
+          <Image
             src={mapUrl}
             alt="Walk Route Map"
-            className="w-full h-full object-cover rounded-md"
+            className="object-cover rounded-md"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         )}
         <div className="absolute bottom-0 flex items-center overflow-hidden w-full h-24 bg-main bg-opacity-90">
@@ -84,6 +86,7 @@ export const WalkDetails = () => {
                   alt={`post-${post.id}`}
                   className="object-cover"
                   fill
+                  sizes="(max-width: 768px) 100vw, 25vw"
                 />
               </button>
             ))
