@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import defaultUserImage from "/public/images/default_avatar.png";
 import Loading from "@/app/loading";
 import { useBookmark } from "@/hooks/useBookmark";
@@ -10,6 +10,7 @@ import { useBoard } from "@/hooks/useBoard";
 import { useAuth } from "@/hooks/useAuth";
 import { CommentViewer } from "./CommentViewer";
 import { useToast } from "@/hooks/useToast";
+import XIcon from "@mui/icons-material/X";
 
 export const BoardDetail = () => {
   const { id } = useParams();
@@ -23,6 +24,18 @@ export const BoardDetail = () => {
     bookmark,
     unbookmark,
   } = useBookmark(parseInt(id as string));
+  const pathName = usePathname();
+  const currentUrl = `https://flully.jp${pathName}`;
+  const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+    `【${board?.category}情報】${board?.location}
+  ${board?.category == "迷子" ? `${board?.breed}の「${board?.name}」を探しています。` : `${board?.breed}を${board?.category}しました。`}
+  
+  ・${board?.breed}
+  ・${board?.feature}
+
+  リンク先のページの掲示板に情報の提供を心よりお待ちしております。
+  `
+  )}&url=${encodeURIComponent(currentUrl)}`;
 
   const getGoogleMapImageUrl = (lat: number, lng: number, zoom = 16) => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -99,9 +112,15 @@ export const BoardDetail = () => {
           </div>
           <div className="flex items-center justify-between py-2">
             <div className="flex items-center space-x-1">
-              <button className="bg-black text-white px-2 py-1 rounded-md border border-black text-xs font-bold transition-all active:scale-95">
-                Xでシェアする
-              </button>
+              <a
+                href={twitterShareUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-black text-white px-2 py-1 rounded-md border border-black text-xs font-bold transition-all active:scale-95 flex items-center justify-center"
+              >
+                <XIcon style={{ fontSize: "14px" }} />
+                <p>でシェアする</p>
+              </a>
               <div className="relative">
                 {bookmarkLoading && (
                   <div className="bg-white opacity-50 h-full w-full absolute top-0 left-0 z-10" />
