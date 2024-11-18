@@ -10,6 +10,8 @@ import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
 import { useBoard } from "@/hooks/useBoard";
 import { showBoardDeleteModal } from "./BoardDeleteModal";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/useToast";
 
 type FormData = {
   category: string;
@@ -66,6 +68,8 @@ const SpeciesButton = ({
 };
 
 export const BoardEditForm = () => {
+  const { name } = useAuth();
+  const { showAlert } = useToast();
   const [categoryText, setCategoryText] = useState<string>("いなくなった");
   const router = useRouter();
   const { id } = useParams();
@@ -221,6 +225,12 @@ export const BoardEditForm = () => {
 
   if (loadError) {
     return <div>Google Mapsの読み込み中にエラーが発生しました。</div>;
+  }
+
+  // 掲示板の作成者じゃない場合は画面から戻る
+  if (board?.user.name !== name) {
+    router.push("/boards");
+    showAlert("編集する権限がありません。");
   }
 
   return (
