@@ -178,7 +178,7 @@ export default function Home() {
                   </p>
                 </button>
               </div>
-              <p className="p-4 font-bold text-sm text-center select-none">
+              <p className="p-4 font-bold text-sm text-white text-center select-none">
                 ©️ 2024 flully.jp
               </p>
             </div>
