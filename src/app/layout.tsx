@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   近所で見つけた鳥や猫、犬などを投稿して、他の動物好きなユーザーとシェアしましょう。
   さらに、迷子のペットや保護したペットの情報を共有することもできます。
   迷子のペットと飼い主がいち早く再開できるようにサポートします。`,
-    images: "https://たまごかけごはん.com/images/opengraph-image.png",
+    images: "https://flully.jp/images/opengraph-image.png",
   },
 };
 
