@@ -46,7 +46,7 @@ export default function Home() {
                 </div>
                 <div className="relative flex items-center justify-center p-2 lg:mb-8 mb-3">
                   <div className="absolute bg-main bg-opacity-70 h-full w-full -z-10 blur-md" />
-                  <p className="text-white font-black lg:text-[28px] text-xs">
+                  <p className="text-white font-black lg:text-[28px] text-xs select-none">
                     ふらりと出会った動物をシェアできるコミュニティ
                   </p>
                 </div>
@@ -71,7 +71,7 @@ export default function Home() {
                       </p>
                     </section>
                   </div>
-                  <div className="w-full grid lg:grid-cols-2 gap-2 py-5 relative">
+                  <div className="w-full grid lg:grid-cols-2 gap-2 p-5 relative">
                     <div className="flex flex-col items-center justify-center space-y-2 h-full w-full">
                       <button
                         className="relative w-full h-1/2 bg-main bg-opacity-80 text-white rounded-lg px-10 py-5 active:scale-95 transition-all duration-700 hover:shadow-xl"
@@ -145,7 +145,7 @@ export default function Home() {
             <div className="lg:flex items-center justify-between pb-2">
               <div className="lg:flex items-center">
                 <button className="p-4 transition-all hover:-translate-y-1 active:scale-95">
-                  <p className="font-black flex items-center">
+                  <p className="font-black flex items-center select-none">
                     <span
                       className="material-icons mr-0.5"
                       style={{ fontSize: "16px" }}
@@ -156,7 +156,7 @@ export default function Home() {
                   </p>
                 </button>
                 <button className="p-4 transition-all hover:-translate-y-1 active:scale-95">
-                  <p className="font-black flex items-center">
+                  <p className="font-black flex items-center select-none">
                     <span
                       className="material-icons mr-0.5"
                       style={{ fontSize: "16px" }}
@@ -167,7 +167,7 @@ export default function Home() {
                   </p>
                 </button>
                 <button className="p-4 transition-all hover:-translate-y-1 active:scale-95">
-                  <p className="font-black flex items-center">
+                  <p className="font-black flex items-center select-none">
                     <span
                       className="material-icons mr-0.5"
                       style={{ fontSize: "16px" }}
@@ -178,8 +178,8 @@ export default function Home() {
                   </p>
                 </button>
               </div>
-              <p className="p-4 font-bold text-sm text-center">
-                ©️ 2024 flully.jp - All rights reserved.
+              <p className="p-4 font-bold text-sm text-center select-none">
+                ©️ 2024 flully.jp
               </p>
             </div>
             <div className="lg:flex items-center justify-between p-2">

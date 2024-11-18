@@ -51,7 +51,7 @@ const Map: React.FC = () => {
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral | null>(null);
   const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
-  const [locationCount, setLocationCount] = useState(0);
+  // const [locationCount, setLocationCount] = useState(0);
   const { posts, fetchNearByPost } = usePosts();
   const { boards, fetchNearbyBoard } = useBoards();
   const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
@@ -72,7 +72,7 @@ const Map: React.FC = () => {
         (position) => {
           const { latitude, longitude } = position.coords;
           const newPosition = { lat: latitude, lng: longitude };
-          setLocationCount((prevCount) => prevCount + 1);
+          // setLocationCount((prevCount) => prevCount + 1);
 
           if (
             currentPosition &&
@@ -181,15 +181,14 @@ const Map: React.FC = () => {
             </OverlayView>
           ))}
         </GoogleMap>
-
-        <div className="absolute top-28 right-4 bg-white p-2 rounded shadow-md">
+        {/* <div className="absolute top-28 right-4 bg-white p-2 rounded shadow-md">
           <p>取得回数: {locationCount} 回</p>
           {currentPosition && (
             <p>
               現在地: 緯度 {currentPosition.lat}, 経度 {currentPosition.lng}
             </p>
           )}
-        </div>
+        </div> */}
       </div>
       <div className="fixed lg:bottom-10 lg:right-4 bottom-36 right-2 z-20">
         <div className="flex flex-col items-center justify-center space-y-2">
