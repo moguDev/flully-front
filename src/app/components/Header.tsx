@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { showModal } from "../map/components/FinishWalkingModal";
 import { Toast } from "./Toast";
 import { useToast } from "@/hooks/useToast";
+import logo from "/public/images/flully_logo.png";
+import Image from "next/image";
 
 export const Header = () => {
   const { isAuthenticated, checkAuth } = useAuth();
@@ -15,27 +17,24 @@ export const Header = () => {
   const router = useRouter();
 
   useEffect(() => {
-    check();
-  }, []);
-
-  useEffect(() => {
     checkAuth();
+    check();
   }, []);
 
   return (
     <header
-      className={`fixed top-0 w-full z-40 shadow-lg ${inProgress ? "bg-orange-400" : "bg-main"}`}
+      className={`fixed top-0 w-full z-40 bg-opacity-90 backdrop-blur ${inProgress ? "bg-orange-400" : "bg-main"}`}
     >
       <div className="flex items-center justify-between h-16 lg:px-5 px-3">
         {inProgress ? (
           <p className="text-xl font-bold text-base">さんぽ中...</p>
         ) : (
-          <h1
-            className="text-base font-black text-2xl cursor-pointer"
+          <div
+            className="h-12 w-20 cursor-pointer relative select-none"
             onClick={() => router.push("/")}
           >
-            flully
-          </h1>
+            <Image src={logo} alt="logo" className="object-contain" fill />
+          </div>
         )}
         {isAuthenticated ? (
           inProgress ? (
