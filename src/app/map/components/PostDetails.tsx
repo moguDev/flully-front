@@ -8,7 +8,7 @@ import { usePost } from "@/hooks/usePost";
 import XIcon from "@mui/icons-material/X";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { showPostDeleteModal } from "./PostDeleteModal";
 import { useToast } from "@/hooks/useToast";
 
@@ -23,8 +23,12 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
   const { comments, sendComment } = usePostComments(postId);
   const router = useRouter();
   const { requireSignin } = useToast();
-
   const [commentText, setCommentText] = useState("");
+  const pathName = usePathname();
+  const currentUrl = `https://flully.jp${pathName}?post_id=${postId}`;
+  const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+    `ふらりとみんなのみつけた動物を見に行きましょう！ #flully #ふらり`
+  )}&url=${encodeURIComponent(currentUrl)}`;
 
   const handleLiked = async () => {
     if (isLiked) {
@@ -62,10 +66,15 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
               fill
             />
             <div className="absolute top-0 right-0 p-2 flex flex-col space-y-1 font-bold">
-              <button className="h-14 w-14 text-white bg-black rounded-full p-1 transition-all active:scale-110">
+              <a
+                href={twitterShareUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-14 w-14 text-white bg-black rounded-full p-1 transition-all active:scale-110 flex flex-col items-center justify-center"
+              >
                 <XIcon />
                 <p style={{ fontSize: "10px" }}>シェア</p>
-              </button>
+              </a>
               <button
                 className="h-14 w-14 text-white bg-main rounded-full p-1 transition-all active:scale-110"
                 onClick={() => {
