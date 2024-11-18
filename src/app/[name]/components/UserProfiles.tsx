@@ -51,15 +51,15 @@ export const UserProfiles = () => {
                 </div>
                 <div className="flex items-center justify-between w-full">
                   <p className="text-sm">
-                    LV<span>{12}</span>
+                    LV<span>{1}</span>
                   </p>
                   <p className="text-xs">
-                    次のレベルまで<span>{1234}</span>EXP
+                    次のレベルまで<span>{0}</span>EXP
                   </p>
                 </div>
                 <div className="relative">
                   <div className="w-full h-2 bg-gray-200 rounded-full" />
-                  <div className="w-1/3 h-2 bg-main rounded-full absolute top-0 left-0" />
+                  <div className="w-0 h-2 bg-main rounded-full absolute top-0 left-0" />
                 </div>
               </div>
             </div>

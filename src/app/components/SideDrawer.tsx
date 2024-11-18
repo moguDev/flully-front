@@ -46,15 +46,15 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center justify-between">
             <p className="font-bold">
               <span className="text-xs">LV</span>
-              <span className="text-lg">12</span>
+              <span className="text-lg">{1}</span>
             </p>
             <p className="opacity-60 font-bold" style={{ fontSize: "8px" }}>
-              次のレベルまで<span className="text-sm">1,234</span>EXP
+              次のレベルまで<span className="text-sm">{0}</span>EXP
             </p>
           </div>
           <div className="relative">
             <div className="w-full h-2 bg-gray-200 rounded-full" />
-            <div className="absolute top-0 left-0 bg-main w-1/2 h-2 rounded-full" />
+            <div className="absolute top-0 left-0 bg-main w-0 h-2 rounded-full" />
           </div>
           <div className="flex items-center space-x-2 py-1">
             <p className="text-lg">
@@ -70,7 +70,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
               </span>
             </p>
           </div>
-          <div className="flex items-center space-x-1 font-bold">
+          {/* <div className="flex items-center space-x-1 font-bold">
             <div className="w-1/2 h-20 text-center bg-main bg-opacity-10 border border-main border-opacity-50 rounded flex flex-col justify-center relative overflow-hidden">
               <span
                 className="material-icons absolute left-0 text-main opacity-20 -translate-x-6 translate-y-4"
@@ -97,7 +97,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
               </p>
               <p style={{ fontSize: "8px" }}>2024.10.24</p>
             </div>
-          </div>
+          </div> */}
           <ul className="my-2 py-2 space-y-1 border-t border-gray-200">
             <li>
               <button
