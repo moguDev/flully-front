@@ -166,7 +166,10 @@ export default function Home() {
                     プライバシーポリシー
                   </p>
                 </button>
-                <button className="p-4 transition-all hover:-translate-y-1 active:scale-95">
+                <a
+                  href="mailto:contact@flully.jp?subject=お問い合わせ"
+                  className="p-4 transition-all hover:-translate-y-1 active:scale-95"
+                >
                   <p className="font-black flex items-center select-none">
                     <span
                       className="material-icons mr-0.5"
@@ -176,7 +179,7 @@ export default function Home() {
                     </span>
                     お問い合わせ
                   </p>
-                </button>
+                </a>
               </div>
               <p className="p-4 font-bold text-sm text-white text-center select-none">
                 ©️ 2024 flully.jp
@@ -201,9 +204,12 @@ export default function Home() {
               </div>
               <div className="p-2">
                 <div className="flex items-center justify-center">
-                  <button className="p-2 transition-all hover:-translate-y-1 active:scale-95">
+                  <a
+                    href="mailto:contact@flully.jp?subject=お問い合わせ"
+                    className="p-2 transition-all hover:-translate-y-1 active:scale-95"
+                  >
                     <MailIcon style={{ fontSize: "28px" }} />
-                  </button>
+                  </a>
                   <a
                     href="https://x.com/mogu_57B"
                     target="_blank"

@@ -177,7 +177,8 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
               </button>
             </li>
             <li>
-              <button
+              <a
+                href="mailto:contact@flully.jp?subject=お問い合わせ"
                 className="w-full flex items-center rounded py-2 transition-all active:scale-95"
                 onClick={() => {
                   closeDrawer();
@@ -185,7 +186,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
               >
                 <span className="material-icons mr-1">mail</span>
                 <span className="text-sm">お問い合わせ</span>
-              </button>
+              </a>
             </li>
           </ul>
           <p className="text-center font-bold text-xs">©️ flully 2024</p>
