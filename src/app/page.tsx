@@ -19,9 +19,7 @@ export default function Home() {
     router.push("/map");
   };
 
-  useEffect(() => {
-    if (isAuthenticated) router.push("/map");
-  }, [isAuthenticated]);
+  if (isAuthenticated) router.push("/map");
 
   return (
     <main className="min-h-screen bg-main bg-opacity-50 relative overflow-hidden">
