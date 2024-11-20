@@ -31,7 +31,13 @@ export const Header = () => {
         ) : (
           <div
             className="h-12 w-20 cursor-pointer relative select-none"
-            onClick={() => router.push("/")}
+            onClick={() => {
+              if (isAuthenticated) {
+                router.push("/map");
+              } else {
+                router.push("/");
+              }
+            }}
           >
             <Image src={logo} alt="logo" className="object-contain" fill />
           </div>

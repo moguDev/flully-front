@@ -20,11 +20,13 @@ export const Toast = () => {
   return (
     <div
       className={`w-full fixed flex items-center justify-center top-0 transition-all ${
-        toast.message === "" ? "-translate-y-20" : "translate-y-20"
+        toast.message === ""
+          ? "-translate-y-20 opacity-0"
+          : "translate-y-20 opacity-100"
       }`}
     >
       <div
-        className={`px-3 py-2 rounded-full bg-opacity-80 backdrop-blur ${toast.toastType === "success" ? "bg-blue-400" : "bg-red-400"}`}
+        className={`px-3 py-2 rounded-full bg-opacity-80 backdrop-blur-lg ${toast.toastType === "success" ? "bg-blue-600" : "bg-red-400"}`}
       >
         <p className="text-white font-bold text-sm">{toast.message}</p>
       </div>
