@@ -11,6 +11,7 @@ import logo from "/public/images/flully_logo.png";
 import screenshot from "/public/images/top_screenshot.png";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
@@ -138,11 +139,14 @@ export default function Home() {
             </div>
           </section> */}
         </div>
-        <footer className="bg-main bg-opacity-20 backdrop-blur text-base p-5">
+        <footer className="bg-main bg-opacity-30 backdrop-blur-lg text-base p-5">
           <div className="max-w-7xl mx-auto px-3 divide-y divide-gray-300">
             <div className="lg:flex items-center justify-between pb-2">
               <div className="lg:flex items-center">
-                <button className="p-4 transition-all hover:-translate-y-1 active:scale-95">
+                <Link
+                  href="/terms"
+                  className="p-4 transition-all hover:-translate-y-1 active:scale-95"
+                >
                   <p className="font-black flex items-center select-none">
                     <span
                       className="material-icons mr-0.5"
@@ -152,7 +156,7 @@ export default function Home() {
                     </span>
                     ご利用規約
                   </p>
-                </button>
+                </Link>
                 <button className="p-4 transition-all hover:-translate-y-1 active:scale-95">
                   <p className="font-black flex items-center select-none">
                     <span
