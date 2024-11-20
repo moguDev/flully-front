@@ -10,7 +10,6 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import logo from "/public/images/flully_logo.png";
 import screenshot from "/public/images/top_screenshot.png";
 import { useAuth } from "@/hooks/useAuth";
-import { useEffect } from "react";
 import Link from "next/link";
 
 export default function Home() {
