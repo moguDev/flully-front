@@ -1,7 +1,7 @@
 import Image from "next/image";
 import defaultUserImage from "/public/images/default_avatar.png";
 import { useLikes } from "@/hooks/useLikes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePostComments } from "@/hooks/usePostComments";
 import { useAuth } from "@/hooks/useAuth";
 import { usePost } from "@/hooks/usePost";
@@ -11,12 +11,15 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import { usePathname, useRouter } from "next/navigation";
 import { showPostDeleteModal } from "./PostDeleteModal";
 import { useToast } from "@/hooks/useToast";
+import { useSetRecoilState } from "recoil";
+import { focusPositionState } from "./Map";
 
 type PostDetailsProps = {
   postId: number;
 };
 
 export const PostDetails = ({ postId }: PostDetailsProps) => {
+  const setFocusPosition = useSetRecoilState(focusPositionState);
   const { isAuthenticated, name } = useAuth();
   const { isLiked, like, dislike } = useLikes(postId);
   const { post, fetch } = usePost(postId);
@@ -47,9 +50,18 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
     }
   };
 
+  useEffect(() => {
+    if (post) {
+      setFocusPosition({ lat: post?.lat, lng: post?.lng });
+    }
+  }, [post]);
+
   return post ? (
     <>
-      <div className="p-3 lg:pb-0 pb-20 space-y-3 h-full overflow-y-auto">
+      <div
+        key={`post_${post.id}`}
+        className="p-3 lg:pb-0 pb-20 space-y-3 h-full overflow-y-auto"
+      >
         <section className="space-y-1">
           <button
             className="flex items-center text-sm text-gray-600 py-2"
@@ -60,6 +72,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
           </button>
           <div className="w-full h-96 overflow-hidden relative rounded">
             <Image
+              key={`post_image_${post.id}`}
               src={post.imageUrl}
               alt={"image"}
               className="object-cover"
@@ -99,7 +112,14 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
                     fill
                   />
                 </div>
-                <p className="text-xs">
+                <p
+                  className="text-xs select-none cursor-pointer"
+                  onClick={() => {
+                    if (post.user) {
+                      router.push(`/${post.user.name}`);
+                    }
+                  }}
+                >
                   {post.user ? post.user.nickname : "非公開"}
                 </p>
               </div>
@@ -128,8 +148,10 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
             ) : (
               comments.map((comment, index) => (
                 <div key={index} className="p-2">
-                  <div className="flex items-center mb-1">
-                    <div className="h-4 w-4 rounded-full overflow-hidden relative mr-1">
+                  <div
+                    className={`flex items-center mb-1 ${comment.user.name === name && "justify-end"}`}
+                  >
+                    <div className="h-4 w-4 rounded-full overflow-hidden relative mr-0.5">
                       <Image
                         src={comment.user.avatarUrl || defaultUserImage}
                         alt="user_icon"
@@ -137,14 +159,20 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
                         fill
                       />
                     </div>
-                    <p className="text-xs font-bold">{comment.user.nickname}</p>
+                    <p className={`text-xs font-bold`}>
+                      {comment.user.name === name
+                        ? "あなた"
+                        : comment.user.nickname}
+                    </p>
                   </div>
-                  <div className="flex items-end pl-1">
+                  <div
+                    className={`flex justify-start items-end px-2 ${comment.user.name === name && "flex-row-reverse"}`}
+                  >
                     <div
                       className={`${comment.user.name === name ? "bg-main" : "bg-gray-200"} w-max max-w-[75%] rounded-[24px] px-5 py-3 relative z-10`}
                     >
                       <div
-                        className={`${comment.user.name === name ? "bg-main" : "bg-gray-200"} absolute top-0 left-0 rounded-md h-1/2 w-1/2 -z-10`}
+                        className={`${comment.user.name === name ? "bg-main right-0" : "bg-gray-200 left-0"} absolute top-0 rounded-md h-1/2 w-1/2 -z-10`}
                       />
                       <p
                         className={`${comment.user.name === name && "text-base"} font-bold w-full break-words z-10`}

@@ -5,6 +5,8 @@ import { useToast } from "@/hooks/useToast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 type FormData = {
   email: string;
@@ -21,6 +23,7 @@ export const LoginForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ defaultValues });
+  const { data: session } = useSession();
 
   const onsubmit = async (data: FormData) => {
     try {
@@ -31,6 +34,10 @@ export const LoginForm = () => {
       showAlert("ログインに失敗しました");
     }
   };
+
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
 
   return (
     <div className="space-y-5 bg-white rounded-lg lg:px-10 px-5 py-10 border border-main border-opacity-30">
@@ -109,6 +116,10 @@ export const LoginForm = () => {
           </button>
         </div>
       </form>
+      <div className="divider">または</div>
+      <button onClick={() => signIn("google")}>
+        <p>Googleアカウントでログイン</p>
+      </button>
       <button className="w-full" onClick={() => router.push("/map")}>
         キャンセル
       </button>

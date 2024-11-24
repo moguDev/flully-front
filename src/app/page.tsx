@@ -9,17 +9,13 @@ import XIcon from "@mui/icons-material/X";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import logo from "/public/images/flully_logo.png";
 import screenshot from "/public/images/top_screenshot.png";
-import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
   const handleStarted = () => {
     router.push("/map");
   };
-
-  if (isAuthenticated) router.push("/map");
 
   return (
     <main className="min-h-screen bg-main bg-opacity-50 relative overflow-hidden">

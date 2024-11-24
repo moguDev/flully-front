@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export const CommentViewer = ({ boardId }: { boardId: number }) => {
   const [commentText, setCommentText] = useState("");
   const { comments, sendComment } = useBoardComments(boardId);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, name } = useAuth();
   const router = useRouter();
 
   const handleSendTextComment = async () => {
@@ -45,7 +45,9 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
         <div className="px-4">
           {comments.reverse().map((comment, index) => (
             <div key={index} className="my-2">
-              <div className="flex items-center mb-1">
+              <div
+                className={`flex items-center mb-1 ${comment.user.name === name && "justify-end"}`}
+              >
                 <div className="h-5 w-5 overflow-hidden rounded-full relative mr-0.5">
                   <Image
                     src={comment.user.avatarUrl}
@@ -54,13 +56,21 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
                     fill
                   />
                 </div>
-                <p className="text-xs font-bold">{comment.user.nickname}</p>
+                <p className="text-xs font-bold">
+                  {comment.user.name === name
+                    ? "あなた"
+                    : comment.user.nickname}
+                </p>
               </div>
-              <div className="flex items-end">
+              <div
+                className={`flex items-end justify-start ${comment.user.name === name && "flex-row-reverse"}`}
+              >
                 {comment.contentType === "text" ? (
-                  <div className="bg-gray-200 w-max max-w-[70%] px-5 py-2 rounded-[24px] relative mx-2">
+                  <div
+                    className={`w-max max-w-[70%] px-5 py-2 rounded-[24px] relative mx-2 ${comment.user.name === name ? "bg-main text-white" : "left-0 bg-gray-200"}`}
+                  >
                     <div
-                      className={`h-1/2 w-1/2 rounded-md absolute top-0 -z-10 ${"left-0 bg-gray-200"}`}
+                      className={`h-1/2 w-1/2 rounded-md absolute top-0 -z-10 ${comment.user.name === name ? "right-0 bg-main text-white" : "left-0 bg-gray-200"}`}
                     />
                     <p className="text-sm font-bold w-full break-words">
                       {comment.content as string}

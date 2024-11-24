@@ -2,6 +2,7 @@ import { Board } from "@/app/types";
 import { api } from "@/lib/axiosInstance";
 import camelcaseKeys from "camelcase-keys";
 import { useEffect, useState } from "react";
+import { atom, useRecoilState } from "recoil";
 import snakecaseKeys from "snakecase-keys";
 
 type BoardData = {
@@ -20,9 +21,11 @@ type BoardData = {
   feature: string;
 };
 
+const boardsState = atom<Board[]>({ key: "boardsState", default: [] });
+
 export const useBoards = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [boards, setBoards] = useState<Board[]>([]);
+  const [boards, setBoards] = useRecoilState<Board[]>(boardsState);
 
   const fetchBoards = async () => {
     setLoading(true);
@@ -78,6 +81,7 @@ export const useBoards = () => {
       await api.post("/boards", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      fetchBoards();
     } catch (e) {
       console.error(e);
     } finally {

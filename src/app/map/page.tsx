@@ -1,5 +1,5 @@
 import { FinishWalkingModal } from "./components/FinishWalkingModal";
-import Map from "./components/Map";
+import { Map } from "./components/Map";
 import { PostDeleteModal } from "./components/PostDeleteModal";
 import { PostModal } from "./components/PostModal";
 import { StartWalkingModal } from "./components/StartWalkingModal";
