@@ -1,8 +1,9 @@
 import { Post } from "@/app/types";
 import { api } from "@/lib/axiosInstance";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import camelcaseKeys from "camelcase-keys";
 import snakecaseKeys from "snakecase-keys";
+import { atom, useRecoilState } from "recoil";
 
 type PostData = {
   image: FileList | null;
@@ -12,9 +13,11 @@ type PostData = {
   isAnonymous: boolean;
 };
 
+const postsState = atom<Post[]>({ key: "postsState", default: [] });
+
 export const usePosts = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useRecoilState<Post[]>(postsState);
 
   const postPost = async (data: PostData) => {
     setLoading(true);
@@ -31,6 +34,7 @@ export const usePosts = () => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+      fetchPosts();
     } catch (e) {
       throw e;
     } finally {
@@ -38,17 +42,12 @@ export const usePosts = () => {
     }
   };
 
-  const fetchNearByPost = async (lat: number, lng: number) => {
+  const fetchPosts = async () => {
     setLoading(true);
     try {
-      const res = await api.get("/posts/nearby_posts", {
-        params: { lat, lng },
-      });
+      const res = await api.get("/posts");
       const { data } = res;
-      const camelCasePosts = camelcaseKeys(data, {
-        deep: true,
-      }) as Post[];
-      setPosts(camelCasePosts);
+      setPosts(camelcaseKeys(data, { deep: true }));
     } catch (e) {
       console.error(e);
     } finally {
@@ -56,5 +55,9 @@ export const usePosts = () => {
     }
   };
 
-  return { posts, loading, postPost, fetchNearByPost };
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  return { posts, loading, postPost, fetchPosts };
 };

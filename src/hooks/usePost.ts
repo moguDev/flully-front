@@ -35,7 +35,7 @@ export const usePost = (postId: number | null) => {
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [postId]);
 
   return { loading, post, initPost, fetch, destroy };
 };

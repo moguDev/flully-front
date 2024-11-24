@@ -6,8 +6,10 @@ import { useState, useRef, useEffect } from "react";
 import { PostDetails } from "./PostDetails";
 import defaultImage from "/public/images/default_avatar.png";
 import { BoardItem } from "@/app/boards/components/BoardItem";
-import catIcon from "/public/images/ic_cat.png";
 import { usePost } from "@/hooks/usePost";
+import { SelectTabButton } from "./SelectTabButton";
+import { useRecoilState } from "recoil";
+import { selectDisplayTabState } from "./Map";
 
 export const HalfModal = ({
   posts,
@@ -21,6 +23,9 @@ export const HalfModal = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const postId = searchParams.get("post_id");
+  const [selectTab, setSelectTab] = useRecoilState<number>(
+    selectDisplayTabState
+  );
   const {
     post: selectedPost,
     fetch,
@@ -84,70 +89,63 @@ export const HalfModal = ({
             </span>
             このあたりの情報
           </p>
-          <p className="text-sm font-bold">（10km以内）</p>
         </div>
       </section>
       {isOpen && selectedPost ? (
         <PostDetails postId={selectedPost.id} />
       ) : (
         <section className="flex flex-col h-full overflow-y-auto relative pb-16 p-1">
-          <div className="px-2 mt-2 mb-4">
-            <div className="flex items-center justify-between">
-              <p className="font-bold flex items-center py-1">
-                <span className="material-icons">search</span>
-                みつかった動物
-              </p>
-              <p className="text-sm font-bold">{posts.length}件</p>
+          <div className="flex items-center justify-center w-full rounded-full bg-gray-100 mt-2 p-1">
+            <SelectTabButton
+              label="みつかった動物"
+              selected={selectTab === 0}
+              onClick={() => setSelectTab(0)}
+            />
+            <SelectTabButton
+              label="迷子・保護情報"
+              selected={selectTab === 1}
+              onClick={() => setSelectTab(1)}
+            />
+          </div>
+          {selectTab === 0 ? (
+            <div className="px-2 mt-2 mb-4">
+              {posts.length > 0 ? (
+                <div className="grid grid-cols-3">
+                  {posts.map((post, index) => (
+                    <div
+                      key={index}
+                      className="w-full h-32 overflow-hidden relative"
+                      onClick={() => {
+                        setIsOpen(true);
+                        router.replace(`?post_id=${post.id}`);
+                      }}
+                    >
+                      <Image
+                        src={post.imageUrl || defaultImage}
+                        alt={`post-${post.id}`}
+                        className="object-cover"
+                        fill
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <p className="p-2 font-bold text-black text-sm text-opacity-50">
+                    まだみつかった動物はいません
+                  </p>
+                </div>
+              )}
             </div>
-            {posts.length > 0 ? (
-              <div className="grid grid-cols-4 p-1">
-                {posts.map((post, index) => (
-                  <div
-                    key={index}
-                    className="w-full h-24 overflow-hidden relative"
-                    onClick={() => {
-                      setIsOpen(true);
-                      router.replace(`?post_id=${post.id}`);
-                    }}
-                  >
-                    <Image
-                      src={post.imageUrl || defaultImage}
-                      alt={`post-${post.id}`}
-                      className="object-cover"
-                      fill
-                    />
-                  </div>
+          ) : (
+            <div className="px-2 py-4">
+              <div>
+                {boards.map((board, index) => (
+                  <BoardItem key={index} board={board} />
                 ))}
               </div>
-            ) : (
-              <div className="flex items-center justify-center">
-                <p className="p-2 font-bold text-black text-sm text-opacity-50">
-                  まだみつかった動物はいません
-                </p>
-              </div>
-            )}
-          </div>
-          <div className="px-2 py-4">
-            <div className="flex items-center justify-between">
-              <p className="font-bold flex items-center">
-                <div className="h-5 w-5 relative overflow-hidden mr-1">
-                  <Image
-                    src={catIcon}
-                    alt="cat_icon"
-                    className="object-cover"
-                    fill
-                  />
-                </div>
-                まいご・保護情報
-              </p>
-              <p className="text-sm font-bold">{boards.length}件</p>
             </div>
-            <div>
-              {boards.map((board, index) => (
-                <BoardItem key={index} board={board} />
-              ))}
-            </div>
-          </div>
+          )}
         </section>
       )}
     </div>
