@@ -2,7 +2,9 @@
 
 import Loading from "@/app/loading";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 type FormData = {
@@ -16,6 +18,12 @@ type FormData = {
 export const SignupForm = () => {
   const router = useRouter();
   const { loading, signup } = useAuth();
+  const { showAlert } = useToast();
+
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const isButtonDisabled = !termsAccepted || !privacyAccepted;
+
   const defaultValues: FormData = {
     name: "",
     nickname: "",
@@ -30,7 +38,11 @@ export const SignupForm = () => {
   } = useForm({ defaultValues });
 
   const onsubmit = async (data: FormData) => {
-    await signup(data).then(() => router.back());
+    if (isButtonDisabled) {
+      showAlert("ご利用規約およびプライバシーポリシーに同意してください");
+    } else {
+      await signup(data).then(() => router.back());
+    }
   };
 
   return (
@@ -169,9 +181,47 @@ export const SignupForm = () => {
             {errors.passwordConfirmation?.message}
           </div>
         </div>
+        <div className="pb-4">
+          <div className="flex items-center pb-1">
+            <input
+              type="checkbox"
+              className="mr-1"
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+            />
+            <label className="text-xs">
+              <a
+                href="https://flully.jp/terms"
+                target="_blank"
+                className="text-blue-500 underline"
+              >
+                ご利用規約
+              </a>
+              を確認の上、同意しました。
+            </label>
+          </div>
+          <div className="flex items-center pb-1">
+            <input
+              type="checkbox"
+              className="mr-1"
+              onChange={(e) => setPrivacyAccepted(e.target.checked)}
+            />
+            <label className="text-xs">
+              <a
+                href="https://flully.jp/privacy"
+                target="_blank"
+                className="text-blue-500 underline"
+              >
+                プライバシーポリシー
+              </a>
+              を確認の上、同意しました。
+            </label>
+          </div>
+        </div>
         <button
           type="submit"
-          className="w-full bg-main text-base font-bold py-3 rounded flex items-center justify-center"
+          className={`w-full text-base font-bold py-3 rounded flex items-center justify-center ${
+            isButtonDisabled ? "bg-gray-300" : "bg-main"
+          }`}
         >
           <span className="material-icons mr-1">person_add</span>
           アカウントを作成

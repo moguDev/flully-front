@@ -2,10 +2,12 @@ import { Post } from "@/app/types";
 import { api } from "@/lib/axiosInstance";
 import camelcaseKeys from "camelcase-keys";
 import { useEffect, useState } from "react";
+import { usePosts } from "./usePosts";
 
 export const usePost = (postId: number | null) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [post, setPost] = useState<Post | null>(null);
+  const { fetchPosts } = usePosts();
 
   const initPost = () => setPost(null);
 
@@ -25,6 +27,7 @@ export const usePost = (postId: number | null) => {
   const destroy = async () => {
     setLoading(true);
     await api.delete(`/posts/${postId}`);
+    fetchPosts();
     try {
     } catch (e) {
       console.error(e);
