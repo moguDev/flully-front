@@ -50,7 +50,7 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
               >
                 <div className="h-5 w-5 overflow-hidden rounded-full relative mr-0.5">
                   <Image
-                    src={comment.user.avatarUrl}
+                    src={comment.user.avatar.url}
                     alt={comment.user.nickname}
                     className="object-cover"
                     fill

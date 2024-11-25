@@ -2,7 +2,7 @@ export type User = {
   name: string;
   nickname: string;
   introduction: string;
-  avatarUrl: string;
+  avatar: { url: string };
   location: string;
   email: string;
   twitter: string;

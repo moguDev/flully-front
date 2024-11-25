@@ -1,15 +1,14 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Board, Post } from "@/app/types";
-import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { PostDetails } from "./PostDetails";
-import defaultImage from "/public/images/default_avatar.png";
 import { BoardItem } from "@/app/boards/components/BoardItem";
 import { usePost } from "@/hooks/usePost";
 import { SelectTabButton } from "./SelectTabButton";
 import { useRecoilState } from "recoil";
 import { selectDisplayTabState } from "./Map";
+import { PostGridItem } from "./PostGridItem";
 
 export const HalfModal = ({
   posts,
@@ -83,7 +82,7 @@ export const HalfModal = ({
           <div className="bg-gray-300 w-16 h-1 rounded-full" />
         </div>
         <div className="h-12 flex items-center justify-between px-3">
-          <p className="font-bold flex items-center">
+          <p className="font-bold flex items-center select-none">
             <span className="material-icons" style={{ fontSize: "24px" }}>
               location_on
             </span>
@@ -110,23 +109,16 @@ export const HalfModal = ({
           {selectTab === 0 ? (
             <div className="px-2 mt-2 mb-4">
               {posts.length > 0 ? (
-                <div className="grid grid-cols-3">
+                <div className="grid grid-cols-3 gap-1">
                   {posts.map((post, index) => (
-                    <div
+                    <PostGridItem
                       key={index}
-                      className="w-full h-32 overflow-hidden relative"
+                      post={post}
                       onClick={() => {
                         setIsOpen(true);
                         router.replace(`?post_id=${post.id}`);
                       }}
-                    >
-                      <Image
-                        src={post.imageUrl || defaultImage}
-                        alt={`post-${post.id}`}
-                        className="object-cover"
-                        fill
-                      />
-                    </div>
+                    />
                   ))}
                 </div>
               ) : (

@@ -44,6 +44,7 @@ export const PostModal = () => {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({ defaultValues });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -57,6 +58,12 @@ export const PostModal = () => {
     lat: 35.6895,
     lng: 139.6917,
   });
+
+  const initForm = () => {
+    setValue("image", null);
+    setValue("body", "");
+    setValue("isAnonymous", false);
+  };
 
   const onsubmit = (data: FormData) => {
     if (!imageFile) {
@@ -75,6 +82,7 @@ export const PostModal = () => {
         postPost({ ...data, lat, lng });
         closePostModal();
         showSuccess("みつけた動物を投稿しました");
+        initForm();
       } catch (e) {
         console.error(e);
         showAlert("投稿に失敗しました");

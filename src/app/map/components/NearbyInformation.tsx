@@ -1,15 +1,14 @@
 "use client";
 import { usePost } from "@/hooks/usePost";
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { PostDetails } from "./PostDetails";
 import { Board, Post } from "../../types";
-import defaultImage from "/public/images/default_avatar.png";
 import { BoardItem } from "@/app/boards/components/BoardItem";
 import { SelectTabButton } from "./SelectTabButton";
 import { useRecoilState } from "recoil";
 import { selectDisplayTabState } from "./Map";
+import { PostGridItem } from "./PostGridItem";
 
 export const NearbyInformation = ({
   posts,
@@ -66,22 +65,15 @@ export const NearbyInformation = ({
           {selectTab === 0 ? (
             <div className="px-2 mt-2 mb-4">
               {posts.length > 0 ? (
-                <div className="grid grid-cols-3 ">
+                <div className="grid grid-cols-3 gap-1">
                   {posts.map((post, index) => (
-                    <div
+                    <PostGridItem
                       key={index}
-                      className="w-full h-32 overflow-hidden relative cursor-pointer transition-all hover:-translate-y-1"
+                      post={post}
                       onClick={() => {
                         router.replace(`?post_id=${post.id}`);
                       }}
-                    >
-                      <Image
-                        src={post.imageUrl || defaultImage}
-                        alt={`post-${post.id}`}
-                        className="object-cover"
-                        fill
-                      />
-                    </div>
+                    />
                   ))}
                 </div>
               ) : (

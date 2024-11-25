@@ -45,7 +45,7 @@ export const BoardDetail = () => {
   return loading ? (
     <Loading />
   ) : board ? (
-    <div className="lg:flex bg-white rounded-lg p-5 relative">
+    <div className="lg:flex bg-white rounded-lg px-2 py-4 relative">
       <div className="lg:pb-0 pb-32 max-w-3xl lg:w-2/3 w-full mx-auto p-2">
         <section>
           <div className="flex items-center justify-between pb-4">
@@ -150,7 +150,7 @@ export const BoardDetail = () => {
             >
               <div className="h-5 w-5 rounded-full overflow-hidden object-cover relative mr-0.5">
                 <Image
-                  src={board.user.avatarUrl || defaultUserImage}
+                  src={board.user.avatar.url || defaultUserImage}
                   alt={board.user.nickname}
                   className="object-cover"
                   fill

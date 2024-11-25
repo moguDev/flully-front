@@ -53,15 +53,6 @@ export const Navigation = () => {
         selected={pathName.includes("/boards")}
         onClick={() => router.push("/boards")}
       />
-      {/* <NavigationMenu
-        iconName="leaderboard"
-        label="リーダーボード"
-        selected={selectIndex === 2}
-        onClick={() => {
-          setSelectIndex(2);
-          // router.push("/ranking");
-        }}
-      /> */}
       <NavigationMenu
         iconName="person"
         label="マイページ"
@@ -70,7 +61,7 @@ export const Navigation = () => {
           if (isAuthenticated) {
             router.push(`/${name}`);
           } else {
-            router.push("/signin");
+            router.replace("/signin");
           }
         }}
       />
