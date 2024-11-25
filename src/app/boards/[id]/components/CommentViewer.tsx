@@ -57,9 +57,7 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
                   />
                 </div>
                 <p className="text-xs font-bold">
-                  {comment.user.name === name
-                    ? "あなた"
-                    : comment.user.nickname}
+                  {comment.user.name !== name && comment.user.nickname}
                 </p>
               </div>
               <div

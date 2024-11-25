@@ -69,7 +69,7 @@ export const BoardItem = ({ board }: BoardItemProps) => {
         <div className="flex items-center">
           <div className="h-4 w-4 overflow-hidden rounded-full relative mr-0.5">
             <Image
-              src={board.user?.avatarUrl || defaultUserImage}
+              src={board.user?.avatar.url || defaultUserImage}
               alt={board.user!.nickname}
               className="object-cover"
               fill
