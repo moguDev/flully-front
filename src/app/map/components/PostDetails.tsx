@@ -106,7 +106,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
               <div className="flex items-center">
                 <div className="h-4 w-4 rounded-full overflow-hidden relative mr-0.5">
                   <Image
-                    src={post.user?.avatarUrl || defaultUserImage}
+                    src={post.user?.avatar.url || defaultUserImage}
                     alt={post.user?.nickname || "undefined"}
                     className="object-cover"
                     fill
@@ -153,7 +153,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
                   >
                     <div className="h-4 w-4 rounded-full overflow-hidden relative mr-0.5">
                       <Image
-                        src={comment.user.avatarUrl || defaultUserImage}
+                        src={comment.user.avatar.url || defaultUserImage}
                         alt="user_icon"
                         className="object-cover"
                         fill

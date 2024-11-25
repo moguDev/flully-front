@@ -9,6 +9,7 @@ export type AuthState = {
   nickname: string;
   email: string;
   introduction: string;
+  avatar: { url: string | null };
   twitter: string;
   location: string;
 };
@@ -21,6 +22,7 @@ export const authState = atom<AuthState>({
     nickname: "",
     email: "",
     introduction: "",
+    avatar: { url: null },
     twitter: "",
     location: "",
   },
@@ -29,6 +31,22 @@ export const authState = atom<AuthState>({
 export const useAuth = () => {
   const [auth, setAuth] = useRecoilState<AuthState>(authState);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const initAuthState = () => {
+    Cookies.remove("access-token");
+    Cookies.remove("client");
+    Cookies.remove("uid");
+    setAuth({
+      isAuthenticated: false,
+      name: "",
+      nickname: "",
+      email: "",
+      introduction: "",
+      avatar: { url: null },
+      twitter: "",
+      location: "",
+    });
+  };
 
   const checkAuth = async () => {
     setLoading(true);
@@ -108,18 +126,19 @@ export const useAuth = () => {
     setLoading(true);
     try {
       await api.delete("/auth/sign_out");
-      Cookies.remove("access-token");
-      Cookies.remove("client");
-      Cookies.remove("uid");
-      setAuth({
-        isAuthenticated: false,
-        name: "",
-        nickname: "",
-        email: "",
-        introduction: "",
-        twitter: "",
-        location: "",
-      });
+      initAuthState();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteAccount = async () => {
+    setLoading(true);
+    try {
+      await api.delete("/auth");
+      initAuthState();
     } catch (e) {
       console.error(e);
     } finally {
@@ -131,10 +150,12 @@ export const useAuth = () => {
     isAuthenticated: auth.isAuthenticated,
     name: auth.name,
     nickname: auth.nickname,
+    avatar: auth.avatar,
     loading,
     checkAuth,
     signup,
     login,
     logout,
+    deleteAccount,
   };
 };

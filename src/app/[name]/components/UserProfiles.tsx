@@ -21,14 +21,14 @@ export const UserProfiles = () => {
   return loading ? (
     <Loading />
   ) : (
-    <div className="bg-white rounded-lg border border-main border-opacity-30 p-5">
+    <div className="bg-white rounded-lg p-4">
       {user ? (
         <div>
           <section className="border-b border-gray-300">
             <div className="flex items-center">
               <div className="rounded-full h-24 w-24 min-w-24 relative overflow-hidden">
                 <Image
-                  src={user.avatarUrl || defaultUserImage}
+                  src={user.avatar.url || defaultUserImage}
                   alt="avatar"
                   className="object-cover"
                   fill

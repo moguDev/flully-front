@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import camelcaseKeys from "camelcase-keys";
 import snakecaseKeys from "snakecase-keys";
 import { atom, useRecoilState } from "recoil";
+import { useRouter } from "next/navigation";
 
 type PostData = {
   image: FileList | null;
@@ -18,11 +19,12 @@ const postsState = atom<Post[]>({ key: "postsState", default: [] });
 export const usePosts = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [posts, setPosts] = useRecoilState<Post[]>(postsState);
+  const router = useRouter();
 
   const postPost = async (data: PostData) => {
     setLoading(true);
     try {
-      await api.post(
+      const res = await api.post(
         "/posts",
         {
           post: {
@@ -34,7 +36,8 @@ export const usePosts = () => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      fetchPosts();
+      await fetchPosts();
+      router.push(`/map?post_id=${res.data.post.id}`);
     } catch (e) {
       throw e;
     } finally {

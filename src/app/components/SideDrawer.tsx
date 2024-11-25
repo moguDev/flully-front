@@ -3,7 +3,6 @@ import { useAuth } from "@/hooks/useAuth";
 import defaultImage from "/public/images/default_avatar.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useUserProfiles } from "@/hooks/useUserProfiles";
 import { useToast } from "@/hooks/useToast";
 
 const closeDrawer = () => {
@@ -14,8 +13,7 @@ const closeDrawer = () => {
 };
 
 export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
-  const { name, nickname, logout } = useAuth();
-  const { user } = useUserProfiles(name);
+  const { name, nickname, avatar, logout } = useAuth();
   const router = useRouter();
   const { showSuccess } = useToast();
   return (
@@ -32,14 +30,14 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center">
             <div className="h-12 w-12 rounded relative">
               <Image
-                src={user?.avatarUrl || defaultImage}
+                src={avatar.url || defaultImage}
                 alt="user_icon"
                 className="object-cover rounded-full"
                 fill
               />
             </div>
             <div className="ml-1.5">
-              <p className="text-2xl font-bold">{nickname}</p>
+              <p className="text-xl font-bold">{nickname}</p>
               <p className="text-sm opacity-50">@{name}</p>
             </div>
           </div>
@@ -70,34 +68,6 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
               </span>
             </p>
           </div>
-          {/* <div className="flex items-center space-x-1 font-bold">
-            <div className="w-1/2 h-20 text-center bg-main bg-opacity-10 border border-main border-opacity-50 rounded flex flex-col justify-center relative overflow-hidden">
-              <span
-                className="material-icons absolute left-0 text-main opacity-20 -translate-x-6 translate-y-4"
-                style={{ fontSize: "112px" }}
-              >
-                directions_walk
-              </span>
-              <p style={{ fontSize: "10px" }}>TODAY</p>
-              <p className="text-3xl">
-                12.3<span className="text-xs ml-0.5">km</span>
-              </p>
-              <p style={{ fontSize: "8px" }}>2024.10.24</p>
-            </div>
-            <div className="w-1/2 h-20 text-center bg-main bg-opacity-10 border border-main border-opacity-50 rounded flex flex-col justify-center relative overflow-hidden">
-              <span
-                className="material-icons absolute left-0 text-main opacity-20 -translate-x-6 translate-y-2"
-                style={{ fontSize: "86px" }}
-              >
-                camera_alt
-              </span>
-              <p style={{ fontSize: "10px" }}>TODAY</p>
-              <p className="text-3xl">
-                2<span className="text-xs ml-0.5">shot</span>
-              </p>
-              <p style={{ fontSize: "8px" }}>2024.10.24</p>
-            </div>
-          </div> */}
           <ul className="my-2 py-2 space-y-1 border-t border-gray-200">
             <li>
               <button
@@ -158,6 +128,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
               <button
                 className="w-full flex items-center rounded py-2 transition-all active:scale-95"
                 onClick={() => {
+                  router.push("/terms");
                   closeDrawer();
                 }}
               >
