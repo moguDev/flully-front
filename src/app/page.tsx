@@ -152,7 +152,10 @@ export default function Home() {
                     ご利用規約
                   </p>
                 </Link>
-                <button className="p-4 transition-all hover:-translate-y-1 active:scale-95">
+                <Link
+                  href="/privacy"
+                  className="p-4 transition-all hover:-translate-y-1 active:scale-95"
+                >
                   <p className="font-black flex items-center select-none">
                     <span
                       className="material-icons mr-0.5"
@@ -162,7 +165,7 @@ export default function Home() {
                     </span>
                     プライバシーポリシー
                   </p>
-                </button>
+                </Link>
                 <a
                   href="mailto:contact@flully.jp?subject=お問い合わせ"
                   className="p-4 transition-all hover:-translate-y-1 active:scale-95"

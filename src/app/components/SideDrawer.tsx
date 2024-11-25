@@ -140,6 +140,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
               <button
                 className="w-full flex items-center rounded py-2 transition-all active:scale-95"
                 onClick={() => {
+                  router.push("/privacy");
                   closeDrawer();
                 }}
               >

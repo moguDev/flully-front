@@ -146,7 +146,7 @@ export const Map: React.FC = () => {
   return (
     <>
       <div
-        className={`z-20 fixed flex items-center justify-center w-full lg:hidden ${harfModalIsOpen ? "-top-16" : "top-16"}`}
+        className={`z-20 fixed flex items-center justify-center w-full top-16`}
       >
         <div className="flex items-center rounded-full bg-gray-100 mt-2 p-1">
           <SelectTabButton
