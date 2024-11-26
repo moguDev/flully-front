@@ -39,7 +39,7 @@ export const BoardList = () => {
   });
 
   return (
-    <div className="bg-white px-2 py-4 rounded-lg min-h-[80vh]">
+    <div className="px-2 py-4 rounded-lg min-h-[80vh]">
       <section className="max-w-2xl mx-auto border-b border-gray-200">
         <div className="bg-gray-200 bg-opacity-50 w-full rounded-full flex items-center p-2">
           <span className="material-icons mx-1 text-gray-400 select-none">
@@ -80,7 +80,7 @@ export const BoardList = () => {
           </select>
         </div>
       </section>
-      <section className="py-2 divide-y divide-gray-200">
+      <section className="p-2 divide-y divide-gray-200">
         <div className="grid 2xl:first:grid-cols-3 md:grid-cols-2 grid-cols-1 lg:divide-y-0 divide-y divide-gray-200 gap-2">
           {filteredBoards.map((board, index) => (
             <BoardItem key={index} board={board} />

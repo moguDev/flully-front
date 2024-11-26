@@ -7,13 +7,37 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Loading from "@/app/loading";
 import XIcon from "@mui/icons-material/X";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+const TabComponent = ({
+  label,
+  isSelect,
+  onClick,
+}: {
+  label: string;
+  isSelect: boolean;
+  onClick: () => void;
+}) => {
+  return (
+    <button className="w-full p-4 relative" onClick={onClick}>
+      <div
+        className={`bg-main h-1 w-full absolute bottom-0 left-0 transition-all ${isSelect ? "opacity-100" : "opacity-0"}`}
+      />
+      <p
+        className={`w-full text-sm text-center transition-all ${isSelect ? "font-bold opacity-100" : "opacity-50"}`}
+      >
+        {label}
+      </p>
+    </button>
+  );
+};
 
 export const UserProfiles = () => {
   const { name: nameParams } = useParams();
   const { name: currentUserName } = useAuth();
   const { loading, user, fetch } = useUserProfiles(nameParams as string);
   const router = useRouter();
+  const [selectTabIndex, setSelectTabIndes] = useState<number>(0);
 
   useEffect(() => {
     fetch();
@@ -21,10 +45,10 @@ export const UserProfiles = () => {
   return loading ? (
     <Loading />
   ) : (
-    <div className="bg-white rounded-lg p-4">
+    <div>
       {user ? (
         <div>
-          <section className="border-b border-gray-300">
+          <section className="bg-white rounded p-4">
             <div className="flex items-center">
               <div className="rounded-full h-24 w-24 min-w-24 relative overflow-hidden">
                 <Image
@@ -37,14 +61,18 @@ export const UserProfiles = () => {
               <div className="font-bold w-full ml-1">
                 <div className="pb-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-2xl">{user.nickname}</p>
-                    {nameParams === currentUserName && (
+                    <p className="text-xl">{user.nickname}</p>
+                    {nameParams === currentUserName ? (
                       <Link
                         href={`/${nameParams}/edit`}
                         className="text-sm bg-gray-200 rounded-full px-5 py-1 transition-all active:scale-95"
                       >
                         <p className="font-bold opacity-60">編集</p>
                       </Link>
+                    ) : (
+                      <button className="text-xs bg-main text-white rounded-full px-3 py-1">
+                        フォローする
+                      </button>
                     )}
                   </div>
                   <p className="text-sm opacity-50">@{user.name}</p>
@@ -103,155 +131,66 @@ export const UserProfiles = () => {
               </p>
             </div>
           </section>
-          <section className="border-b border-gray-300">
-            <div className="py-4">
-              <p className="font-bold mb-1">アクティビティ</p>
-              <div className="flex items-center space-x-1 mb-1">
-                <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex flex-col items-center justify-center p-2 w-1/3 overflow-hidden relative">
-                  <p className="text-sm font-bold">Total</p>
-                  <p className="font-bold py-1">
-                    <span className="text-3xl pr-0.5">
-                      {user.walks?.reduce(
-                        (acc, walk) => acc + walk.totalDistance,
-                        0
-                      )}
-                    </span>
-                    <span className="text-sm">km</span>
-                  </p>
-                  <div
-                    className="flex items-center justify-center"
-                    style={{ fontSize: "9px" }}
-                  >
-                    <p>2024.10.1</p>
-                    <p>〜</p>
-                    <p>Present</p>
-                  </div>
-                  <div
-                    className="material-icons absolute top-1 -translate-x-7 text-main opacity-20"
-                    style={{ fontSize: "112px" }}
-                  >
-                    directions_walk
-                  </div>
-                </div>
-                <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex flex-col items-center justify-center p-2 w-1/3 overflow-hidden relative">
-                  <p className="text-sm font-bold">Total</p>
-                  <p className="font-bold py-1">
-                    <span className="text-3xl pr-0.5">
-                      {user.posts?.length}
-                    </span>
-                    <span className="text-sm">shot</span>
-                  </p>
-                  <div
-                    className="flex items-center justify-center"
-                    style={{ fontSize: "9px" }}
-                  >
-                    <p>2024.10.1</p>
-                    <p>〜</p>
-                    <p>Present</p>
-                  </div>
-                  <div
-                    className="material-icons absolute top-1 -translate-x-8 text-main opacity-20"
-                    style={{ fontSize: "96px" }}
-                  >
-                    camera_alt
-                  </div>
-                </div>
-                <div className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex flex-col items-center justify-center p-2 w-1/3 overflow-hidden relative">
-                  <p className="text-sm font-bold">Current Streak</p>
-                  <p className="font-black text-3xl py-1 pr-0.5">
-                    {user.currentStreak}
-                  </p>
-                  <div
-                    className="flex items-center justify-center"
-                    style={{ fontSize: "9px" }}
-                  >
-                    <p>2024.10.1</p>
-                    <p>〜</p>
-                    <p>Present</p>
-                  </div>
-                  <div
-                    className="material-icons absolute top-1 -translate-x-8 text-main opacity-20"
-                    style={{ fontSize: "96px" }}
-                  >
-                    whatshot
-                  </div>
-                </div>
-              </div>
-              <button
-                className="bg-main bg-opacity-10 border border-main border-opacity-50 rounded-md flex items-center justify-between p-2 w-full"
-                onClick={() => router.push("/walks")}
-              >
-                <div className="flex items-end font-bold text-sm ml-1">
-                  <p>Total</p>
-                  <p className="text-3xl px-1 translate-y-[3px]">
-                    {user.walks?.length}
-                  </p>
-                  <p>times walking.</p>
-                </div>
-                <div className="text-xs text-main font-bold flex items-center">
-                  散歩記録をみる
-                  <span className="material-icons" style={{ fontSize: "16px" }}>
-                    keyboard_arrow_right
-                  </span>
-                </div>
-              </button>
+          <section className="bg-white rounded px-4 py-2 mt-2">
+            <div className="flex items-center border-b border-main">
+              <TabComponent
+                label="みつけた動物"
+                isSelect={selectTabIndex === 0}
+                onClick={() => setSelectTabIndes(0)}
+              />
+              <TabComponent
+                label="掲示板"
+                isSelect={selectTabIndex === 1}
+                onClick={() => setSelectTabIndes(1)}
+              />
             </div>
-          </section>
-          <section className="border-b border-gray-300">
-            <div className="py-4">
-              <div className="flex items-center justify-between">
-                <p className="font-bold mb-1">作成した掲示板</p>
-                <p className="text-sm font-bold">{user.boards?.length}件</p>
-              </div>
-              <div className="flex items-center space-x-0.5">
-                {user.boards?.map((board, index) => (
-                  <button
-                    key={index}
-                    className="h-24 w-24 rounded-lg overflow-hidden relative"
-                    onClick={() => router.push(`/boards/${board.id}`)}
-                  >
-                    <Image
-                      src={board.iconUrl}
-                      alt={board.name}
-                      className="object-cover"
-                      fill
-                    />
-                    <div className="absolute bottom-0 w-full rounded-br-lg bg-red-500 bg-opacity-80 p-0.5">
-                      <p
-                        className="font-bold text-white text-center"
-                        style={{ fontSize: "10px" }}
-                      >
-                        {board.category}情報
-                      </p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </section>
-          <section>
-            <div className="py-4">
-              <div className="flex items-center justify-between">
-                <p className="font-bold mb-1">みつけた動物</p>
-                <p className="text-sm font-bold">{user.posts?.length}件</p>
-              </div>
-              <div className="grid grid-cols-4 gap-0.5">
-                {user.posts?.map((post, index) => (
-                  <button
-                    key={index}
-                    className="md:h-44 h-24 w-full overflow-hidden relative rounded"
-                    onClick={() => router.push(`/map?post_id=${post.id}`)}
-                  >
-                    <Image
-                      src={post.imageUrl}
-                      alt={`post-${post.id}`}
-                      className="object-cover"
-                      fill
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
+            {selectTabIndex === 0 ? (
+              <section className="py-4">
+                <div className="grid grid-cols-4 gap-0.5">
+                  {user.posts?.map((post, index) => (
+                    <button
+                      key={index}
+                      className="md:h-44 h-24 w-full overflow-hidden relative rounded"
+                      onClick={() => router.push(`/map?post_id=${post.id}`)}
+                    >
+                      <Image
+                        src={post.imageUrl}
+                        alt={`post-${post.id}`}
+                        className="object-cover"
+                        fill
+                      />
+                    </button>
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <section className="py-4">
+                <div className="flex items-center space-x-0.5">
+                  {user.boards?.map((board, index) => (
+                    <button
+                      key={index}
+                      className="h-24 w-24 rounded-lg overflow-hidden relative"
+                      onClick={() => router.push(`/boards/${board.id}`)}
+                    >
+                      <Image
+                        src={board.iconUrl}
+                        alt={board.name}
+                        className="object-cover"
+                        fill
+                      />
+                      <div className="absolute bottom-0 w-full rounded-br-lg bg-red-500 bg-opacity-80 p-0.5">
+                        <p
+                          className="font-bold text-white text-center"
+                          style={{ fontSize: "10px" }}
+                        >
+                          {board.category}情報
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
           </section>
         </div>
       ) : (

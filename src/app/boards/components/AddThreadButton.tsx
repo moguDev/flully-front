@@ -10,7 +10,7 @@ export const AddThreadButton = () => {
   const { requireSignin } = useToast();
   return (
     <button
-      className="fixed bottom-16 right-0 m-2 p-3 flex items-center bg-main rounded-lg text-white transition-all active:scale-95"
+      className="fixed bottom-16 right-0 m-2 p-3 flex items-center bg-main rounded-lg text-white transition-all active:scale-95 z-20"
       onClick={() => {
         if (isAuthenticated) {
           router.push("/boards/new");

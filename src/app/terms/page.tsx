@@ -1,3 +1,9 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ご利用規約 | flully - ふらりと出会った動物をシェアできるコミュニティ",
+};
+
 const Section = ({
   title,
   children,

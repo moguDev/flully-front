@@ -1,8 +1,12 @@
-import { FinishWalkingModal } from "./components/FinishWalkingModal";
 import { Map } from "./components/Map";
 import { PostDeleteModal } from "./components/PostDeleteModal";
 import { PostModal } from "./components/PostModal";
-import { StartWalkingModal } from "./components/StartWalkingModal";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title:
+    "このあたりの情報 | flully - ふらりと出会った動物をシェアできるコミュニティ",
+};
 
 export default function MapPage() {
   return (
@@ -10,8 +14,6 @@ export default function MapPage() {
       <Map />
       <PostModal />
       <PostDeleteModal />
-      <StartWalkingModal />
-      <FinishWalkingModal />
     </main>
   );
 }

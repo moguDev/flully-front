@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Toast } from "./Toast";
 import { useToast } from "@/hooks/useToast";
@@ -12,6 +12,7 @@ export const Header = () => {
   const { isAuthenticated, checkAuth } = useAuth();
   const { showAlert } = useToast();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     checkAuth();
@@ -19,7 +20,7 @@ export const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 w-full z-40 bg-opacity-90 backdrop-blur bg-main`}
+      className={`fixed top-0 w-full z-40 bg-main ${pathname === "/" ? "bg-opacity-0" : "bg-opacity-90 backdrop-blur"}`}
     >
       <div className="flex items-center justify-between h-16 lg:px-5 px-3">
         <div

@@ -228,7 +228,7 @@ export const BoardEditForm = () => {
   }
 
   // 掲示板の作成者じゃない場合は画面から戻る
-  if (board?.user.name !== name) {
+  if (board && board?.user.name !== name) {
     router.push("/boards");
     showAlert("編集する権限がありません。");
   }

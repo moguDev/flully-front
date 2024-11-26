@@ -46,9 +46,9 @@ export const SignupForm = () => {
   };
 
   return (
-    <div className="bg-white px-5 lg:px-10 py-10 border border-main border-opacity-30 rounded-lg">
-      <h1 className="text-main font-bold flex items-center text-xl">
-        flullyアカウントを作成
+    <div className="bg-white px-5 lg:px-10 py-10 rounded-lg shadow-sm">
+      <h1 className="text-black font-black flex items-center text-2xl">
+        新しいアカウントを作成
       </h1>
       <form
         method="post"
