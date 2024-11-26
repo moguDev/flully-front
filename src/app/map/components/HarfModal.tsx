@@ -133,7 +133,9 @@ export const HalfModal = ({
             <div className="px-2 py-4">
               <div>
                 {boards.map((board, index) => (
-                  <BoardItem key={index} board={board} />
+                  <div key={index} className="mx-2 my-4">
+                    <BoardItem board={board} />
+                  </div>
                 ))}
               </div>
             </div>

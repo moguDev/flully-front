@@ -182,7 +182,7 @@ export default function Home() {
                 </a>
               </div>
               <p className="p-4 font-bold text-sm text-white text-center select-none">
-                ©️ 2024 flully.jp
+                {"©️ 2024 flully.jp"}
               </p>
             </div>
             <div className="lg:flex items-center justify-between p-2">

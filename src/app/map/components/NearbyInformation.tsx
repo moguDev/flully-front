@@ -88,7 +88,9 @@ export const NearbyInformation = ({
             <div className="py-4">
               {boards.length > 0 ? (
                 boards.map((board, index) => (
-                  <BoardItem key={index} board={board} />
+                  <div key={index} className="mx-2 my-4">
+                    <BoardItem board={board} />
+                  </div>
                 ))
               ) : (
                 <div className="flex items-center justify-center">

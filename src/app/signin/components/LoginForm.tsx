@@ -33,9 +33,9 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="space-y-5 bg-white lg:rounded-lg lg:px-10 px-5 py-10">
-      <h1 className="text-main font-bold flex items-center text-xl">
-        flullyアカウントでログイン
+    <div className="space-y-5 bg-white lg:rounded-lg lg:px-10 px-5 py-10 shadow-sm">
+      <h1 className="text-black font-black flex items-center text-2xl">
+        ログイン
       </h1>
       <form
         onSubmit={handleSubmit(onsubmit)}
@@ -87,7 +87,7 @@ export const LoginForm = () => {
             {errors.password?.message}
           </div>
           <Link
-            href="#"
+            href="/reset_password"
             className="text-xs py-1 opacity-60 font-bold underline"
           >
             パスワードを忘れた場合

@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title:
+    "プライバシーポリシー | flully - ふらりと出会った動物をシェアできるコミュニティ",
+};
+
 const Section = ({
   title,
   children,

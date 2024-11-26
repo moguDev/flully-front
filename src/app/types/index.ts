@@ -54,6 +54,19 @@ export type Board = {
   images: { id: number; url: string }[];
 };
 
+export type NekoSearchBoard = {
+  id: number;
+  area: string;
+  bestFeature: string;
+  bodyColor: string;
+  date: string;
+  eyeColor: string;
+  name: string;
+  pictUrl: string;
+  siteUrl: string;
+  type: string;
+};
+
 export type BoardComment = {
   id: number;
   user: User;
