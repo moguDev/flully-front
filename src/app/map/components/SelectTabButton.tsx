@@ -11,7 +11,7 @@ export const SelectTabButton = ({
 }) => {
   return (
     <div
-      className={`w-full h-full flex items-center justify-center text-sm font-bold select-none p-4 relative cursor-pointer transition-all ${selected ? "text-black bg-white rounded-xl" : "text-gray-400"}`}
+      className={`w-full h-full flex items-center justify-center text-sm font-bold select-none p-4 relative cursor-pointer transition-all ${selected ? "text-black bg-white rounded-t-xl" : "text-gray-400"}`}
       onClick={onClick}
     >
       {selected && (
