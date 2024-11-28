@@ -25,7 +25,7 @@ const NavigationMenu = ({
       </p>
       <p
         className="lg:hidden select-none font-bold"
-        style={{ fontSize: "7px" }}
+        style={{ fontSize: "10px" }}
       >
         {label}
       </p>
@@ -43,13 +43,13 @@ export const Navigation = () => {
     >
       <NavigationMenu
         iconName="home"
-        label="マップ"
+        label="ホーム"
         selected={pathName.includes("/map")}
         onClick={() => router.push("/map")}
       />
       <NavigationMenu
         iconName="format_list_bulleted"
-        label="まいご掲示板"
+        label="掲示板"
         selected={pathName.includes("/boards")}
         onClick={() => router.push("/boards")}
       />

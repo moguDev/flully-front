@@ -84,7 +84,18 @@ export const Map: React.FC = () => {
       watchIdRef.current = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          setCurrentPosition({ lat: latitude, lng: longitude });
+          const newPosition = { lat: latitude, lng: longitude };
+
+          if (currentPosition) {
+            const distance =
+              google.maps.geometry.spherical.computeDistanceBetween(
+                new google.maps.LatLng(currentPosition),
+                new google.maps.LatLng(newPosition)
+              );
+            if (distance < 5) return; // 5メートル未満なら更新しない
+          }
+
+          setCurrentPosition(newPosition);
         },
         (error) => {
           console.error("Error watching location:", error);
@@ -126,9 +137,6 @@ export const Map: React.FC = () => {
     if (!bounds) {
       return;
     } else {
-      const center = bounds.getCenter();
-      console.log("Bounds Center:", center.toJSON());
-
       const filteredPosts = posts.filter((post) => {
         const postLatLng = new google.maps.LatLng(post.lat, post.lng);
         return bounds.contains(postLatLng);
