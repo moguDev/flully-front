@@ -137,8 +137,6 @@ export const Map: React.FC = () => {
     if (!bounds) {
       return;
     } else {
-      const center = bounds.getCenter();
-
       const filteredPosts = posts.filter((post) => {
         const postLatLng = new google.maps.LatLng(post.lat, post.lng);
         return bounds.contains(postLatLng);
