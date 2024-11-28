@@ -81,7 +81,7 @@ export const BoardList = () => {
         </div>
       </section>
       <section className="p-2 divide-y divide-gray-200">
-        <div className="grid 2xl:first:grid-cols-3 md:grid-cols-2 grid-cols-1 lg:divide-y-0 divide-y divide-gray-200 gap-2">
+        <div className="grid 2xl:first:grid-cols-4 md:grid-cols-2 grid-cols-1 lg:divide-y-0 divide-y divide-gray-200 gap-2">
           {filteredBoards.map((board, index) => (
             <BoardItem key={index} board={board} />
           ))}

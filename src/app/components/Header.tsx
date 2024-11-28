@@ -20,7 +20,7 @@ export const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 w-full z-40 bg-main ${pathname === "/" ? "bg-opacity-0" : "bg-opacity-90 backdrop-blur"}`}
+      className={`fixed top-0 w-full z-40 bg-main ${pathname === "/" ? "bg-opacity-0 shadow-none" : "bg-opacity-90 backdrop-blur shadow"}`}
     >
       <div className="flex items-center justify-between h-16 lg:px-5 px-3">
         <div

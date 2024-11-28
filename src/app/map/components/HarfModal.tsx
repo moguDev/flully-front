@@ -5,10 +5,11 @@ import { useState, useRef, useEffect } from "react";
 import { PostDetails } from "./PostDetails";
 import { BoardItem } from "@/app/boards/components/BoardItem";
 import { usePost } from "@/hooks/usePost";
-import { SelectTabButton } from "./SelectTabButton";
+import { SelectCategoryButton } from "./SelectCategoryButton";
 import { useRecoilState } from "recoil";
 import { selectDisplayTabState } from "./Map";
 import { PostGridItem } from "./PostGridItem";
+import { SelectTabButton } from "./SelectTabButton";
 
 export const HalfModal = ({
   posts,
@@ -22,7 +23,8 @@ export const HalfModal = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const postId = searchParams.get("post_id");
-  const [selectTab, setSelectTab] = useRecoilState<number>(
+  const [selectTab, setSelectTab] = useState<number>(0);
+  const [selectCategory, setSelectCategory] = useRecoilState<number>(
     selectDisplayTabState
   );
   const {
@@ -69,7 +71,7 @@ export const HalfModal = ({
 
   return (
     <div
-      className={`pb-16 fixed bottom-0 left-0 bg-base w-full rounded-t-lg transition-all duration-300 z-30 ${isOpen ? "h-[70vh]" : "h-32"}`}
+      className={`pb-16 fixed bottom-0 left-0 bg-white w-full rounded-t-xl overflow-hidden transition-all duration-300 z-30 ${isOpen ? "h-[70vh]" : "h-28"}`}
       style={{ boxShadow: "0 -1px 10px rgba(0, 0, 0, 0.10)" }}
     >
       <section
@@ -78,16 +80,23 @@ export const HalfModal = ({
         onTouchMove={handleTouchMove}
         onClick={() => setIsOpen(true)}
       >
-        <div className="h-4 w-full flex items-center justify-center">
-          <div className="bg-gray-300 w-16 h-1 rounded-full" />
-        </div>
-        <div className="h-12 flex items-center justify-between px-3">
-          <p className="font-bold flex items-center select-none">
-            <span className="material-icons" style={{ fontSize: "24px" }}>
-              location_on
-            </span>
-            このあたりの情報
-          </p>
+        <div className="h-14 flex items-center border-b border-main bg-gray-200 z-10">
+          <SelectTabButton
+            iconName="access_time_filled"
+            label="タイムライン"
+            selected={selectTab === 0}
+            onClick={() => {
+              setSelectTab(0);
+            }}
+          />
+          <SelectTabButton
+            iconName="location_on"
+            label="このあたりの情報"
+            selected={selectTab === 1}
+            onClick={() => {
+              setSelectTab(1);
+            }}
+          />
         </div>
       </section>
       {isOpen && selectedPost ? (
@@ -95,28 +104,28 @@ export const HalfModal = ({
       ) : (
         <section className="flex flex-col h-full overflow-y-auto relative pb-16 p-1">
           <div className="flex items-center justify-center w-full rounded-full bg-gray-100 mt-2 p-1">
-            <SelectTabButton
+            <SelectCategoryButton
               label="みつかった動物"
-              selected={selectTab === 0}
-              onClick={() => setSelectTab(0)}
+              selected={selectCategory === 0}
+              onClick={() => setSelectCategory(0)}
             />
-            <SelectTabButton
+            <SelectCategoryButton
               label="迷子・保護情報"
-              selected={selectTab === 1}
-              onClick={() => setSelectTab(1)}
+              selected={selectCategory === 1}
+              onClick={() => setSelectCategory(1)}
             />
           </div>
-          {selectTab === 0 ? (
+          {selectCategory === 0 ? (
             <div className="px-2 mt-2 mb-4">
               {posts.length > 0 ? (
-                <div className="grid grid-cols-3 gap-1">
+                <div className="grid grid-cols-2 gap-1">
                   {posts.map((post, index) => (
                     <PostGridItem
                       key={index}
                       post={post}
                       onClick={() => {
                         setIsOpen(true);
-                        router.replace(`?post_id=${post.id}`);
+                        router.push(`?post_id=${post.id}`);
                       }}
                     />
                   ))}

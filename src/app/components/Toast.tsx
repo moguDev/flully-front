@@ -11,7 +11,7 @@ export const Toast = () => {
     if (toast.message !== "") {
       const timer = setTimeout(() => {
         setToast({ message: "", toastType: "success" });
-      }, 3000);
+      }, 5000);
 
       return () => clearTimeout(timer);
     }
@@ -26,9 +26,16 @@ export const Toast = () => {
       }`}
     >
       <div
-        className={`px-3 py-2 rounded-full bg-opacity-80 backdrop-blur-lg ${toast.toastType === "success" ? "bg-blue-600" : "bg-red-400"}`}
+        className={`flex items-center px-3 py-2 rounded-md bg-opacity-90 backdrop-blur ${toast.toastType === "success" ? "bg-blue-400" : "bg-red-400"}`}
       >
         <p className="text-white font-bold text-sm">{toast.message}</p>
+        <p
+          className="material-icons text-white p-2 cursor-pointer"
+          style={{ fontSize: "16px" }}
+          onClick={() => setToast({ message: "", toastType: "success" })}
+        >
+          close
+        </p>
       </div>
     </div>
   );

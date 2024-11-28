@@ -1,18 +1,26 @@
 export const SelectTabButton = ({
+  iconName,
   label,
   selected,
   onClick,
 }: {
+  iconName: string;
   label: string;
   selected: boolean;
   onClick: () => void;
 }) => {
   return (
-    <button
-      className={`p-2 w-full min-w-36 text-sm rounded-full bg-main transition-all ${selected ? "bg-opacity-100 text-white font-bold" : "bg-opacity-0 text-gray-500"}`}
+    <div
+      className={`w-full h-full flex items-center justify-center text-sm font-bold select-none p-4 relative cursor-pointer transition-all ${selected ? "text-black bg-white rounded-xl" : "text-gray-400"}`}
       onClick={onClick}
     >
-      <p className="select-none">{label}</p>
-    </button>
+      {selected && (
+        <div className="bg-main h-1 w-full absolute bottom-0 left-0" />
+      )}
+      <span className="material-icons mr-0.5" style={{ fontSize: "16px" }}>
+        {iconName}
+      </span>
+      <span>{label}</span>
+    </div>
   );
 };

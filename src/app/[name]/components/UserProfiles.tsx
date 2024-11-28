@@ -8,13 +8,17 @@ import Link from "next/link";
 import Loading from "@/app/loading";
 import XIcon from "@mui/icons-material/X";
 import { useEffect, useState } from "react";
+import { BoardItem } from "@/app/boards/components/BoardItem";
+import { PostGridItem } from "@/app/map/components/PostGridItem";
 
 const TabComponent = ({
   label,
+  count,
   isSelect,
   onClick,
 }: {
   label: string;
+  count: number;
   isSelect: boolean;
   onClick: () => void;
 }) => {
@@ -27,6 +31,7 @@ const TabComponent = ({
         className={`w-full text-sm text-center transition-all ${isSelect ? "font-bold opacity-100" : "opacity-50"}`}
       >
         {label}
+        <span className="ml-2 text-main">{count}</span>
       </p>
     </button>
   );
@@ -35,7 +40,8 @@ const TabComponent = ({
 export const UserProfiles = () => {
   const { name: nameParams } = useParams();
   const { name: currentUserName } = useAuth();
-  const { loading, user, fetch } = useUserProfiles(nameParams as string);
+  const { loading, user, isFollowing, fetch, handleFollow, handleUnFollow } =
+    useUserProfiles(nameParams as string);
   const router = useRouter();
   const [selectTabIndex, setSelectTabIndes] = useState<number>(0);
 
@@ -69,8 +75,22 @@ export const UserProfiles = () => {
                       >
                         <p className="font-bold opacity-60">編集</p>
                       </Link>
+                    ) : isFollowing ? (
+                      <button
+                        className="text-xs border border-main text-main rounded-full px-3 py-1 transition-all active:scale-95"
+                        onClick={() => {
+                          handleUnFollow();
+                        }}
+                      >
+                        フォロー中
+                      </button>
                     ) : (
-                      <button className="text-xs bg-main text-white rounded-full px-3 py-1">
+                      <button
+                        className="text-xs bg-main text-white rounded-full px-3 py-1 transition-all active:scale-95"
+                        onClick={() => {
+                          handleFollow();
+                        }}
+                      >
                         フォローする
                       </button>
                     )}
@@ -124,10 +144,12 @@ export const UserProfiles = () => {
             <div className="text-xs font-bold py-1">{user.introduction}</div>
             <div className="flex items-center font-bold space-x-2 py-1">
               <p className="text-xs">
-                <span className="text-lg mr-0.5">{0}</span>フォロワー
+                <span className="text-lg mr-0.5">{user.followersCount}</span>
+                フォロワー
               </p>
               <p className="text-xs">
-                <span className="text-lg mr-0.5">{0}</span>フォロー中
+                <span className="text-lg mr-0.5">{user.followingCount}</span>
+                フォロー中
               </p>
             </div>
           </section>
@@ -135,58 +157,36 @@ export const UserProfiles = () => {
             <div className="flex items-center border-b border-main">
               <TabComponent
                 label="みつけた動物"
+                count={user.posts?.length || 0}
                 isSelect={selectTabIndex === 0}
                 onClick={() => setSelectTabIndes(0)}
               />
               <TabComponent
                 label="掲示板"
+                count={user.boards?.length || 0}
                 isSelect={selectTabIndex === 1}
                 onClick={() => setSelectTabIndes(1)}
               />
             </div>
             {selectTabIndex === 0 ? (
               <section className="py-4">
-                <div className="grid grid-cols-4 gap-0.5">
+                <div className="grid lg:grid-cols-4 grid-cols-2 gap-1">
                   {user.posts?.map((post, index) => (
-                    <button
+                    <PostGridItem
                       key={index}
-                      className="md:h-44 h-24 w-full overflow-hidden relative rounded"
-                      onClick={() => router.push(`/map?post_id=${post.id}`)}
-                    >
-                      <Image
-                        src={post.imageUrl}
-                        alt={`post-${post.id}`}
-                        className="object-cover"
-                        fill
-                      />
-                    </button>
+                      post={post}
+                      onClick={() => {
+                        router.push(`/map?post_id=${post.id}`);
+                      }}
+                    />
                   ))}
                 </div>
               </section>
             ) : (
               <section className="py-4">
-                <div className="flex items-center space-x-0.5">
+                <div className="grid lg:grid-cols-2 grid-cols-1 gap-2">
                   {user.boards?.map((board, index) => (
-                    <button
-                      key={index}
-                      className="h-24 w-24 rounded-lg overflow-hidden relative"
-                      onClick={() => router.push(`/boards/${board.id}`)}
-                    >
-                      <Image
-                        src={board.iconUrl}
-                        alt={board.name}
-                        className="object-cover"
-                        fill
-                      />
-                      <div className="absolute bottom-0 w-full rounded-br-lg bg-red-500 bg-opacity-80 p-0.5">
-                        <p
-                          className="font-bold text-white text-center"
-                          style={{ fontSize: "10px" }}
-                        >
-                          {board.category}情報
-                        </p>
-                      </div>
-                    </button>
+                    <BoardItem key={index} board={board} />
                   ))}
                 </div>
               </section>
