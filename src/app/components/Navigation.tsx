@@ -42,7 +42,7 @@ export const Navigation = () => {
       className={`shadow-lg fixed lg:pt-20 lg:top-0 lg:h-full lg:w-16 lg:flex-col bottom-0 flex items-center h-16 w-full border-t bg-base border-gray-300 z-30 overflow-hidden ${pathName === "/" && "hidden"}`}
     >
       <NavigationMenu
-        iconName="location_on"
+        iconName="home"
         label="マップ"
         selected={pathName.includes("/map")}
         onClick={() => router.push("/map")}

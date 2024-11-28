@@ -1,14 +1,15 @@
 "use client";
 import { usePost } from "@/hooks/usePost";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PostDetails } from "./PostDetails";
 import { Board, Post } from "../../types";
 import { BoardItem } from "@/app/boards/components/BoardItem";
-import { SelectTabButton } from "./SelectTabButton";
+import { SelectCategoryButton } from "./SelectCategoryButton";
 import { useRecoilState } from "recoil";
 import { selectDisplayTabState } from "./Map";
 import { PostGridItem } from "./PostGridItem";
+import { SelectTabButton } from "./SelectTabButton";
 
 export const NearbyInformation = ({
   posts,
@@ -20,7 +21,8 @@ export const NearbyInformation = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const postId = searchParams.get("post_id");
-  const [selectTab, setSelectTab] = useRecoilState<number>(
+  const [selectTab, setSelectTab] = useState<number>(0);
+  const [selectCategory, setSelectCategory] = useRecoilState<number>(
     selectDisplayTabState
   );
   const {
@@ -38,71 +40,88 @@ export const NearbyInformation = ({
   }, [postId]);
 
   return (
-    <div className="w-96 pt-16 h-screen relative border-r border-gray-300 max-h-[100vh] overflow-y-auto">
-      <div className="flex items-center justify-between px-2 py-4 border-b border-gray-200">
-        <p className="flex items-center font-bold text-lg select-none">
-          <span className="material-icons">location_on</span>このあたりの情報
-        </p>
+    <div className="w-96 pt-16 h-screen border-r border-gray-300 bg-white">
+      <div className="h-14 flex items-center border-b border-main mx-1 z-10">
+        <SelectTabButton
+          iconName="access_time_filled"
+          label="タイムライン"
+          selected={selectTab === 0}
+          onClick={() => {
+            console.log("send");
+            setSelectTab(0);
+          }}
+        />
+        <SelectTabButton
+          iconName="location_on"
+          label="このあたりの情報"
+          selected={selectTab === 1}
+          onClick={() => {
+            console.log("send");
+            setSelectTab(1);
+          }}
+        />
       </div>
-      {selectedPost ? (
-        <div>
-          <PostDetails postId={selectedPost.id} />
-        </div>
-      ) : (
-        <section className="flex flex-col px-1">
-          <div className="flex items-center justify-center w-full rounded-full bg-gray-100 mt-2 p-1">
-            <SelectTabButton
-              label="みつかった動物"
-              selected={selectTab === 0}
-              onClick={() => setSelectTab(0)}
-            />
-            <SelectTabButton
-              label="迷子・保護情報"
-              selected={selectTab === 1}
-              onClick={() => setSelectTab(1)}
-            />
+      <div className="max-h-nearbyinformation overflow-y-auto">
+        {selectedPost ? (
+          <div>
+            <PostDetails postId={selectedPost.id} />
           </div>
-          {selectTab === 0 ? (
-            <div className="px-2 mt-2 mb-4">
-              {posts.length > 0 ? (
-                <div className="grid grid-cols-3 gap-1">
-                  {posts.map((post, index) => (
-                    <PostGridItem
-                      key={index}
-                      post={post}
-                      onClick={() => {
-                        router.replace(`?post_id=${post.id}`);
-                      }}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="flex items-center justify-center">
-                  <p className="p-5 font-bold text-black text-sm text-opacity-50">
-                    このあたりでみつかった動物はいません...
-                  </p>
-                </div>
-              )}
+        ) : (
+          <section className="flex flex-col px-1">
+            <div className="flex items-center justify-center w-full rounded-full bg-gray-100 mt-2 p-1">
+              <SelectCategoryButton
+                label="みつかった動物"
+                selected={selectCategory === 0}
+                onClick={() => setSelectCategory(0)}
+              />
+              <SelectCategoryButton
+                label="迷子・保護情報"
+                selected={selectCategory === 1}
+                onClick={() => setSelectCategory(1)}
+              />
             </div>
-          ) : (
-            <div className="py-4">
-              {boards.length > 0 ? (
-                boards.map((board, index) => (
-                  <div key={index} className="mx-2 my-4">
-                    <BoardItem board={board} />
+            {selectCategory === 0 ? (
+              <div className="px-2 mt-2 mb-4">
+                {posts.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-1">
+                    {posts.map((post, index) => (
+                      <PostGridItem
+                        key={index}
+                        post={post}
+                        onClick={() => {
+                          router.replace(`?post_id=${post.id}`);
+                        }}
+                      />
+                    ))}
                   </div>
-                ))
-              ) : (
-                <div className="flex items-center justify-center">
-                  <p className="p-2 font-bold text-black text-sm text-opacity-50">
-                    まいご・保護情報はありません
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-        </section>
-      )}
+                ) : (
+                  <div className="flex items-center justify-center">
+                    <p className="p-5 font-bold text-black text-sm text-opacity-50">
+                      このあたりでみつかった動物はいません...
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="py-4">
+                {boards.length > 0 ? (
+                  boards.map((board, index) => (
+                    <div key={index} className="mx-2 mb-4">
+                      <BoardItem board={board} />
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex items-center justify-center">
+                    <p className="p-2 font-bold text-black text-sm text-opacity-50">
+                      まいご・保護情報はありません
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
+        )}
+      </div>
     </div>
   );
 };

@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      maxHeight: {
+        nearbyinformation: "calc(100vh - 120px)", // 例: 100vhから50px引いた値
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

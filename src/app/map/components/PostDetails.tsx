@@ -6,8 +6,8 @@ import { usePostComments } from "@/hooks/usePostComments";
 import { useAuth } from "@/hooks/useAuth";
 import { usePost } from "@/hooks/usePost";
 import XIcon from "@mui/icons-material/X";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { usePathname, useRouter } from "next/navigation";
 import { showPostDeleteModal } from "./PostDeleteModal";
 import { useToast } from "@/hooks/useToast";
@@ -98,7 +98,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
                   }
                 }}
               >
-                {isLiked ? <ThumbUpIcon /> : <ThumbUpOffAltIcon />}
+                {isLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
                 <p style={{ fontSize: "10px" }}>{post.likeCount}</p>
               </button>
             </div>

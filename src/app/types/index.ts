@@ -1,4 +1,5 @@
 export type User = {
+  id: number;
   name: string;
   nickname: string;
   introduction: string;
@@ -12,6 +13,8 @@ export type User = {
   currentStreak?: number;
   isMailPublic?: boolean;
   isLocationPublic?: boolean;
+  followersCount?: number;
+  followingCount?: number;
 };
 
 export type Walk = {

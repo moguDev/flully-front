@@ -12,7 +12,7 @@ import { NearbyInformation } from "@/app/map/components/NearbyInformation";
 import { useToast } from "@/hooks/useToast";
 import { useAuth } from "@/hooks/useAuth";
 import { atom, useRecoilState } from "recoil";
-import { SelectTabButton } from "./SelectTabButton";
+import { SelectCategoryButton } from "./SelectCategoryButton";
 
 const FixedSizeCircles = ({
   position,
@@ -114,7 +114,6 @@ export const Map: React.FC = () => {
 
   useEffect(() => {
     startWatchingLocation();
-
     return () => {
       stopWatchingLocation();
     };
@@ -149,12 +148,12 @@ export const Map: React.FC = () => {
         className={`z-20 fixed flex items-center justify-center w-full top-16`}
       >
         <div className="flex items-center rounded-full bg-gray-100 mt-2 p-1">
-          <SelectTabButton
+          <SelectCategoryButton
             label="みつかった動物"
             selected={selectTab === 0}
             onClick={() => setSelectTab(0)}
           />
-          <SelectTabButton
+          <SelectCategoryButton
             label="迷子・保護情報"
             selected={selectTab === 1}
             onClick={() => setSelectTab(1)}
