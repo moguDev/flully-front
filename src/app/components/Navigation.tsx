@@ -43,7 +43,7 @@ export const Navigation = () => {
         onClick={() => router.push("/map")}
       />
       <NavigationMenu
-        iconName="format_list_bulleted"
+        iconName="campaign"
         selected={pathName.includes("/boards")}
         onClick={() => router.push("/boards")}
       />
