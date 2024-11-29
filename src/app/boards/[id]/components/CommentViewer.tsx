@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 export const CommentViewer = ({ boardId }: { boardId: number }) => {
   const [commentText, setCommentText] = useState("");
   const { comments, sendComment } = useBoardComments(boardId);
-  const { isAuthenticated, name } = useAuth();
+  const { authState } = useAuth();
+  const { isAuthenticated, name } = authState;
   const router = useRouter();
 
   const handleSendTextComment = async () => {
@@ -50,7 +51,7 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
               >
                 <div className="h-5 w-5 overflow-hidden rounded-full relative mr-0.5">
                   <Image
-                    src={comment.user.avatar.url}
+                    src={comment.user.avatarUrl}
                     alt={comment.user.nickname}
                     className="object-cover"
                     fill

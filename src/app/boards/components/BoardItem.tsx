@@ -10,10 +10,10 @@ export const BoardItem = ({ board }: BoardItemProps) => {
   const router = useRouter();
   return (
     <div
-      className="bg-white cursor-pointer transition-all hover:translate-x-1 rounded-md overflow-hidden shadow"
+      className="bg-white cursor-pointer transition-all hover:translate-x-1 rounded-md overflow-hidden relative shadow"
       onClick={() => router.push(`/boards/${board.id}`)}
     >
-      <div className="w-full min-h-80 overflow-hidden relative">
+      <div className="w-full min-h-80 overflow-hidden rounded-t-md relative">
         <div
           className={`absolute top-0 left-0 w-full bg-opacity-80 backdrop-blur p-2 z-10 ${board.category === "迷子" ? "bg-red-500" : board.category === "保護" ? "bg-blue-500" : "bg-green-500"}`}
         >

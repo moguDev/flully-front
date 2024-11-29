@@ -14,7 +14,8 @@ import XIcon from "@mui/icons-material/X";
 
 export const BoardDetail = () => {
   const { id } = useParams();
-  const { isAuthenticated, name: userName } = useAuth();
+  const { authState } = useAuth();
+  const { isAuthenticated, name: userName } = authState;
   const { loading, board } = useBoard(parseInt(id as string));
   const router = useRouter();
   const { requireSignin } = useToast();
@@ -139,7 +140,7 @@ export const BoardDetail = () => {
               >
                 <div className="h-5 w-5 rounded-full overflow-hidden object-cover relative mr-0.5">
                   <Image
-                    src={board.user.avatar.url || defaultUserImage}
+                    src={board.user.avatarUrl || defaultUserImage}
                     alt={board.user.nickname}
                     className="object-cover"
                     fill

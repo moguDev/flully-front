@@ -68,7 +68,8 @@ const SpeciesButton = ({
 };
 
 export const BoardEditForm = () => {
-  const { name } = useAuth();
+  const { authState } = useAuth();
+  const { name } = authState;
   const { showAlert } = useToast();
   const [categoryText, setCategoryText] = useState<string>("いなくなった");
   const router = useRouter();

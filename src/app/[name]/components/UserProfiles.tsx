@@ -10,6 +10,8 @@ import XIcon from "@mui/icons-material/X";
 import { useEffect, useState } from "react";
 import { BoardItem } from "@/app/boards/components/BoardItem";
 import { PostGridItem } from "@/app/map/components/PostGridItem";
+import { followsModalTabState, showFollowsModal } from "./FollowsModal";
+import { useSetRecoilState } from "recoil";
 
 const TabComponent = ({
   label,
@@ -39,11 +41,13 @@ const TabComponent = ({
 
 export const UserProfiles = () => {
   const { name: nameParams } = useParams();
-  const { name: currentUserName } = useAuth();
+  const { authState } = useAuth();
+  const { name: currentUserName } = authState;
   const { loading, user, isFollowing, fetch, handleFollow, handleUnFollow } =
     useUserProfiles(nameParams as string);
   const router = useRouter();
   const [selectTabIndex, setSelectTabIndes] = useState<number>(0);
+  const setFollowsModalTab = useSetRecoilState<number>(followsModalTabState);
 
   useEffect(() => {
     fetch();
@@ -58,7 +62,7 @@ export const UserProfiles = () => {
             <div className="flex items-center">
               <div className="rounded-full h-24 w-24 min-w-24 relative overflow-hidden">
                 <Image
-                  src={user.avatar.url || defaultUserImage}
+                  src={user.avatarUrl || defaultUserImage}
                   alt="avatar"
                   className="object-cover"
                   fill
@@ -143,11 +147,23 @@ export const UserProfiles = () => {
             </div>
             <div className="text-xs font-bold py-1">{user.introduction}</div>
             <div className="flex items-center font-bold space-x-2 py-1">
-              <p className="text-xs">
+              <p
+                className="text-xs select-none cursor-pointer transition-all hover:text-main"
+                onClick={() => {
+                  setFollowsModalTab(0);
+                  showFollowsModal();
+                }}
+              >
                 <span className="text-lg mr-0.5">{user.followersCount}</span>
                 フォロワー
               </p>
-              <p className="text-xs">
+              <p
+                className="text-xs select-none cursor-pointer transition-all hover:text-main"
+                onClick={() => {
+                  setFollowsModalTab(1);
+                  showFollowsModal();
+                }}
+              >
                 <span className="text-lg mr-0.5">{user.followingCount}</span>
                 フォロー中
               </p>

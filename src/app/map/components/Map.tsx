@@ -67,7 +67,8 @@ export const Map: React.FC = () => {
   const { boards } = useBoards();
 
   const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
-  const { isAuthenticated } = useAuth();
+  const { authState } = useAuth();
+  const { isAuthenticated } = authState;
   const { showAlert, requireSignin } = useToast();
 
   const { isLoaded, loadError } = useGoogleMaps();

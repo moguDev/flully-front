@@ -3,34 +3,17 @@ export type User = {
   name: string;
   nickname: string;
   introduction: string;
-  avatar: { url: string };
+  avatarUrl: string;
   location: string;
   email: string;
   twitter: string;
   boards?: Board[];
   posts?: Post[];
-  walks?: Walk[];
   currentStreak?: number;
   isMailPublic?: boolean;
   isLocationPublic?: boolean;
   followersCount?: number;
   followingCount?: number;
-};
-
-export type Walk = {
-  id: number;
-  startTime: string;
-  finishTime: string;
-  totalDistance: number;
-  checkpoints: Checkpoint[];
-  posts: Post[];
-  createdAt: string;
-};
-
-export type Checkpoint = {
-  id: number;
-  lat: number;
-  lng: number;
 };
 
 export type Board = {

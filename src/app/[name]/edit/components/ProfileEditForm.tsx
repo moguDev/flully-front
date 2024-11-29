@@ -99,7 +99,7 @@ export const ProfileEditForm = () => {
               }}
             >
               <Image
-                src={imageSource || user?.avatar.url || defaultUserImage}
+                src={imageSource || user?.avatarUrl || defaultUserImage}
                 alt="アイコン"
                 className="object-cover"
                 fill

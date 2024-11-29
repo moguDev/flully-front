@@ -13,7 +13,7 @@ const closeDrawer = () => {
 };
 
 export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
-  const { name, nickname, avatar, logout } = useAuth();
+  const { authState, logout } = useAuth();
   const router = useRouter();
   const { showSuccess } = useToast();
   return (
@@ -30,15 +30,15 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center">
             <div className="h-12 w-12 rounded relative">
               <Image
-                src={avatar.url || defaultImage}
+                src={authState.avatarUrl || defaultImage}
                 alt="user_icon"
                 className="object-cover rounded-full"
                 fill
               />
             </div>
             <div className="ml-1.5">
-              <p className="text-xl font-bold">{nickname}</p>
-              <p className="text-sm opacity-50">@{name}</p>
+              <p className="text-xl font-bold">{authState.nickname}</p>
+              <p className="text-sm opacity-50">@{authState.name}</p>
             </div>
           </div>
           <div className="flex items-center justify-between">
@@ -56,13 +56,13 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           </div>
           <div className="flex items-center space-x-2 py-1">
             <p className="text-lg">
-              {0}
+              {authState.followersCount}
               <span className="ml-0.5" style={{ fontSize: "10px" }}>
                 フォロワー
               </span>
             </p>
             <p className="text-lg">
-              {0}
+              {authState.followingCount}
               <span className="ml-0.5" style={{ fontSize: "10px" }}>
                 フォロー中
               </span>
@@ -104,8 +104,8 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
                   closeDrawer();
                 }}
               >
-                <span className="material-icons mr-1">location_on</span>
-                <span className="text-sm">マップ</span>
+                <span className="material-icons mr-1">home</span>
+                <span className="text-sm">ホーム</span>
               </button>
             </li>
             <li>
