@@ -2,6 +2,7 @@ import { api } from "@/lib/axiosInstance";
 import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
 import Cookies from "js-cookie";
+import camelcaseKeys from "camelcase-keys";
 
 export type AuthState = {
   isAuthenticated: boolean;
@@ -9,9 +10,11 @@ export type AuthState = {
   nickname: string;
   email: string;
   introduction: string;
-  avatar: { url: string | null };
+  avatarUrl: string | null;
   twitter: string;
   location: string;
+  followingCount: number;
+  followersCount: number;
 };
 
 export const authState = atom<AuthState>({
@@ -22,9 +25,11 @@ export const authState = atom<AuthState>({
     nickname: "",
     email: "",
     introduction: "",
-    avatar: { url: null },
+    avatarUrl: null,
     twitter: "",
     location: "",
+    followersCount: 0,
+    followingCount: 0,
   },
 });
 
@@ -42,9 +47,11 @@ export const useAuth = () => {
       nickname: "",
       email: "",
       introduction: "",
-      avatar: { url: null },
+      avatarUrl: null,
       twitter: "",
       location: "",
+      followersCount: 0,
+      followingCount: 0,
     });
   };
 
@@ -55,7 +62,7 @@ export const useAuth = () => {
       const { data } = res;
       setAuth({
         isAuthenticated: true,
-        ...data.data,
+        ...camelcaseKeys(data, { deep: true }),
       });
     } catch (e) {
       console.error(e);
@@ -92,7 +99,7 @@ export const useAuth = () => {
       Cookies.set("uid", headers["uid"]);
       setAuth({
         isAuthenticated: true,
-        ...data.data,
+        ...camelcaseKeys(data, { deep: true }),
       });
     } catch (e) {
       throw e;
@@ -113,7 +120,7 @@ export const useAuth = () => {
       Cookies.set("uid", headers["uid"]);
       setAuth({
         isAuthenticated: true,
-        ...data.data,
+        ...camelcaseKeys(data, { deep: true }),
       });
     } catch (e) {
       throw e;
@@ -147,10 +154,7 @@ export const useAuth = () => {
   };
 
   return {
-    isAuthenticated: auth.isAuthenticated,
-    name: auth.name,
-    nickname: auth.nickname,
-    avatar: auth.avatar,
+    authState: auth,
     loading,
     checkAuth,
     signup,

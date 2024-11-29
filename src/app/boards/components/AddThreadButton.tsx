@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 
 export const AddThreadButton = () => {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { authState } = useAuth();
+  const { isAuthenticated } = authState;
   const { requireSignin } = useToast();
   return (
     <button

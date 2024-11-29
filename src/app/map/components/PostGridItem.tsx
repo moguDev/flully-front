@@ -26,7 +26,7 @@ export const PostGridItem = ({
           <div className="flex items-center">
             <div className="relative h-3 w-3 rounded-full overflow-hidden mr-0.5">
               <Image
-                src={post.user?.avatar.url || defaultImage}
+                src={post.user?.avatarUrl || defaultImage}
                 alt={post.user?.name || "icon"}
                 className="object-cover"
                 fill

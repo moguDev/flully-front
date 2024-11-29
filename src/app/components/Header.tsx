@@ -9,7 +9,8 @@ import logo from "/public/images/flully_logo.png";
 import Image from "next/image";
 
 export const Header = () => {
-  const { isAuthenticated, checkAuth } = useAuth();
+  const { authState, checkAuth } = useAuth();
+  const { isAuthenticated } = authState;
   const { showAlert } = useToast();
   const router = useRouter();
   const pathname = usePathname();
