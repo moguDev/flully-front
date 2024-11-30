@@ -42,13 +42,12 @@ export const NearbyInformation = ({
 
   return (
     <div className="w-96 pt-16 h-screen border-r border-gray-300 bg-white">
-      <div className="h-14 flex items-center border-b border-main mx-1 z-10">
+      <div className="h-14 w-full flex items-center border-b border-main mx-1">
         <SelectTabButton
           iconName="access_time_filled"
           label="タイムライン"
           selected={selectTab === 0}
           onClick={() => {
-            console.log("send");
             setSelectTab(0);
           }}
         />
@@ -57,7 +56,6 @@ export const NearbyInformation = ({
           label="このあたりの情報"
           selected={selectTab === 1}
           onClick={() => {
-            console.log("send");
             setSelectTab(1);
           }}
         />
@@ -73,7 +71,7 @@ export const NearbyInformation = ({
           </div>
         ) : (
           <section className="flex flex-col px-1">
-            <div className="flex items-center justify-center w-full rounded-full bg-gray-100 mt-2 p-1">
+            <div className="flex items-center justify-center w-full h-fit rounded-full bg-gray-100 mt-2 p-1">
               <SelectCategoryButton
                 label="みつかった動物"
                 selected={selectCategory === 0}
