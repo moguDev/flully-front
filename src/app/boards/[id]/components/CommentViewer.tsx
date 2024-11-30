@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { showModal } from "./SelectLocationModal";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { removeParamsFromUrl } from "@/lib";
 
 export const CommentViewer = ({ boardId }: { boardId: number }) => {
   const [commentText, setCommentText] = useState("");
@@ -51,7 +52,7 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
               >
                 <div className="h-5 w-5 overflow-hidden rounded-full relative mr-0.5">
                   <Image
-                    src={comment.user.avatarUrl}
+                    src={removeParamsFromUrl(comment.user.avatarUrl)!}
                     alt={comment.user.nickname}
                     className="object-cover"
                     fill
@@ -78,7 +79,7 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
                 ) : comment.contentType === "image" ? (
                   <div className="relative overflow-hidden h-64 w-56 rounded mx-2">
                     <Image
-                      src={comment.content as string}
+                      src={removeParamsFromUrl(comment.content as string)!}
                       alt={`image ${comment.id}`}
                       className="object-cover"
                       fill

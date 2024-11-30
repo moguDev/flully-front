@@ -4,6 +4,7 @@ import defaultImage from "/public/images/default_avatar.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
+import { removeParamsFromUrl } from "@/lib";
 
 const closeDrawer = () => {
   const drawerCheckbox = document.getElementById(
@@ -30,7 +31,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center">
             <div className="h-12 w-12 rounded relative">
               <Image
-                src={authState.avatarUrl || defaultImage}
+                src={removeParamsFromUrl(authState.avatarUrl) || defaultImage}
                 alt="user_icon"
                 className="object-cover rounded-full"
                 fill

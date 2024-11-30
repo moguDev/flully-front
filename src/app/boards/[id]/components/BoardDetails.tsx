@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { CommentViewer } from "./CommentViewer";
 import { useToast } from "@/hooks/useToast";
 import XIcon from "@mui/icons-material/X";
+import { removeParamsFromUrl } from "@/lib";
 
 export const BoardDetail = () => {
   const { id } = useParams();
@@ -93,7 +94,9 @@ export const BoardDetail = () => {
                   className={`min-h-96 overflow-hidden relative ${board.images.length <= 1 ? "w-full" : "w-2/3"}`}
                 >
                   <Image
-                    src={board.images[0]?.url || board.iconUrl}
+                    src={
+                      removeParamsFromUrl(board.images[0]?.url) || board.iconUrl
+                    }
                     alt={board.name}
                     className="object-cover"
                     fill
@@ -108,7 +111,7 @@ export const BoardDetail = () => {
                       >
                         {image ? (
                           <Image
-                            src={image.url}
+                            src={removeParamsFromUrl(image.url)!}
                             alt={`image_${index}`}
                             className="object-cover"
                             fill
@@ -124,7 +127,7 @@ export const BoardDetail = () => {
                           </p>
                         </div>
                         <Image
-                          src={board.images[3].url}
+                          src={removeParamsFromUrl(board.images[3].url)!}
                           alt="more_image"
                           className="object-cover"
                           fill
@@ -199,7 +202,10 @@ export const BoardDetail = () => {
                 >
                   <div className="h-5 w-5 rounded-full overflow-hidden object-cover relative mr-0.5">
                     <Image
-                      src={board.user.avatarUrl || defaultUserImage}
+                      src={
+                        removeParamsFromUrl(board.user.avatarUrl) ||
+                        defaultUserImage
+                      }
                       alt={board.user.nickname}
                       className="object-cover"
                       fill

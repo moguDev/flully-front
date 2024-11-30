@@ -13,6 +13,7 @@ import { showPostDeleteModal } from "./PostDeleteModal";
 import { useToast } from "@/hooks/useToast";
 import { useSetRecoilState } from "recoil";
 import { focusPositionState } from "./Map";
+import { removeParamsFromUrl } from "@/lib";
 
 type PostDetailsProps = {
   postId: number;
@@ -74,7 +75,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
           <div className="w-full h-96 overflow-hidden relative rounded">
             <Image
               key={`post_image_${post.id}`}
-              src={post.imageUrl}
+              src={removeParamsFromUrl(post.imageUrl)!}
               alt={"image"}
               className="object-cover"
               fill
@@ -154,7 +155,10 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
                   >
                     <div className="h-4 w-4 rounded-full overflow-hidden relative mr-0.5">
                       <Image
-                        src={comment.user.avatarUrl || defaultUserImage}
+                        src={
+                          removeParamsFromUrl(comment.user.avatarUrl) ||
+                          defaultUserImage
+                        }
                         alt="user_icon"
                         className="object-cover"
                         fill
