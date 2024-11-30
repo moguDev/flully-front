@@ -1,4 +1,5 @@
 import { Board } from "@/app/types";
+import { removeParamsFromUrl } from "@/lib";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -27,7 +28,7 @@ export const BoardItem = ({ board }: BoardItemProps) => {
           </p>
         </div>
         <Image
-          src={board.images[0]?.url || board.iconUrl}
+          src={removeParamsFromUrl(board.images[0]?.url) || board.iconUrl}
           alt={board.name}
           className="object-cover"
           fill

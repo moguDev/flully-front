@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/useToast";
 import { useAuth } from "@/hooks/useAuth";
 import { atom, useRecoilState } from "recoil";
 import { SelectCategoryButton } from "./SelectCategoryButton";
+import { removeParamsFromUrl } from "@/lib";
 
 const FixedSizeCircles = ({
   position,
@@ -201,7 +202,7 @@ export const Map: React.FC = () => {
                 >
                   {post.imageUrl && (
                     <Image
-                      src={post.imageUrl}
+                      src={removeParamsFromUrl(post.imageUrl)!}
                       alt="Post Thumbnail"
                       className="object-cover"
                       fill
@@ -227,7 +228,7 @@ export const Map: React.FC = () => {
                       }}
                     >
                       <Image
-                        src={board.iconUrl}
+                        src={removeParamsFromUrl(board.iconUrl)!}
                         alt="Board Icon"
                         className="object-cover"
                         fill

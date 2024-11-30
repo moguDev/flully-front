@@ -1,6 +1,7 @@
 import { Post } from "@/app/types";
 import Image from "next/image";
 import defaultImage from "/public/images/default_avatar.png";
+import { removeParamsFromUrl } from "@/lib";
 
 export const PostGridItem = ({
   post,
@@ -26,7 +27,7 @@ export const PostGridItem = ({
           <div className="flex items-center">
             <div className="relative h-3 w-3 rounded-full overflow-hidden mr-0.5">
               <Image
-                src={post.user?.avatarUrl || defaultImage}
+                src={removeParamsFromUrl(post.user?.avatarUrl) || defaultImage}
                 alt={post.user?.name || "icon"}
                 className="object-cover"
                 fill
@@ -39,7 +40,7 @@ export const PostGridItem = ({
         )}
       </div>
       <Image
-        src={post.imageUrl || defaultImage}
+        src={removeParamsFromUrl(post.imageUrl) || defaultImage}
         alt={`postImage-${post.id}`}
         className="object-cover"
         fill
