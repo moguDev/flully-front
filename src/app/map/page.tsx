@@ -4,8 +4,7 @@ import { PostModal } from "./components/PostModal";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "このあたりの情報 | flully - ふらりと出会った動物をシェアできるコミュニティ",
+  title: "ホーム | flully - ふらりと出会った動物をシェアできるコミュニティ",
 };
 
 export default function MapPage() {
