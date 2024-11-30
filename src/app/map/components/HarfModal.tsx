@@ -10,6 +10,7 @@ import { useRecoilState } from "recoil";
 import { selectDisplayTabState } from "./Map";
 import { PostGridItem } from "./PostGridItem";
 import { SelectTabButton } from "./SelectTabButton";
+import { Timeline } from "./Timeline";
 
 export const HalfModal = ({
   posts,
@@ -86,7 +87,13 @@ export const HalfModal = ({
             label="タイムライン"
             selected={selectTab === 0}
             onClick={() => {
-              setSelectTab(0);
+              if (selectTab === 0) {
+                setIsOpen(false);
+                router.replace("?");
+                startY.current = null;
+              } else {
+                setSelectTab(0);
+              }
             }}
           />
           <SelectTabButton
@@ -101,6 +108,10 @@ export const HalfModal = ({
       </section>
       {isOpen && selectedPost ? (
         <PostDetails postId={selectedPost.id} />
+      ) : selectTab === 0 ? (
+        <div className="h-full overflow-y-auto relative pb-16">
+          <Timeline />
+        </div>
       ) : (
         <section className="flex flex-col h-full overflow-y-auto relative pb-16 p-1">
           <div className="flex items-center justify-center w-full rounded-full bg-gray-100 mt-2 p-1">

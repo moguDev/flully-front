@@ -42,7 +42,7 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
 
   return (
     <div className="relative h-full w-full">
-      <section className="absolute bg-base h-full w-full lg:pb-16 pb-32 overflow-y-auto">
+      <section className="absolute bg-gray-50 h-full w-full lg:pb-16 pb-32 overflow-y-auto">
         <div className="px-4">
           {comments.reverse().map((comment, index) => (
             <div key={index} className="my-2">
@@ -111,7 +111,7 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
           <div ref={commentsEndRef} />
         </div>
       </section>
-      <div className="lg:absolute fixed lg:bottom-0 bottom-16 left-0 h-max w-full bg-white p-2 border-t border-gray-200">
+      <div className="lg:absolute fixed lg:bottom-0 bottom-16 left-0 h-max w-full bg-white p-2">
         {isAuthenticated ? (
           <div className="flex items-center">
             <div className="bg-gray-100 p-2 px-2 rounded-full w-full flex items-center">

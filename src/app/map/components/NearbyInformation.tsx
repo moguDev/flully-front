@@ -10,6 +10,7 @@ import { useRecoilState } from "recoil";
 import { selectDisplayTabState } from "./Map";
 import { PostGridItem } from "./PostGridItem";
 import { SelectTabButton } from "./SelectTabButton";
+import { Timeline } from "./Timeline";
 
 export const NearbyInformation = ({
   posts,
@@ -65,6 +66,10 @@ export const NearbyInformation = ({
         {selectedPost ? (
           <div>
             <PostDetails postId={selectedPost.id} />
+          </div>
+        ) : selectTab === 0 ? (
+          <div className="w-full h-full">
+            <Timeline />
           </div>
         ) : (
           <section className="flex flex-col px-1">
