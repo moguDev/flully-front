@@ -178,6 +178,10 @@ export const Map: React.FC = () => {
           mapContainerStyle={mapContainerStyle}
           center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
           zoom={currentPosition ? 16 : 5}
+          options={{
+            gestureHandling: "greedy",
+            disableDefaultUI: true,
+          }}
           onLoad={(map) => {
             mapRef.current = map;
           }}
