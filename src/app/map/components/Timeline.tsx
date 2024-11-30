@@ -60,7 +60,11 @@ export const Timeline = () => {
               <div className="flex">
                 <div className="h-12 min-w-12 rounded-full overflow-hidden relative">
                   <Image
-                    src={item.content.user?.avatarUrl || defaultImage}
+                    src={
+                      removeParamsFromUrl(
+                        item.content.user?.avatarUrl || null
+                      ) || defaultImage
+                    }
                     alt={`avatar_${item.content.user?.id}`}
                     className="object-cover"
                     fill
@@ -69,9 +73,7 @@ export const Timeline = () => {
                 <div className="px-1 w-full">
                   <div className="w-full flex items-center justify-between">
                     <p className="font-bold select-none">
-                      {removeParamsFromUrl(
-                        item.content.user?.nickname || null
-                      ) || "匿名"}
+                      {item.content.user?.nickname || "匿名"}
                     </p>
                     <p className="text-xs font-bold text-gray-400">
                       {(item.content as Post).createdAt}
