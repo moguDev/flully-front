@@ -4,6 +4,7 @@ import Image from "next/image";
 import defaultImage from "/public/images/default_avatar.png";
 import { Board, Post } from "@/app/types";
 import { useRouter } from "next/navigation";
+import { removeParamsFromUrl } from "@/lib";
 
 export const Timeline = () => {
   const { items, fetch } = useTimeline();
@@ -68,7 +69,9 @@ export const Timeline = () => {
                 <div className="px-1 w-full">
                   <div className="w-full flex items-center justify-between">
                     <p className="font-bold select-none">
-                      {item.content.user?.nickname || "匿名"}
+                      {removeParamsFromUrl(
+                        item.content.user?.nickname || null
+                      ) || "匿名"}
                     </p>
                     <p className="text-xs font-bold text-gray-400">
                       {(item.content as Post).createdAt}
@@ -81,7 +84,7 @@ export const Timeline = () => {
               </div>
               <div className="relative h-80 w-full rounded overflow-hidden my-2">
                 <Image
-                  src={(item.content as Post).imageUrl}
+                  src={removeParamsFromUrl((item.content as Post).imageUrl)!}
                   alt={`post_${item.content.id}`}
                   className="object-cover select-none"
                   fill
@@ -97,7 +100,11 @@ export const Timeline = () => {
               <div className="flex">
                 <div className="h-12 min-w-12 rounded-full overflow-hidden relative">
                   <Image
-                    src={item.content.user?.avatarUrl || defaultImage}
+                    src={
+                      removeParamsFromUrl(
+                        item.content.user?.avatarUrl || null
+                      ) || defaultImage
+                    }
                     alt={`avatar_${item.content.user?.id}`}
                     className="object-cover"
                     fill
@@ -139,8 +146,10 @@ export const Timeline = () => {
                 <Image
                   src={
                     (item.content as Board).images[0]
-                      ? (item.content as Board).images[0].url
-                      : (item.content as Board).iconUrl
+                      ? removeParamsFromUrl(
+                          (item.content as Board).images[0].url
+                        )!
+                      : removeParamsFromUrl((item.content as Board).iconUrl)!
                   }
                   alt={`board_${item.content.id}`}
                   className="object-cover select-none"
