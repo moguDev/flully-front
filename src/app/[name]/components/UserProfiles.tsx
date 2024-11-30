@@ -12,6 +12,7 @@ import { BoardItem } from "@/app/boards/components/BoardItem";
 import { PostGridItem } from "@/app/map/components/PostGridItem";
 import { followsModalTabState, showFollowsModal } from "./FollowsModal";
 import { useSetRecoilState } from "recoil";
+import { removeParamsFromUrl } from "@/lib";
 
 const TabComponent = ({
   label,
@@ -62,7 +63,7 @@ export const UserProfiles = () => {
             <div className="flex items-center">
               <div className="rounded-full h-24 w-24 min-w-24 relative overflow-hidden">
                 <Image
-                  src={user.avatarUrl || defaultUserImage}
+                  src={removeParamsFromUrl(user.avatarUrl) || defaultUserImage}
                   alt="avatar"
                   className="object-cover"
                   fill
