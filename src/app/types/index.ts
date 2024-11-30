@@ -81,3 +81,8 @@ export type Comment = {
   createdAt: string;
   user: User;
 };
+
+export type TimelineItem = {
+  type: string;
+  content: Board | Post;
+};

@@ -131,7 +131,7 @@ export const BoardEditForm = () => {
       removeImageId: removeImageId,
     };
     await update(formData);
-    router.push("/boards");
+    router.push(`/boards/${board?.id}`);
   };
 
   useEffect(() => {
@@ -236,320 +236,328 @@ export const BoardEditForm = () => {
 
   return (
     <div>
-      <button
-        className="text-main flex items-center"
-        onClick={() => router.push(`/boards/${board?.id}`)}
-      >
-        <span className="material-icons">keyboard_arrow_left</span>
-        掲示板にもどる
-      </button>
-      <h1 className="text-2xl font-bold my-4">掲示板を編集</h1>
-      <form method="post" onSubmit={handleSubmit(onsubmit)}>
-        <section className="divide-y">
-          <div className="flex items-center space-x-2 py-1">
-            <div>
-              <input
-                type="radio"
-                value={0}
-                {...register("category")}
-                className="mr-1"
-                defaultChecked
-              />
-              <label className="font-bold">まいご</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                value={1} // "1" に設定
-                {...register("category")}
-                className="mr-1"
-              />
-              <label className="font-bold">保護</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                value={2} // "2" に設定
-                {...register("category")}
-                className="mr-1"
-              />
-              <label className="font-bold">目撃</label>
-            </div>
-          </div>
-          <div className="py-1">
-            <label className="text-sm font-bold">分類</label>
-            <div className="flex items-center">
-              {SPECIES_LIST.map((species, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  className="w-1/5"
-                  onClick={() => setSelectedSpeciesIndex(index)}
-                >
-                  <SpeciesButton
-                    icon={species.icon}
-                    label={species.label}
-                    selected={index === selectedSpeciesIndex}
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="py-2">
-            <label className="text-sm font-bold">種類</label>
-            <div>
-              <input
-                type="text"
-                placeholder="いなくなったペットの種類"
-                className="w-full p-2 bg-gray-100 rounded outline-none"
-                {...register("breed", {
-                  required: "ペットの種類を入力してください",
-                })}
-              />
-            </div>
-            <div className="text-red-500 font-bold text-xs p-1">
-              {errors.breed?.message}
-            </div>
-          </div>
-          <div className="py-2">
-            <label className="text-sm font-bold">掲載用のアイコン</label>
-            <div
-              className="h-16 w-16 rounded-full bg-gray-200 bg-opacity-50 relative overflow-hidden cursor-pointer"
-              onClick={() => {
-                iconInputRef.current?.click();
-              }}
-            >
-              {iconSource || board?.iconUrl ? (
-                <Image
-                  src={iconSource || (board?.iconUrl as string)}
-                  alt="icon"
-                  className="object-cover"
-                  fill
+      <section className="my-2">
+        <button
+          className="flex items-center"
+          onClick={() => router.push(`/boards/${board?.id}`)}
+        >
+          <span className="material-icons">keyboard_arrow_left</span>
+          掲示板にもどる
+        </button>
+      </section>
+      <section className="bg-white rounded-lg p-4 shadow-sm">
+        <h1 className="text-2xl font-bold my-4">掲示板を編集</h1>
+        <form method="post" onSubmit={handleSubmit(onsubmit)}>
+          <section className="divide-y">
+            <div className="flex items-center space-x-2 py-1">
+              <div>
+                <input
+                  type="radio"
+                  value={0}
+                  {...register("category")}
+                  className="mr-1"
+                  defaultChecked
                 />
-              ) : (
-                <div className="flex items-center justify-center h-full w-full">
-                  <span
-                    className="material-icons text-gray-300"
-                    style={{ fontSize: "32px" }}
+                <label className="font-bold">まいご</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  value={1} // "1" に設定
+                  {...register("category")}
+                  className="mr-1"
+                />
+                <label className="font-bold">保護</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  value={2} // "2" に設定
+                  {...register("category")}
+                  className="mr-1"
+                />
+                <label className="font-bold">目撃</label>
+              </div>
+            </div>
+            <div className="py-1">
+              <label className="text-sm font-bold">分類</label>
+              <div className="flex items-center">
+                {SPECIES_LIST.map((species, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    className="w-1/5"
+                    onClick={() => setSelectedSpeciesIndex(index)}
                   >
-                    add_photo_alternate
-                  </span>
-                </div>
-              )}
-            </div>
-            <input
-              type="file"
-              accept="image/*"
-              {...register("icon")}
-              ref={(e: HTMLInputElement) => {
-                register("icon").ref(e);
-                iconInputRef.current = e;
-              }}
-              hidden
-            />
-          </div>
-          {category === "0" && (
-            <>
-              <div className="py-2">
-                <label className="text-sm font-bold">名前</label>
-                <div>
-                  <input
-                    type="text"
-                    placeholder={`${categoryText}ペットの名前`}
-                    className="w-full p-2 bg-gray-100 rounded outline-none"
-                    {...register("name", {
-                      required: "ペットの名前を入力してください",
-                    })}
-                  />
-                </div>
-                <div className="text-red-500 font-bold text-xs p-1">
-                  {errors.name?.message}
-                </div>
+                    <SpeciesButton
+                      icon={species.icon}
+                      label={species.label}
+                      selected={index === selectedSpeciesIndex}
+                    />
+                  </button>
+                ))}
               </div>
-              <div className="py-2">
-                <label className="text-sm font-bold">年齢</label>
-                <div>
-                  <input
-                    type="number"
-                    placeholder="年齢"
-                    className="p-2 bg-gray-100 rounded mr-1 w-14 outline-none"
-                    {...register("age", {
-                      required: "ペットの年齢を入力してください。",
-                    })}
-                  />
-                  <label className="font-bold">歳</label>
-                </div>
-                <div className="text-red-500 font-bold text-xs p-1">
-                  {errors.age?.message}
-                </div>
+            </div>
+            <div className="py-2">
+              <label className="text-sm font-bold">種類</label>
+              <div>
+                <input
+                  type="text"
+                  placeholder="いなくなったペットの種類"
+                  className="w-full p-2 bg-gray-100 rounded outline-none"
+                  {...register("breed", {
+                    required: "ペットの種類を入力してください",
+                  })}
+                />
               </div>
-            </>
-          )}
-          <div className="py-2">
-            <label className="text-sm font-bold">
-              {categoryText}ペットの特徴
-            </label>
-            <div>
-              <input
-                type="text"
-                placeholder="色や特徴などを記述してください"
-                className="w-full p-2 bg-gray-100 rounded outline-none"
-                {...register("feature", {
-                  required: "ペットの特徴を入力してください",
-                })}
-              />
-            </div>
-            <div className="text-red-500 font-bold text-xs p-1">
-              {errors.name?.message}
-            </div>
-          </div>
-          <div className="py-2">
-            <label className="text-sm font-bold">{categoryText}日時</label>
-            <div>
-              <input
-                type="datetime-local"
-                placeholder="年齢"
-                className="w-full p-2 bg-gray-100 rounded mr-1 outline-none"
-                {...register("date", {
-                  required: "日時を入力してください。",
-                })}
-              />
-            </div>
-            <div className="text-red-500 font-bold text-xs p-1">
-              {errors.date?.message}
-            </div>
-          </div>
-          <div className="py-2">
-            <label className="text-sm font-bold">{categoryText}場所</label>
-            <div className="flex items-center p-1">
-              <input
-                type="checkbox"
-                className="mr-1"
-                {...register("isLocationPublic")}
-              />
-              <label className="text-xs">正確な位置情報を共有しない</label>
-            </div>
-            {isLoaded && center ? (
-              <div className="relative border border-gray-200 bg-gray-100 rounded w-full h-64">
-                <div ref={mapRef} className="absolute inset-0"></div>
-                <div
-                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-main font-black"
-                  style={{ fontSize: "24px" }}
-                >
-                  +
-                </div>
+              <div className="text-red-500 font-bold text-xs p-1">
+                {errors.breed?.message}
               </div>
-            ) : (
-              <p>地図を読み込んでいます...</p>
-            )}
-          </div>
-          <div className="py-2">
-            <label className="text-sm font-bold">{categoryText}時の状況</label>
-            <div>
-              <textarea
-                placeholder={`${categoryText}時の状況を記述してください。`}
-                className="w-full p-2 bg-gray-100 rounded outline-none"
-                {...register("body")}
-              />
             </div>
-            <div className="text-red-500 font-bold text-xs p-1">
-              {errors.breed?.message}
-            </div>
-          </div>
-          <div className="py-2">
-            <label className="text-sm font-bold">
-              {categoryText}ペットの写真
-            </label>
-            <div className="flex items-center overflow-x-auto space-x-1 flex-nowrap">
+            <div className="py-2">
+              <label className="text-sm font-bold">掲載用のアイコン</label>
               <div
-                className="bg-gray-100 min-w-28 h-32 rounded p-1 flex flex-col items-center justify-center text-gray-400 cursor-pointer"
+                className="h-16 w-16 rounded-full bg-gray-200 bg-opacity-50 relative overflow-hidden cursor-pointer"
                 onClick={() => {
-                  imagesInputRef.current?.click();
+                  iconInputRef.current?.click();
                 }}
               >
-                <span className="material-icons" style={{ fontSize: "36px" }}>
-                  camera_alt
-                </span>
-                <p className="text-xs font-bold p-0.5">写真を追加</p>
-              </div>
-              {imageSources.map((src, index) => (
-                <div
-                  key={index}
-                  className="relative h-32 min-w-28 overflow-hidden rounded"
-                  onClick={() => {
-                    setImageSources((prev) => prev.splice(index, index));
-                  }}
-                >
+                {iconSource || board?.iconUrl ? (
                   <Image
-                    src={src}
-                    alt={`Preview ${index}`}
+                    src={iconSource || (board?.iconUrl as string)}
+                    alt="icon"
                     className="object-cover"
                     fill
                   />
-                </div>
-              ))}
-              {board?.images.map(
-                (image, index) =>
-                  !removeImageId.includes(image.id) && (
-                    <div
-                      key={index}
-                      className="relative h-32 min-w-28 overflow-hidden rounded"
-                      onClick={() => {
-                        setImageSources((prev) => prev.splice(index, index));
-                      }}
+                ) : (
+                  <div className="flex items-center justify-center h-full w-full">
+                    <span
+                      className="material-icons text-gray-300"
+                      style={{ fontSize: "32px" }}
                     >
-                      <button
-                        className="material-icons rounded-full h-2 w-2 p-1 absolute top-0 right-4 z-10"
-                        onClick={() => {
-                          setRemoveImageId((prev) => [...prev, image.id]);
-                        }}
-                      >
-                        <p
-                          className="bg-black text-white"
-                          style={{ fontSize: "16px" }}
-                        >
-                          cancel
-                        </p>
-                      </button>
-                      <Image
-                        src={image.url}
-                        alt={`Preview ${index}`}
-                        className="object-cover"
-                        fill
-                      />
-                    </div>
-                  )
+                      add_photo_alternate
+                    </span>
+                  </div>
+                )}
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                {...register("icon")}
+                ref={(e: HTMLInputElement) => {
+                  register("icon").ref(e);
+                  iconInputRef.current = e;
+                }}
+                hidden
+              />
+            </div>
+            {category === "0" && (
+              <>
+                <div className="py-2">
+                  <label className="text-sm font-bold">名前</label>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder={`${categoryText}ペットの名前`}
+                      className="w-full p-2 bg-gray-100 rounded outline-none"
+                      {...register("name", {
+                        required: "ペットの名前を入力してください",
+                      })}
+                    />
+                  </div>
+                  <div className="text-red-500 font-bold text-xs p-1">
+                    {errors.name?.message}
+                  </div>
+                </div>
+                <div className="py-2">
+                  <label className="text-sm font-bold">年齢</label>
+                  <div>
+                    <input
+                      type="number"
+                      placeholder="年齢"
+                      className="p-2 bg-gray-100 rounded mr-1 w-14 outline-none"
+                      {...register("age", {
+                        required: "ペットの年齢を入力してください。",
+                      })}
+                    />
+                    <label className="font-bold">歳</label>
+                  </div>
+                  <div className="text-red-500 font-bold text-xs p-1">
+                    {errors.age?.message}
+                  </div>
+                </div>
+              </>
+            )}
+            <div className="py-2">
+              <label className="text-sm font-bold">
+                {categoryText}ペットの特徴
+              </label>
+              <div>
+                <input
+                  type="text"
+                  placeholder="色や特徴などを記述してください"
+                  className="w-full p-2 bg-gray-100 rounded outline-none"
+                  {...register("feature", {
+                    required: "ペットの特徴を入力してください",
+                  })}
+                />
+              </div>
+              <div className="text-red-500 font-bold text-xs p-1">
+                {errors.name?.message}
+              </div>
+            </div>
+            <div className="py-2">
+              <label className="text-sm font-bold">{categoryText}日時</label>
+              <div>
+                <input
+                  type="datetime-local"
+                  placeholder="年齢"
+                  className="w-full p-2 bg-gray-100 rounded mr-1 outline-none"
+                  {...register("date", {
+                    required: "日時を入力してください。",
+                  })}
+                />
+              </div>
+              <div className="text-red-500 font-bold text-xs p-1">
+                {errors.date?.message}
+              </div>
+            </div>
+            <div className="py-2">
+              <label className="text-sm font-bold">{categoryText}場所</label>
+              <div className="flex items-center p-1">
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  {...register("isLocationPublic")}
+                />
+                <label className="text-xs">正確な位置情報を共有しない</label>
+              </div>
+              {isLoaded && center ? (
+                <div className="relative border border-gray-200 bg-gray-100 rounded w-full h-64">
+                  <div ref={mapRef} className="absolute inset-0"></div>
+                  <div
+                    className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-main font-black"
+                    style={{ fontSize: "24px" }}
+                  >
+                    +
+                  </div>
+                </div>
+              ) : (
+                <p>地図を読み込んでいます...</p>
               )}
             </div>
-            <input
-              type="file"
-              accept="image/*"
-              {...register("images")}
-              ref={(e: HTMLInputElement) => {
-                register("images").ref(e);
-                imagesInputRef.current = e;
+            <div className="py-2">
+              <label className="text-sm font-bold">
+                {categoryText}時の状況
+              </label>
+              <div>
+                <textarea
+                  placeholder={`${categoryText}時の状況を記述してください。`}
+                  className="w-full p-2 bg-gray-100 rounded outline-none"
+                  {...register("body")}
+                />
+              </div>
+              <div className="text-red-500 font-bold text-xs p-1">
+                {errors.breed?.message}
+              </div>
+            </div>
+            <div className="py-2">
+              <label className="text-sm font-bold">
+                {categoryText}ペットの写真
+              </label>
+              <div className="flex items-center overflow-x-auto space-x-1 flex-nowrap">
+                <div
+                  className="bg-gray-100 min-w-28 h-32 rounded p-1 flex flex-col items-center justify-center text-gray-400 cursor-pointer"
+                  onClick={() => {
+                    imagesInputRef.current?.click();
+                  }}
+                >
+                  <span className="material-icons" style={{ fontSize: "36px" }}>
+                    camera_alt
+                  </span>
+                  <p className="text-xs font-bold p-0.5">写真を追加</p>
+                </div>
+                {imageSources.map((src, index) => (
+                  <div
+                    key={index}
+                    className="relative h-32 min-w-28 overflow-hidden rounded"
+                    onClick={() => {
+                      setImageSources((prev) => prev.splice(index, index));
+                    }}
+                  >
+                    <Image
+                      src={src}
+                      alt={`Preview ${index}`}
+                      className="object-cover"
+                      fill
+                    />
+                  </div>
+                ))}
+                {board?.images.map(
+                  (image, index) =>
+                    !removeImageId.includes(image.id) && (
+                      <div
+                        key={index}
+                        className="relative h-32 min-w-28 overflow-hidden rounded"
+                        onClick={() => {
+                          setImageSources((prev) => prev.splice(index, index));
+                        }}
+                      >
+                        <button
+                          className="material-icons rounded-full h-2 w-2 p-1 absolute top-0 right-4 z-10"
+                          onClick={() => {
+                            setRemoveImageId((prev) => [...prev, image.id]);
+                          }}
+                        >
+                          <p
+                            className="bg-black text-white"
+                            style={{ fontSize: "16px" }}
+                          >
+                            cancel
+                          </p>
+                        </button>
+                        <Image
+                          src={image.url}
+                          alt={`Preview ${index}`}
+                          className="object-cover"
+                          fill
+                        />
+                      </div>
+                    )
+                )}
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                {...register("images")}
+                ref={(e: HTMLInputElement) => {
+                  register("images").ref(e);
+                  imagesInputRef.current = e;
+                }}
+                hidden
+              />
+            </div>
+          </section>
+          <div className="flex items-center mt-4">
+            <button
+              type="button"
+              className="p-3 w-1/2 font-bold"
+              onClick={() => {
+                router.back();
               }}
-              hidden
-            />
+            >
+              キャンセル
+            </button>
+            <button
+              type="submit"
+              className="bg-main p-3 text-white font-bold w-1/2 rounded"
+            >
+              掲示板を更新
+            </button>
           </div>
-        </section>
-        <div className="flex items-center">
-          <button
-            type="button"
-            className="p-3 w-1/2 font-bold"
-            onClick={() => {
-              router.back();
-            }}
-          >
-            キャンセル
-          </button>
-          <button
-            type="submit"
-            className="bg-main p-3 text-white font-bold w-1/2 rounded"
-          >
-            掲示板を更新
-          </button>
-        </div>
+        </form>
+      </section>
+      <section className="bg-white rounded-lg mt-4 shadow-sm">
         <div className="flex items-center justify-center">
           <button
             type="button"
@@ -562,7 +570,7 @@ export const BoardEditForm = () => {
             掲示板を削除する
           </button>
         </div>
-      </form>
+      </section>
     </div>
   );
 };

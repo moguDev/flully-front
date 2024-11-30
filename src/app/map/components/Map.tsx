@@ -69,7 +69,7 @@ export const Map: React.FC = () => {
   const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
   const { authState } = useAuth();
   const { isAuthenticated } = authState;
-  const { showAlert, requireSignin } = useToast();
+  const { requireSignin } = useToast();
 
   const { isLoaded, loadError } = useGoogleMaps();
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -239,7 +239,7 @@ export const Map: React.FC = () => {
         </GoogleMap>
       </div>
       <div className="fixed lg:bottom-10 lg:right-4 bottom-36 right-2 z-20">
-        <div className="flex flex-col items-center justify-center space-y-2">
+        <div className="flex flex-col items-center justify-center lg:space-y-4 space-y-2">
           <button
             className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95"
             onClick={() => {
@@ -254,23 +254,6 @@ export const Map: React.FC = () => {
             </span>
           </button>
           <button
-            className="rounded-2xl h-16 w-16 bg-blue-500 flex flex-col items-center justify-center shadow transition-all active:scale-95"
-            onClick={() => showAlert("開発中の機能です")}
-          >
-            <span
-              className="material-icons text-base translate-y-1.5 select-none"
-              style={{ fontSize: "36px" }}
-            >
-              checklist
-            </span>
-            <span
-              className="text-base font-bold select-none"
-              style={{ fontSize: "10px" }}
-            >
-              ミッション
-            </span>
-          </button>
-          <button
             className="rounded-2xl h-16 w-16 bg-main flex flex-col items-center justify-center shadow transition-all active:scale-95"
             onClick={() => {
               if (isAuthenticated) {
@@ -281,10 +264,10 @@ export const Map: React.FC = () => {
             }}
           >
             <span
-              className="material-icons text-base translate-y-1.5 select-none"
+              className="material-icons text-base translate-y-1 select-none"
               style={{ fontSize: "36px" }}
             >
-              search
+              add_a_photo
             </span>
             <span
               className="text-base font-bold select-none"
