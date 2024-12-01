@@ -94,7 +94,7 @@ export const Map: React.FC = () => {
                 new google.maps.LatLng(currentPosition),
                 new google.maps.LatLng(newPosition)
               );
-            if (distance < 5) return; // 5メートル未満なら更新しない
+            if (distance < 10.0) return; // 5メートル未満なら更新しない
           }
 
           setCurrentPosition(newPosition);
@@ -119,7 +119,7 @@ export const Map: React.FC = () => {
   const panToFocusPosition = () => {
     if (mapRef.current && focusPosition) {
       mapRef.current.panTo(focusPosition);
-      if (mapRef.current.getZoom()! < 16) mapRef.current.setZoom(16);
+      if (mapRef.current.getZoom()! < 15) mapRef.current.setZoom(16);
     }
   };
 
@@ -159,11 +159,13 @@ export const Map: React.FC = () => {
       >
         <div className="flex items-center rounded-full bg-gray-100 mt-2 p-1">
           <SelectCategoryButton
+            icon="pets"
             label="みつかった動物"
             selected={selectTab === 0}
             onClick={() => setSelectTab(0)}
           />
           <SelectCategoryButton
+            icon="campaign"
             label="迷子・保護情報"
             selected={selectTab === 1}
             onClick={() => setSelectTab(1)}
@@ -177,7 +179,7 @@ export const Map: React.FC = () => {
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
-          zoom={currentPosition ? 16 : 5}
+          zoom={currentPosition ? 15 : 5}
           options={{
             gestureHandling: "greedy",
             disableDefaultUI: true,
@@ -249,6 +251,7 @@ export const Map: React.FC = () => {
             className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95"
             onClick={() => {
               setFocusPosition(currentPosition);
+              panToFocusPosition();
             }}
           >
             <span
