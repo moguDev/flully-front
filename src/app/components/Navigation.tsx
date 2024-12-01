@@ -19,8 +19,8 @@ const NavigationMenu = ({
       onClick={onClick}
     >
       <p
-        className={`material-icons select-none lg:px-3 px-6 p-3 rounded-lg transition-all ${selected ? "opacity-100 scale-110 bg-main bg-opacity-30" : "opacity-50"} `}
-        style={{ fontSize: "24px" }}
+        className={`material-icons select-none lg:px-2 px-6 p-2 rounded-xl transition-all ${selected ? "opacity-100 scale-110 bg-main bg-opacity-75 text-white" : "opacity-50"} `}
+        style={{ fontSize: "28px" }}
       >
         {selected ? iconName : iconName}
       </p>
