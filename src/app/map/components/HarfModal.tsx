@@ -116,11 +116,13 @@ export const HalfModal = ({
         <section className="flex flex-col h-full overflow-y-auto relative pb-16 p-1">
           <div className="flex items-center justify-center w-full rounded-full bg-gray-100 mt-2 p-1">
             <SelectCategoryButton
+              icon="pets"
               label="みつかった動物"
               selected={selectCategory === 0}
               onClick={() => setSelectCategory(0)}
             />
             <SelectCategoryButton
+              icon="campaign"
               label="迷子・保護情報"
               selected={selectCategory === 1}
               onClick={() => setSelectCategory(1)}

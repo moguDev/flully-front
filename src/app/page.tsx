@@ -18,7 +18,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-main bg-opacity-50 relative overflow-hidden">
+    <main className="min-h-screen bg-main bg-opacity-60 relative overflow-hidden">
       <Image
         src={bg_image}
         alt="background"
@@ -40,13 +40,13 @@ export default function Home() {
                 </div>
                 <div className="relative flex items-center justify-center p-2 lg:mb-8 mb-3">
                   <div className="absolute bg-main bg-opacity-70 h-full w-full -z-10 blur-md" />
-                  <p className="text-white font-black lg:text-[28px] text-xs select-none">
+                  <p className="text-white font-black lg:text-[28px] text-sm select-none">
                     ふらりと出会った動物をシェアできるコミュニティ
                   </p>
                 </div>
                 <div className="text-white lg:text-base text-xs relative mx-5">
                   <div className="absolute bg-main h-full w-full -z-10 bg-opacity-30 blur-xl" />
-                  <div className="mx-5 p-2 border-t border-b border-white border-opacity-50 select-none">
+                  <div className="mx-2 p-2 border-t border-b border-white border-opacity-50 select-none">
                     <section className="pb-2">
                       <p>
                         <span className="font-black">ふらり</span>
@@ -65,8 +65,8 @@ export default function Home() {
                       </p>
                     </section>
                   </div>
-                  <div className="w-full grid lg:grid-cols-2 gap-2 p-5 relative">
-                    <div className="flex flex-col items-center justify-center space-y-2 h-full w-full">
+                  <div className="w-full grid lg:grid-cols-3 gap-2 p-5 relative">
+                    <div className="col-span-2 lex flex-col items-center justify-center space-y-2 h-full w-full relative">
                       <button
                         className="relative w-full h-1/2 bg-main bg-opacity-80 text-white rounded-lg px-10 py-5 active:scale-95 transition-all duration-700 hover:shadow-xl"
                         onClick={handleStarted}
@@ -85,8 +85,8 @@ export default function Home() {
                         </p>
                       </button>
                     </div>
-                    <div className="lg:flex flex-col items-center justify-center bg-base rounded-lg h-full min-w-52 p-3 hidden">
-                      <p className="text-black font-black w-fit">
+                    <div className="lg:flex flex-col items-center justify-center bg-white bg-opacity-20 backdrop-blur rounded-lg h-full min-w-52 p-1 hidden">
+                      <p className="text-white font-black w-fit p-1">
                         スマホでふらり
                       </p>
                       <Image
@@ -115,24 +115,36 @@ export default function Home() {
               </div>
             </div>
           </section>
-          {/* <section className="bg-white bg-opacity-50 backdrop-blur p-10 rounded-xl">
-            <div className="p-4 rounded overflow-hidden relative">
-              <div className="absolute top-0 left-0 bg-main h-full w-2" />
-              <p className="font-bold text-xl">このアプリでできること</p>
+          <section className="max-w-6xl mx-auto px-3">
+            <h2 className="w-full font-bold lg:text-xl text-md text-white border-b border-white border-opacity-50 p-2 my-4">
+              <span className="material-icons lg:block lg:w-fit lg:opacity-100 w-0 opacity-0">
+                tips_and_updates
+              </span>
+              <span
+                className="material-icons lg:hidden lg:w-0 lg:opacity-0"
+                style={{ fontSize: "16px" }}
+              >
+                tips_and_updates
+              </span>
+              <span className="lg:text-3xl text-xl font-black">ふらり</span>
+              でできること
+            </h2>
+            <div className="grid md:grid-cols-3 grid-cols-1 gap-2">
+              <div className="w-full p-4 bg-main bg-opacity-30 backdrop-blur rounded-lg">
+                <h3 className="text-white font-extrabold flex items-center text-lg">
+                  <span className="material-icons mr-1">pets</span>
+                  みつけた動物をシェア
+                </h3>
+              </div>
+              <div className="w-full p-4 bg-main bg-opacity-30 backdrop-blur rounded-lg">
+                <h3 className="text-white font-extrabold flex items-center text-lg">
+                  <span className="material-icons mr-1">campaign</span>
+                  まいごペット情報の掲示板
+                </h3>
+              </div>
+              <div className="w-full p-4 bg-main bg-opacity-30 backdrop-blur rounded-lg"></div>
             </div>
-            <div className="lg:flex items-center justify-center divide-x divide-gray-200">
-              <div className="w-full p-2 m-1">
-                <p className="font-bold">❶ みつけた動物をシェア</p>
-                <p className="text-sm"></p>
-              </div>
-              <div className="w-full p-2 m-1">
-                <p className="font-bold">❷ 迷子・保護情報の掲載</p>
-              </div>
-              <div className="w-full p-2 m-1">
-                <p className="font-bold">❸ 散歩情報の記録</p>
-              </div>
-            </div>
-          </section> */}
+          </section>
         </div>
         <footer className="bg-main bg-opacity-30 backdrop-blur-lg text-base p-5">
           <div className="max-w-7xl mx-auto px-3 divide-y divide-gray-300">
