@@ -25,7 +25,7 @@ export const LoginForm = () => {
   const onsubmit = async (data: FormData) => {
     try {
       await login(data.email, data.password);
-      router.back();
+      router.push("/map");
       showSuccess("ログインしました");
     } catch {
       showAlert("ログインに失敗しました");
