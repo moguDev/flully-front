@@ -46,22 +46,24 @@ export default function Home() {
                 </div>
                 <div className="text-white lg:text-base text-xs relative mx-5">
                   <div className="absolute bg-main h-full w-full -z-10 bg-opacity-30 blur-xl" />
-                  <div className="mx-2 p-2 border-t border-b border-white border-opacity-50 select-none">
+                  <div className="mx-2 p-2 border-t border-b border-white border-opacity-50 select-none font-semibold">
                     <section className="pb-2">
-                      <p>
-                        <span className="font-black">ふらり</span>
+                      <p className="my-1">
+                        <span className="font-black lg:text-[21px] text-[16px] underline">
+                          ふらり
+                        </span>
                         は、街や自然で出会った動物をシェアできるコミュニティサービスです。
                       </p>
-                      <p>
+                      <p className="my-1">
                         近所で見つけた鳥や猫、犬などを投稿して、他の動物好きなユーザーとシェアしましょう。
                       </p>
                     </section>
                     <section>
-                      <p>
-                        さらに、迷子のペットや保護したペットの情報を共有することもできます。
+                      <p className="my-1">
+                        迷子のペットや保護したペットの情報を共有することもできます。
                       </p>
-                      <p>
-                        迷子のペットと飼い主がいち早く再開できるようにサポートします。
+                      <p className="my-1">
+                        ふらりはすべての動物を愛する人とペットを大切に想う人を繋ぎ、ペットとの再会をサポートします。
                       </p>
                     </section>
                   </div>
@@ -131,13 +133,13 @@ export default function Home() {
             </h2>
             <div className="grid md:grid-cols-3 grid-cols-1 gap-2">
               <div className="w-full p-4 bg-main bg-opacity-30 backdrop-blur rounded-lg">
-                <h3 className="text-white font-extrabold flex items-center text-lg">
+                <h3 className="text-white font-extrabold flex items-center text-lg select-none">
                   <span className="material-icons mr-1">pets</span>
                   みつけた動物をシェア
                 </h3>
               </div>
               <div className="w-full p-4 bg-main bg-opacity-30 backdrop-blur rounded-lg">
-                <h3 className="text-white font-extrabold flex items-center text-lg">
+                <h3 className="text-white font-extrabold flex items-center text-lg select-none">
                   <span className="material-icons mr-1">campaign</span>
                   まいごペット情報の掲示板
                 </h3>

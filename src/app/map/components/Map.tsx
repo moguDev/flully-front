@@ -98,6 +98,9 @@ export const Map: React.FC = () => {
           }
 
           setCurrentPosition(newPosition);
+          if (!focusPosition) {
+            setFocusPosition(newPosition);
+          }
         },
         (error) => {
           console.error("Error watching location:", error);
@@ -178,7 +181,7 @@ export const Map: React.FC = () => {
         </div>
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
-          center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
+          center={focusPosition || { lat: 35.6812, lng: 139.7671 }}
           zoom={currentPosition ? 15 : 5}
           options={{
             gestureHandling: "greedy",
