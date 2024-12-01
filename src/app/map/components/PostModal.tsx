@@ -201,6 +201,7 @@ export const PostModal = () => {
                   }}
                   mapContainerStyle={{ width: "100%", height: "100%" }}
                   options={{
+                    gestureHandling: "greedy",
                     disableDefaultUI: true,
                   }}
                 />

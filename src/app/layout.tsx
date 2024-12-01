@@ -51,6 +51,9 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon.png"></link>
+        <meta name="theme-color" content="#8aa8aa" />
       </head>
       <body className={`${font.className} antialiased`}>
         <RecoilRootWrapper>
