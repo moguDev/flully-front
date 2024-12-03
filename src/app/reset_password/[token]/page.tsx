@@ -30,7 +30,7 @@ export default function ResetPasswordForm({
   };
 
   return (
-    <div>
+    <main className="max-w-xl mx-auto py-24">
       <h1>Set New Password</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -48,6 +48,6 @@ export default function ResetPasswordForm({
         <button type="submit">Reset Password</button>
       </form>
       {message && <p>{message}</p>}
-    </div>
+    </main>
   );
 }
