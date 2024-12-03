@@ -28,11 +28,9 @@ export default function ResetPasswordForm({
       await api.put(
         "/auth/password",
         {
-          body: {
-            reset_password_token: params.token,
-            password,
-            password_confirmation: passwordConfirmation,
-          },
+          reset_password_token: params.token,
+          password,
+          password_confirmation: passwordConfirmation,
         },
         { headers: { ...getAuthHeaders() } }
       );
