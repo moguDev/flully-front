@@ -1,10 +1,9 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Board, Post } from "@/app/types";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { PostDetails } from "./PostDetails";
 import { BoardItem } from "@/app/boards/components/BoardItem";
-import { usePost } from "@/hooks/usePost";
 import { SelectCategoryButton } from "./SelectCategoryButton";
 import { useRecoilState } from "recoil";
 import { selectDisplayTabState } from "./Map";
@@ -28,27 +27,18 @@ export const HalfModal = ({
   const [selectCategory, setSelectCategory] = useRecoilState<number>(
     selectDisplayTabState
   );
-  const {
-    post: selectedPost,
-    fetch,
-    initPost,
-  } = usePost(postId ? parseInt(postId) : null);
   const [isOpen, setIsOpen] = useState<boolean>(open);
   const startY = useRef<number | null>(null);
 
-  useEffect(() => {
-    setIsOpen(open);
-  }, [open]);
-
-  useEffect(() => {
-    if (postId) {
-      setIsOpen(true);
-      fetch();
-    } else {
+  const handleClickTab = (tabIndex: number) => {
+    if (selectTab === tabIndex) {
       setIsOpen(false);
-      initPost();
+      router.replace("?");
+      startY.current = null;
+    } else {
+      setSelectTab(tabIndex);
     }
-  }, [postId]);
+  };
 
   const handleTouchStart = (event: React.TouchEvent) => {
     startY.current = event.touches[0].clientY;
@@ -79,35 +69,27 @@ export const HalfModal = ({
         className="border-b border-gray-200"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          if (!isOpen) setIsOpen(true);
+        }}
       >
         <div className="h-14 flex items-center border-b border-main bg-gray-200 z-10">
           <SelectTabButton
             iconName="access_time_filled"
             label="タイムライン"
             selected={selectTab === 0}
-            onClick={() => {
-              if (selectTab === 0) {
-                setIsOpen(false);
-                router.replace("?");
-                startY.current = null;
-              } else {
-                setSelectTab(0);
-              }
-            }}
+            onClick={() => handleClickTab(0)}
           />
           <SelectTabButton
             iconName="location_on"
             label="このあたりの情報"
             selected={selectTab === 1}
-            onClick={() => {
-              setSelectTab(1);
-            }}
+            onClick={() => handleClickTab(1)}
           />
         </div>
       </section>
-      {isOpen && selectedPost ? (
-        <PostDetails postId={selectedPost.id} />
+      {isOpen && postId ? (
+        <PostDetails postId={parseInt(postId)} />
       ) : selectTab === 0 ? (
         <div className="h-full overflow-y-auto relative pb-16">
           <Timeline />

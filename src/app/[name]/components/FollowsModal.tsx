@@ -78,13 +78,13 @@ const AccountRow = ({
                     follow(user.name).then(() => onClick());
                   }}
                 >
-                  <p className="text-xs font-bold">フォローする</p>
+                  <p className="text-xs font-bold mt-1">フォローする</p>
                 </div>
               )}
             </button>
           )}
         </div>
-        <p className="font-bold">{user.introduction}</p>
+        <p className="text-sm">{user.introduction}</p>
       </div>
     </div>
   );

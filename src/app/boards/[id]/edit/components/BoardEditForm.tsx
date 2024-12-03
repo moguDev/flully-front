@@ -12,6 +12,7 @@ import { useBoard } from "@/hooks/useBoard";
 import { showBoardDeleteModal } from "./BoardDeleteModal";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/useToast";
+import { GoogleMap } from "@react-google-maps/api";
 
 type FormData = {
   category: string;
@@ -70,17 +71,20 @@ const SpeciesButton = ({
 export const BoardEditForm = () => {
   const { authState } = useAuth();
   const { name } = authState;
-  const { showAlert } = useToast();
+  const { showSuccess, showAlert } = useToast();
+
   const [categoryText, setCategoryText] = useState<string>("いなくなった");
   const router = useRouter();
   const { id } = useParams();
   const { board, update } = useBoard(parseInt(id as string));
-  const mapRef = useRef<HTMLDivElement>(null);
+
+  const mapRef = useRef<google.maps.Map | null>(null);
   const { isLoaded, loadError } = useGoogleMaps();
   const [center, setCenter] = useState<{ lat: number; lng: number }>({
     lat: 35.6895,
     lng: 139.6917,
   });
+
   const [selectedSpeciesIndex, setSelectedSpeciesIndex] = useState<number>(0);
   const defaultValues: FormData = {
     category: "0",
@@ -114,24 +118,35 @@ export const BoardEditForm = () => {
 
   const onsubmit = async (data: FormData) => {
     if (!center) return;
-    const formData = {
-      category: data.category,
-      species: selectedSpeciesIndex,
-      breed: data.breed,
-      name: data.name,
-      icon: data.icon,
-      age: parseInt(data.age),
-      date: data.date,
-      images: imageFiles,
-      isLocationPublic: !data.isLocationPublic,
-      lat: center.lat,
-      lng: center.lng,
-      feature: data.feature,
-      body: data.body,
-      removeImageId: removeImageId,
-    };
-    await update(formData);
-    router.push(`/boards/${board?.id}`);
+    if (mapRef.current) {
+      try {
+        const center = mapRef.current.getCenter();
+        const lat = center?.lat() ?? 35.6895;
+        const lng = center?.lng() ?? 139.6917;
+        const formData = {
+          category: data.category,
+          species: selectedSpeciesIndex,
+          breed: data.breed,
+          name: data.name,
+          icon: data.icon,
+          age: parseInt(data.age),
+          date: data.date,
+          images: imageFiles,
+          isLocationPublic: !data.isLocationPublic,
+          lat: lat,
+          lng: lng,
+          feature: data.feature,
+          body: data.body,
+          removeImageId: removeImageId,
+        };
+        await update(formData);
+        router.push(`/boards/${board?.id}`);
+        showSuccess("掲示板を更新しました");
+      } catch (e) {
+        console.error(e);
+        showAlert("掲示板の更新に失敗しました");
+      }
+    }
   };
 
   useEffect(() => {
@@ -212,21 +227,20 @@ export const BoardEditForm = () => {
   }, [images]);
 
   useEffect(() => {
-    if (isLoaded && mapRef.current && center) {
-      new google.maps.Map(mapRef.current, {
-        center,
-        zoom: 16,
-        disableDefaultUI: true,
-        gestureHandling: "greedy",
-        draggable: true,
-        scrollwheel: true,
-      });
-    }
-  }, [isLoaded, center]);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setCenter({ lat: latitude, lng: longitude });
+      },
+      (error) => {
+        console.error("現在地の取得に失敗しました:", error);
+        setCenter({ lat: 35.6895, lng: 139.6917 });
+      }
+    );
+  }, []);
 
-  if (loadError) {
-    return <div>Google Mapsの読み込み中にエラーが発生しました。</div>;
-  }
+  if (loadError) return <div>Error loading maps</div>;
+  if (!isLoaded) return <div>Loading...</div>;
 
   // 掲示板の作成者じゃない場合は画面から戻る
   if (board && board?.user.name !== name) {
@@ -432,19 +446,26 @@ export const BoardEditForm = () => {
                 />
                 <label className="text-xs">正確な位置情報を共有しない</label>
               </div>
-              {isLoaded && center ? (
-                <div className="relative border border-gray-200 bg-gray-100 rounded w-full h-64">
-                  <div ref={mapRef} className="absolute inset-0"></div>
-                  <div
-                    className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-main font-black"
-                    style={{ fontSize: "24px" }}
-                  >
-                    +
-                  </div>
+              <div className="relative w-full h-72 border border-gray-200 rounded">
+                <GoogleMap
+                  center={center}
+                  zoom={16}
+                  onLoad={(map) => {
+                    mapRef.current = map;
+                  }}
+                  mapContainerStyle={{ width: "100%", height: "100%" }}
+                  options={{
+                    gestureHandling: "greedy",
+                    disableDefaultUI: true,
+                  }}
+                />
+                <div
+                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-main font-black"
+                  style={{ fontSize: "24px" }}
+                >
+                  +
                 </div>
-              ) : (
-                <p>地図を読み込んでいます...</p>
-              )}
+              </div>
             </div>
             <div className="py-2">
               <label className="text-sm font-bold">

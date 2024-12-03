@@ -126,7 +126,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
                 </p>
               </div>
               <p className="px-2 py-1">{post.body}</p>
-              <p className="text-xs text-right">{post.createdAt}</p>
+              <p className="text-xs text-right">{post.formatedDate}</p>
             </div>
           </div>
         </section>

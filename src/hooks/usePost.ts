@@ -1,7 +1,7 @@
 import { Post } from "@/app/types";
 import { api } from "@/lib/axiosInstance";
 import camelcaseKeys from "camelcase-keys";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePosts } from "./usePosts";
 
 export const usePost = (postId: number | null) => {
@@ -11,7 +11,7 @@ export const usePost = (postId: number | null) => {
 
   const initPost = () => setPost(null);
 
-  const fetch = async () => {
+  const fetch = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get(`/posts/${postId}`);
@@ -22,7 +22,7 @@ export const usePost = (postId: number | null) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [postId]);
 
   const destroy = async () => {
     setLoading(true);
@@ -37,7 +37,9 @@ export const usePost = (postId: number | null) => {
   };
 
   useEffect(() => {
-    fetch();
+    if (postId) {
+      fetch();
+    }
   }, [postId]);
 
   return { loading, post, initPost, fetch, destroy };
