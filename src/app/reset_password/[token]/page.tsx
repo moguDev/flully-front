@@ -16,11 +16,19 @@ export default function ResetPasswordForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.put("/auth/password", {
-        reset_password_token: params.token,
-        password,
-        password_confirmation: passwordConfirmation,
-      });
+      await api.patch(
+        "/auth/password",
+        {
+          reset_password_token: params.token,
+          password,
+          password_confirmation: passwordConfirmation,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${params.token}`,
+          },
+        }
+      );
       setMessage("Password has been successfully reset.");
       setTimeout(() => router.push("/login"), 3000);
     } catch (e) {
