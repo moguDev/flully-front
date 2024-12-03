@@ -14,7 +14,7 @@ import { followsModalTabState, showFollowsModal } from "./FollowsModal";
 import { useSetRecoilState } from "recoil";
 import { removeParamsFromUrl } from "@/lib";
 import { format, parseISO } from "date-fns";
-import CalHeatMap from "cal-heatmap";
+import CalHeatmap from "cal-heatmap";
 import "cal-heatmap/cal-heatmap.css";
 
 const TabComponent = ({
@@ -95,7 +95,7 @@ export const UserProfiles = () => {
     });
     console.log(completeData);
 
-    const cal = new CalHeatMap();
+    const cal = new CalHeatmap();
     cal.paint({
       itemSelector: "#cal-heatmap",
       domain: {
