@@ -5,11 +5,12 @@ import { useState } from "react";
 export const usePasswordReset = () => {
   const { showSuccess, showAlert } = useToast();
   const [isSend, setIsSend] = useState<boolean>(false);
+
   const requestPasswordReset = async (email: string) => {
     try {
       await api.post("/auth/password", {
         email,
-        redirect_url: "http://localhost:3000/reset-password",
+        redirect_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/reset-password`,
       });
       showSuccess("パスワードリセットメールが送信されました");
       setIsSend(true);
@@ -20,5 +21,6 @@ export const usePasswordReset = () => {
       );
     }
   };
+
   return { isSend, requestPasswordReset };
 };
