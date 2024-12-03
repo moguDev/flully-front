@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/axiosInstance";
-import { headers } from "next/headers";
 
 const getAuthHeaders = () => {
   return {
