@@ -13,6 +13,9 @@ import { PostGridItem } from "@/app/map/components/PostGridItem";
 import { followsModalTabState, showFollowsModal } from "./FollowsModal";
 import { useSetRecoilState } from "recoil";
 import { removeParamsFromUrl } from "@/lib";
+import { format, parseISO } from "date-fns";
+import CalHeatmap from "cal-heatmap";
+import "cal-heatmap/cal-heatmap.css";
 
 const TabComponent = ({
   label,
@@ -40,6 +43,24 @@ const TabComponent = ({
   );
 };
 
+const getDailyPostCounts = (posts: { createdAt: string }[]) => {
+  return posts.reduce(
+    (acc, post) => {
+      const date = format(parseISO(post.createdAt), "yyyy-MM-dd");
+
+      const existing = acc.find((item) => item.date === date);
+      if (existing) {
+        existing.value += 1;
+      } else {
+        acc.push({ date, value: 1 });
+      }
+
+      return acc;
+    },
+    [] as { date: string; value: number }[]
+  );
+};
+
 export const UserProfiles = () => {
   const { name: nameParams } = useParams();
   const { authState } = useAuth();
@@ -50,16 +71,70 @@ export const UserProfiles = () => {
   const [selectTabIndex, setSelectTabIndes] = useState<number>(0);
   const setFollowsModalTab = useSetRecoilState<number>(followsModalTabState);
 
+  const setHeatmap = (heatmapData: { date: string; value: number }[]) => {
+    console.log(JSON.stringify(heatmapData));
+
+    const startDate = new Date();
+    startDate.setMonth(startDate.getMonth() - 6);
+    startDate.setDate(1);
+    const endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
+    endDate.setDate(0);
+
+    const allDates = [];
+    const tempDate = new Date(startDate);
+    tempDate.setDate(tempDate.getDate() - 1);
+    while (tempDate <= new Date(endDate)) {
+      allDates.push(tempDate.toISOString().split("T")[0]); // YYYY-MM-DD形式で日付を保存
+      tempDate.setDate(tempDate.getDate() + 1);
+    }
+
+    const completeData = allDates.map((date) => {
+      const existingData = heatmapData.find((item) => item.date === date);
+      return existingData || { date, value: 0 }; // 存在しない場合はvalue: 0のデータを追加
+    });
+    console.log(completeData);
+
+    const cal = new CalHeatmap();
+    cal.paint({
+      itemSelector: "#cal-heatmap",
+      domain: {
+        type: "month",
+        gutter: 6,
+        label: { text: "MMM", textAlign: "start", position: "top" },
+      },
+      subDomain: { type: "ghDay", radius: 3, width: 18, height: 18, gutter: 4 },
+      date: { start: startDate },
+      range: 7,
+      data: { source: completeData, x: "date", y: "value" },
+      type: "json",
+      scale: {
+        color: {
+          type: "linear",
+          range: ["#f5f5f5", "#8aa8aa", "#6f8686"],
+          domain: [0, 3, 6],
+        },
+      },
+    });
+  };
+
   useEffect(() => {
     fetch();
   }, []);
+
+  useEffect(() => {
+    if (user && user.posts) {
+      setHeatmap(getDailyPostCounts(user.posts));
+    }
+  }, [user, user?.posts]);
+
   return loading ? (
     <Loading />
   ) : (
     <div>
       {user ? (
         <div>
-          <section className="bg-white rounded p-4">
+          <section className="bg-white rounded p-4 shadow-sm">
             <div className="flex items-center">
               <div className="rounded-full h-24 w-24 min-w-24 relative overflow-hidden">
                 <Image
@@ -169,8 +244,11 @@ export const UserProfiles = () => {
                 フォロー中
               </p>
             </div>
+            <div className="mt-4">
+              <div id="cal-heatmap" className="overflow-auto mx-auto" />
+            </div>
           </section>
-          <section className="bg-white rounded px-4 py-2 mt-2">
+          <section className="bg-white rounded px-4 py-2 mt-2 shadow-sm">
             <div className="flex items-center border-b border-main">
               <TabComponent
                 label="みつけた動物"
@@ -187,25 +265,37 @@ export const UserProfiles = () => {
             </div>
             {selectTabIndex === 0 ? (
               <section className="py-4">
-                <div className="grid lg:grid-cols-4 grid-cols-2 gap-1">
-                  {user.posts?.map((post, index) => (
-                    <PostGridItem
-                      key={index}
-                      post={post}
-                      onClick={() => {
-                        router.push(`/map?post_id=${post.id}`);
-                      }}
-                    />
-                  ))}
-                </div>
+                {user.posts?.length === 0 ? (
+                  <p className="text-center text-sm text-gray-500 py-10">
+                    みつけた動物の投稿がありません
+                  </p>
+                ) : (
+                  <div className="grid lg:grid-cols-4 grid-cols-2 gap-1">
+                    {user.posts?.map((post, index) => (
+                      <PostGridItem
+                        key={index}
+                        post={post}
+                        onClick={() => {
+                          router.push(`/map?post_id=${post.id}`);
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
               </section>
             ) : (
               <section className="py-4">
-                <div className="grid lg:grid-cols-2 grid-cols-1 gap-2">
-                  {user.boards?.map((board, index) => (
-                    <BoardItem key={index} board={board} />
-                  ))}
-                </div>
+                {user.boards?.length === 0 ? (
+                  <p className="text-center text-sm text-gray-500 py-10">
+                    公開中の掲示板はありません。
+                  </p>
+                ) : (
+                  <div className="grid lg:grid-cols-2 grid-cols-1 gap-2">
+                    {user.boards?.map((board, index) => (
+                      <BoardItem key={index} board={board} />
+                    ))}
+                  </div>
+                )}
               </section>
             )}
           </section>

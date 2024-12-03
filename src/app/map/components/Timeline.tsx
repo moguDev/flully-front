@@ -76,7 +76,7 @@ export const Timeline = () => {
                       {item.content.user?.nickname || "匿名"}
                     </p>
                     <p className="text-xs font-bold text-gray-400">
-                      {(item.content as Post).createdAt}
+                      {(item.content as Post).formatedDate}
                     </p>
                   </div>
                   <p className="text-sm text-gray-500 select-none">

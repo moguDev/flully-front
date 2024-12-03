@@ -70,6 +70,7 @@ export type Post = {
   isAnonymous: boolean;
   user: User | null;
   likeCount: number;
+  formatedDate: string;
   createdAt: string;
 };
 

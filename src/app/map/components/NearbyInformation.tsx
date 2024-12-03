@@ -1,7 +1,6 @@
 "use client";
-import { usePost } from "@/hooks/usePost";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PostDetails } from "./PostDetails";
 import { Board, Post } from "../../types";
 import { BoardItem } from "@/app/boards/components/BoardItem";
@@ -26,19 +25,6 @@ export const NearbyInformation = ({
   const [selectCategory, setSelectCategory] = useRecoilState<number>(
     selectDisplayTabState
   );
-  const {
-    post: selectedPost,
-    fetch,
-    initPost,
-  } = usePost(postId ? parseInt(postId) : null);
-
-  useEffect(() => {
-    if (postId) {
-      fetch();
-    } else {
-      initPost();
-    }
-  }, [postId]);
 
   return (
     <div className="w-96 pt-16 h-screen border-r border-gray-300 bg-white">
@@ -61,9 +47,9 @@ export const NearbyInformation = ({
         />
       </div>
       <div className="max-h-nearbyinformation overflow-y-auto">
-        {selectedPost ? (
+        {postId ? (
           <div>
-            <PostDetails postId={selectedPost.id} />
+            <PostDetails postId={parseInt(postId)} />
           </div>
         ) : selectTab === 0 ? (
           <div className="w-full h-full">

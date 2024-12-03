@@ -58,10 +58,10 @@ export const BoardDetail = () => {
         </button>
         {board.user.name === userName && (
           <button
-            className="bg-gray-100 text-gray-400 px-3 py-1 rounded-full my-2"
+            className="bg-gray-100 text-sm text-gray-500 px-3 py-1 rounded-full my-2 transition-all active:scale-95"
             onClick={() => router.push(`/boards/${board.id}/edit`)}
           >
-            <p className="font-semibold flex items-center">
+            <p className="flex items-center">
               <span
                 className="material-icons mr-0.5"
                 style={{ fontSize: "20px" }}

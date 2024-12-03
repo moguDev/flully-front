@@ -9,6 +9,8 @@ import useGoogleMaps from "@/hooks/useGoogleMaps";
 import { useForm } from "react-hook-form";
 import { useBoards } from "@/hooks/useBoards";
 import { useRouter } from "next/navigation";
+import { GoogleMap } from "@react-google-maps/api";
+import { useToast } from "@/hooks/useToast";
 
 type FormData = {
   category: string;
@@ -55,11 +57,15 @@ const SpeciesButton = ({
 export const NewBoardForm = () => {
   const [categoryText, setCategoryText] = useState<string>("いなくなった");
   const router = useRouter();
-  const mapRef = useRef<HTMLDivElement>(null);
+  const { showSuccess, showAlert } = useToast();
+
+  const mapRef = useRef<google.maps.Map | null>(null);
   const { isLoaded, loadError } = useGoogleMaps();
-  const [center, setCenter] = useState<{ lat: number; lng: number } | null>(
-    null
-  );
+  const [center, setCenter] = useState<{ lat: number; lng: number }>({
+    lat: 35.6895,
+    lng: 139.6917,
+  });
+
   const [selectedSpeciesIndex, setSelectedSpeciesIndex] = useState<number>(0);
   const { postNewBoard } = useBoards();
   const defaultValues: FormData = {
@@ -92,23 +98,35 @@ export const NewBoardForm = () => {
 
   const onsubmit = async (data: FormData) => {
     if (!center) return;
-    const formData = {
-      category: data.category,
-      species: selectedSpeciesIndex,
-      breed: data.breed,
-      name: data.name,
-      icon: data.icon,
-      age: parseInt(data.age),
-      date: data.date,
-      images: imageFiles,
-      isLocationPublic: !data.isLocationPublic,
-      lat: center.lat,
-      lng: center.lng,
-      feature: data.feature,
-      body: data.body,
-    };
-    await postNewBoard(formData);
-    router.push("/boards");
+    if (mapRef.current) {
+      try {
+        const center = mapRef.current.getCenter();
+        const lat = center?.lat() ?? 35.6895;
+        const lng = center?.lng() ?? 139.6917;
+        const formData = {
+          category: data.category,
+          species: selectedSpeciesIndex,
+          breed: data.breed,
+          name: data.name,
+          icon: data.icon,
+          age: parseInt(data.age),
+          date: data.date,
+          images: imageFiles,
+          isLocationPublic: !data.isLocationPublic,
+          lat: lat,
+          lng: lng,
+          feature: data.feature,
+          body: data.body,
+        };
+        await postNewBoard(formData);
+        router.push("/boards");
+
+        showSuccess("掲示板を作成しました");
+      } catch (e) {
+        console.error(e);
+        showAlert("掲示板の作成に失敗しました");
+      }
+    }
   };
 
   useEffect(() => {
@@ -162,22 +180,8 @@ export const NewBoardForm = () => {
     );
   }, []);
 
-  useEffect(() => {
-    if (isLoaded && mapRef.current && center) {
-      new google.maps.Map(mapRef.current, {
-        center,
-        zoom: 16,
-        disableDefaultUI: true,
-        gestureHandling: "greedy",
-        draggable: true,
-        scrollwheel: true,
-      });
-    }
-  }, [isLoaded, center]);
-
-  if (loadError) {
-    return <div>Google Mapsの読み込み中にエラーが発生しました。</div>;
-  }
+  if (loadError) return <div>Error loading maps</div>;
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <div>
@@ -381,19 +385,26 @@ export const NewBoardForm = () => {
                 />
                 <label className="text-xs">正確な位置情報を共有しない</label>
               </div>
-              {isLoaded && center ? (
-                <div className="relative border border-gray-200 bg-gray-100 rounded w-full h-64">
-                  <div ref={mapRef} className="absolute inset-0" />
-                  <div
-                    className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-500"
-                    style={{ fontSize: "24px" }}
-                  >
-                    +
-                  </div>
+              <div className="relative w-full h-72 border border-gray-200 rounded">
+                <GoogleMap
+                  center={center}
+                  zoom={16}
+                  onLoad={(map) => {
+                    mapRef.current = map;
+                  }}
+                  mapContainerStyle={{ width: "100%", height: "100%" }}
+                  options={{
+                    gestureHandling: "greedy",
+                    disableDefaultUI: true,
+                  }}
+                />
+                <div
+                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-main font-black"
+                  style={{ fontSize: "24px" }}
+                >
+                  +
                 </div>
-              ) : (
-                <p>地図を読み込んでいます...</p>
-              )}
+              </div>
             </div>
             <div className="py-2">
               <label className="text-sm font-bold">

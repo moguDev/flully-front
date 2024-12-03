@@ -22,9 +22,7 @@ const FixedSizeCircles = ({
 }) => {
   const iconSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
-      <!-- 薄い円 -->
       <circle cx="20" cy="20" r="20" fill="#90acaf" fill-opacity="0.3" />
-      <!-- 濃い円 -->
       <circle cx="20" cy="20" r="7.5" fill="#90acaf" stroke="#fafafa" stroke-width="2.0" />
     </svg>
   `;
@@ -59,6 +57,9 @@ export const Map: React.FC = () => {
 
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral | null>(null);
+
+  const [center, setCenter] = useState<google.maps.LatLngLiteral | null>(null);
+
   const [focusPosition, setFocusPosition] =
     useRecoilState<google.maps.LatLngLiteral | null>(focusPositionState);
 
@@ -66,6 +67,7 @@ export const Map: React.FC = () => {
   const [filteredPosts, setFilteredPosts] = useState(posts);
 
   const { boards } = useBoards();
+  const [filteredBoards, setFilteredBoards] = useState(boards);
 
   const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
   const { authState } = useAuth();
@@ -87,20 +89,17 @@ export const Map: React.FC = () => {
         (position) => {
           const { latitude, longitude } = position.coords;
           const newPosition = { lat: latitude, lng: longitude };
-
           if (currentPosition) {
             const distance =
               google.maps.geometry.spherical.computeDistanceBetween(
                 new google.maps.LatLng(currentPosition),
                 new google.maps.LatLng(newPosition)
               );
-            if (distance < 10.0) return; // 5メートル未満なら更新しない
+            if (distance < 10.0) {
+              return;
+            }
           }
-
           setCurrentPosition(newPosition);
-          if (!focusPosition) {
-            setFocusPosition(newPosition);
-          }
         },
         (error) => {
           console.error("Error watching location:", error);
@@ -135,13 +134,19 @@ export const Map: React.FC = () => {
     };
   }, []);
 
+  const handleBoundsChanged = () => {
+    if (!mapRef.current || !currentPosition) return;
+    const newCenter = mapRef.current.getCenter();
+    if (newCenter) {
+      setCenter({ lat: newCenter.lat(), lng: newCenter.lng() });
+    }
+  };
+
   const filterPosts = () => {
     if (!mapRef.current || !currentPosition) return;
 
     const bounds = mapRef.current.getBounds();
-    if (!bounds) {
-      return;
-    } else {
+    if (bounds) {
       const filteredPosts = posts.filter((post) => {
         const postLatLng = new google.maps.LatLng(post.lat, post.lng);
         return bounds.contains(postLatLng);
@@ -150,149 +155,172 @@ export const Map: React.FC = () => {
     }
   };
 
+  const filterBoards = () => {
+    if (!mapRef.current || !center) return;
+
+    const filteredBoards = boards.filter((board) => {
+      if (board.isLocationPublic && center) {
+        const boardLatLng = new google.maps.LatLng(board.lat!, board.lng);
+        const centerLatLng = new google.maps.LatLng(center);
+        const distance = google.maps.geometry.spherical.computeDistanceBetween(
+          boardLatLng,
+          centerLatLng
+        );
+        return distance <= 10000;
+      }
+      return false;
+    });
+    setFilteredBoards(filteredBoards);
+  };
+
   useEffect(filterPosts, [currentPosition, posts]);
+
+  useEffect(() => {
+    filterPosts();
+    filterBoards();
+  }, [center, posts, boards]);
 
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <>
-      <div
-        className={`z-20 fixed flex items-center justify-center w-full top-16`}
-      >
-        <div className="flex items-center rounded-full bg-gray-100 mt-2 p-1">
-          <SelectCategoryButton
-            icon="pets"
-            label="みつかった動物"
-            selected={selectTab === 0}
-            onClick={() => setSelectTab(0)}
-          />
-          <SelectCategoryButton
-            icon="campaign"
-            label="迷子・保護情報"
-            selected={selectTab === 1}
-            onClick={() => setSelectTab(1)}
-          />
-        </div>
-      </div>
-      <div className={`flex absolute top-0 left-0 h-full w-full`}>
-        <div className="lg:block hidden">
-          <NearbyInformation posts={filteredPosts} boards={boards} />
-        </div>
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          center={focusPosition || { lat: 35.6812, lng: 139.7671 }}
-          zoom={currentPosition ? 15 : 5}
-          options={{
-            gestureHandling: "greedy",
-            disableDefaultUI: true,
-          }}
-          onLoad={(map) => {
-            mapRef.current = map;
-          }}
-          onBoundsChanged={filterPosts}
+      <section>
+        <div
+          className={`z-20 fixed flex items-center justify-center w-full top-16`}
         >
-          {currentPosition && <FixedSizeCircles position={currentPosition} />}
-          {/* みつけた動物をマップ上に表示 */}
-          {selectTab === 0 &&
-            posts.map((post, index) => (
-              <OverlayView
-                key={index}
-                position={{ lat: post.lat, lng: post.lng }}
-                mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-              >
-                <div
-                  className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
-                  onClick={() => {
-                    setHarfModalIsOpen(true);
-                    setFocusPosition({ lat: post.lat, lng: post.lng });
-                    router.replace(`?post_id=${post.id}`);
-                  }}
+          <div className="flex items-center rounded-full bg-gray-100 mt-2 p-1">
+            <SelectCategoryButton
+              icon="pets"
+              label="みつかった動物"
+              selected={selectTab === 0}
+              onClick={() => setSelectTab(0)}
+            />
+            <SelectCategoryButton
+              icon="campaign"
+              label="迷子・保護情報"
+              selected={selectTab === 1}
+              onClick={() => setSelectTab(1)}
+            />
+          </div>
+        </div>
+        <div className={`flex absolute h-full w-full`}>
+          <div className="lg:block hidden">
+            <NearbyInformation posts={filteredPosts} boards={filteredBoards} />
+          </div>
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={currentPosition || { lat: 35.6812, lng: 139.7671 }}
+            zoom={currentPosition ? 15 : 5}
+            options={{
+              gestureHandling: "greedy",
+              disableDefaultUI: true,
+            }}
+            onLoad={(map) => {
+              mapRef.current = map;
+            }}
+            onBoundsChanged={handleBoundsChanged}
+          >
+            {currentPosition && <FixedSizeCircles position={currentPosition} />}
+            {selectTab === 0 &&
+              posts.map((post, index) => (
+                <OverlayView
+                  key={index}
+                  position={{ lat: post.lat, lng: post.lng }}
+                  mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                 >
-                  {post.imageUrl && (
-                    <Image
-                      src={removeParamsFromUrl(post.imageUrl)!}
-                      alt="Post Thumbnail"
-                      className="object-cover"
-                      fill
-                    />
-                  )}
-                </div>
-              </OverlayView>
-            ))}
-          {selectTab === 1 &&
-            boards.map(
-              (board, index) =>
-                board.lat &&
-                board.lng && (
-                  <OverlayView
-                    key={`board-${index}`}
-                    position={{ lat: board.lat, lng: board.lng }}
-                    mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                  <div
+                    className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
+                    onClick={() => {
+                      setHarfModalIsOpen(true);
+                      router.replace(`?post_id=${post.id}`);
+                    }}
                   >
-                    <div
-                      className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
-                      onClick={() => {
-                        router.push(`/boards/${board.id}`);
-                      }}
-                    >
+                    {post.imageUrl && (
                       <Image
-                        src={removeParamsFromUrl(board.iconUrl)!}
-                        alt="Board Icon"
+                        src={removeParamsFromUrl(post.imageUrl)!}
+                        alt="Post Thumbnail"
                         className="object-cover"
                         fill
                       />
-                    </div>
-                  </OverlayView>
-                )
-            )}
-        </GoogleMap>
-      </div>
-      <div className="fixed lg:bottom-10 lg:right-4 bottom-36 right-2 z-20">
-        <div className="flex flex-col items-center justify-center lg:space-y-4 space-y-2">
-          <button
-            className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95"
-            onClick={() => {
-              setFocusPosition(currentPosition);
-              panToFocusPosition();
-            }}
-          >
-            <span
-              className="material-icons select-none"
-              style={{ fontSize: "32px" }}
-            >
-              my_location
-            </span>
-          </button>
-          <button
-            className="rounded-2xl h-16 w-16 bg-main flex flex-col items-center justify-center shadow transition-all active:scale-95"
-            onClick={() => {
-              if (isAuthenticated) {
-                showPostModal();
-              } else {
-                requireSignin();
-              }
-            }}
-          >
-            <span
-              className="material-icons text-base translate-y-1 select-none"
-              style={{ fontSize: "36px" }}
-            >
-              add_a_photo
-            </span>
-            <span
-              className="text-base font-bold select-none"
-              style={{ fontSize: "10px" }}
-            >
-              みつけた
-            </span>
-          </button>
+                    )}
+                  </div>
+                </OverlayView>
+              ))}
+            {selectTab === 1 &&
+              boards.map(
+                (board, index) =>
+                  board.lat &&
+                  board.lng && (
+                    <OverlayView
+                      key={`board-${index}`}
+                      position={{ lat: board.lat, lng: board.lng }}
+                      mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                    >
+                      <div
+                        className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
+                        onClick={() => {
+                          router.push(`/boards/${board.id}`);
+                        }}
+                      >
+                        <Image
+                          src={removeParamsFromUrl(board.iconUrl)!}
+                          alt="Board Icon"
+                          className="object-cover"
+                          fill
+                        />
+                      </div>
+                    </OverlayView>
+                  )
+              )}
+          </GoogleMap>
         </div>
-      </div>
+        <div className="fixed lg:bottom-10 lg:right-4 bottom-36 right-2 z-20">
+          <div className="flex flex-col items-center justify-center lg:space-y-4 space-y-2">
+            <button
+              className="rounded-full h-16 w-16 bg-base flex items-center justify-center shadow transition-all active:scale-95"
+              onClick={() => {
+                setFocusPosition(currentPosition);
+                panToFocusPosition();
+              }}
+            >
+              <span
+                className="material-icons select-none"
+                style={{ fontSize: "32px" }}
+              >
+                my_location
+              </span>
+            </button>
+            <button
+              className="rounded-2xl h-16 w-16 bg-main flex flex-col items-center justify-center shadow transition-all active:scale-95"
+              onClick={() => {
+                if (isAuthenticated) {
+                  showPostModal();
+                } else {
+                  requireSignin();
+                }
+              }}
+            >
+              <span
+                className="material-icons text-base translate-y-1 select-none"
+                style={{ fontSize: "36px" }}
+              >
+                add_a_photo
+              </span>
+              <span
+                className="text-base font-bold select-none"
+                style={{ fontSize: "10px" }}
+              >
+                みつけた
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
       <div className="lg:hidden">
         <HalfModal
           posts={filteredPosts}
-          boards={boards}
+          boards={filteredBoards}
           open={harfModalIsOpen}
         />
       </div>
