@@ -62,7 +62,7 @@ export const HalfModal = ({
 
   return (
     <div
-      className={`pb-16 fixed bottom-0 left-0 bg-white w-full rounded-t-xl overflow-hidden transition-all duration-300 z-30 ${isOpen ? "h-[70vh]" : "h-28"}`}
+      className={`pb-16 fixed bottom-0 left-0 bg-white w-full rounded-t-xl overflow-hidden transition-all duration-300 z-30 ${isOpen ? "h-[80vh]" : "h-28"}`}
       style={{ boxShadow: "0 -1px 10px rgba(0, 0, 0, 0.10)" }}
     >
       <section
