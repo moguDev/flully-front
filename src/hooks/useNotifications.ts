@@ -24,12 +24,22 @@ export const useNotifications = () => {
     }
   };
 
+  const checked = async (id: number) => {
+    try {
+      await api.post("/notifications/checked", { id });
+      fetch();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const fetch = async () => {
     setLoading(true);
     try {
       const res = await api.get("/notifications");
       const { data } = res;
       setNotifications(camelcaseKeys(data, { deep: true }));
+      checkHasUnread();
     } catch (e) {
       console.error(e);
     } finally {
@@ -37,5 +47,5 @@ export const useNotifications = () => {
     }
   };
 
-  return { loading, unread, notifications, fetch, checkHasUnread };
+  return { loading, unread, notifications, fetch, checkHasUnread, checked };
 };
