@@ -70,10 +70,12 @@ export const useUserProfiles = (name: string) => {
     try {
       const res = await api.put(
         "/auth",
-        snakecaseKeys({
-          ...newUserData,
+        {
+          ...snakecaseKeys({
+            ...newUserData,
+          }),
           avatar: newUserData.avatar ? newUserData.avatar[0] : null,
-        }),
+        },
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
