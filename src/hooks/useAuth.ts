@@ -3,6 +3,7 @@ import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
 import Cookies from "js-cookie";
 import camelcaseKeys from "camelcase-keys";
+import { useNotifications } from "./useNotifications";
 
 export type AuthState = {
   isAuthenticated: boolean;
@@ -36,6 +37,7 @@ export const authState = atom<AuthState>({
 export const useAuth = () => {
   const [auth, setAuth] = useRecoilState<AuthState>(authState);
   const [loading, setLoading] = useState<boolean>(false);
+  const { checkHasUnread } = useNotifications();
 
   const initAuthState = () => {
     Cookies.remove("access-token");
@@ -53,6 +55,7 @@ export const useAuth = () => {
       followersCount: 0,
       followingCount: 0,
     });
+    checkHasUnread();
   };
 
   const checkAuth = async () => {
@@ -64,6 +67,7 @@ export const useAuth = () => {
         isAuthenticated: true,
         ...camelcaseKeys(data, { deep: true }),
       });
+      checkHasUnread();
     } catch (e) {
       console.error(e);
     } finally {

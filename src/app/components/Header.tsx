@@ -11,7 +11,6 @@ import Image from "next/image";
 export const Header = () => {
   const { authState, checkAuth } = useAuth();
   const { isAuthenticated } = authState;
-  const { showAlert } = useToast();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -38,13 +37,6 @@ export const Header = () => {
         </div>
         {isAuthenticated ? (
           <ul className="flex items-center text-base space-x-2">
-            <li
-              className="material-icons cursor-pointer"
-              style={{ fontSize: "32px" }}
-              onClick={() => showAlert("開発中の機能です")}
-            >
-              notifications
-            </li>
             <li className="material-icons" style={{ fontSize: "32px" }}>
               <label htmlFor="drawer-menu" className="cursor-pointer">
                 menu

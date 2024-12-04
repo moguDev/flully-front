@@ -87,3 +87,12 @@ export type TimelineItem = {
   type: string;
   content: Board | Post;
 };
+
+export type Notification = {
+  id: number;
+  category: "follow" | "like" | "post_comment" | "board_comment";
+  body: string;
+  checked: boolean;
+  url: string;
+  createdAt: string;
+};
