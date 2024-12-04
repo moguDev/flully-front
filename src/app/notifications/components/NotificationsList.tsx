@@ -68,12 +68,6 @@ const NotificationView = ({
 
 export const NotificationsList = () => {
   const { notifications, fetch } = useNotifications();
-  const iconCollections = {
-    follow: "person",
-    like: "favorite",
-    post_comment: "chat",
-    board_comment: "chat",
-  };
   useEffect(() => {
     fetch();
   }, []);

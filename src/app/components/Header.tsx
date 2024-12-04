@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Toast } from "./Toast";
-import { useToast } from "@/hooks/useToast";
 import logo from "/public/images/flully_logo.png";
 import Image from "next/image";
 
