@@ -93,14 +93,11 @@ export const useAuth = () => {
         password,
         passwordConfirmation,
       });
-      const { headers, data } = res;
+      const { headers } = res;
       Cookies.set("access-token", headers["access-token"]);
       Cookies.set("client", headers["client"]);
       Cookies.set("uid", headers["uid"]);
-      setAuth({
-        isAuthenticated: true,
-        ...camelcaseKeys(data, { deep: true }),
-      });
+      checkAuth();
     } catch (e) {
       throw e;
     } finally {
@@ -112,16 +109,11 @@ export const useAuth = () => {
     setLoading(true);
     try {
       const res = await api.post("/auth/sign_in", { email, password });
-      const { headers, data } = res;
-      console.log(data.data.name);
-
+      const { headers } = res;
       Cookies.set("access-token", headers["access-token"]);
       Cookies.set("client", headers["client"]);
       Cookies.set("uid", headers["uid"]);
-      setAuth({
-        isAuthenticated: true,
-        ...camelcaseKeys(data, { deep: true }),
-      });
+      checkAuth();
     } catch (e) {
       throw e;
     } finally {

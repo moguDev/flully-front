@@ -140,7 +140,7 @@ export const SignupForm = () => {
           </div>
         </div>
         <div className="my-6">
-          <label htmlFor="flully-id" className="font-bold text-xs text-main">
+          <label htmlFor="password" className="font-bold text-xs text-main">
             パスワード
           </label>
           <div className="border-b border-gray-300 flex items-center py-1">
@@ -163,7 +163,10 @@ export const SignupForm = () => {
           </div>
         </div>
         <div className="my-6">
-          <label htmlFor="flully-id" className="font-bold text-xs text-main">
+          <label
+            htmlFor="password-confirmation"
+            className="font-bold text-xs text-main"
+          >
             パスワード（確認用）
           </label>
           <div className="border-b border-gray-300 flex items-center py-1">
