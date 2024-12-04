@@ -7,9 +7,11 @@ import { useEffect } from "react";
 const NotificationView = ({
   category,
   item,
+  onClick,
 }: {
   category: "follow" | "like" | "post_comment" | "board_comment";
   item: Notification;
+  onClick: () => void;
 }) => {
   const router = useRouter();
   const iconCollections = {
@@ -27,9 +29,12 @@ const NotificationView = ({
   return (
     <button
       className={`w-full bg-white p-5 rounded-lg shadow-sm transition-all active:scale-95 ${item.checked ? "opacity-60" : "opacity-100"}}`}
-      onClick={() => router.push(item.url)}
+      onClick={() => {
+        onClick();
+        router.push(item.url);
+      }}
     >
-      <p className="flex items-start">
+      <p className="flex items-start select-none">
         <span
           className={`material-icons mr-2 ${iconColors[category]}`}
           style={{ fontSize: "28px" }}
@@ -41,14 +46,14 @@ const NotificationView = ({
       <div className="flex items-center justify-between mt-3">
         {!item.checked ? (
           <p
-            className="text-end text-white bg-red-400 rounded-lg px-2 py-0.5 font-black"
+            className="text-end text-white bg-red-400 rounded-lg px-2 py-0.5 font-black select-none"
             style={{ fontSize: "10px" }}
           >
             未読
           </p>
         ) : (
           <p
-            className="flex items-center text-end text-gray-400 bg-gray-100 rounded-lg px-1 py-0.5 font-bold"
+            className="flex items-center text-end text-gray-400 bg-gray-100 rounded-lg px-1 py-0.5 font-bold select-none"
             style={{ fontSize: "10px" }}
           >
             <span
@@ -67,13 +72,13 @@ const NotificationView = ({
 };
 
 export const NotificationsList = () => {
-  const { notifications, fetch } = useNotifications();
+  const { notifications, fetch, checked } = useNotifications();
   useEffect(() => {
     fetch();
   }, []);
   return (
     <div className="mx-2">
-      <h1 className="text-black font-black flex items-center text-2xl p-2 mb-2">
+      <h1 className="text-black font-black flex items-center text-2xl p-2 mb-2 select-none">
         通知
       </h1>
       {notifications.length > 0 ? (
@@ -83,6 +88,9 @@ export const NotificationsList = () => {
               key={index}
               category={notification.category}
               item={notification}
+              onClick={() => {
+                checked(notification.id);
+              }}
             />
           ))}
         </div>
