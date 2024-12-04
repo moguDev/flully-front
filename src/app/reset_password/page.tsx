@@ -8,7 +8,7 @@ type FormData = {
 };
 
 export default function PasswordResetPage() {
-  const { isSend, requestPasswordReset } = usePasswordReset();
+  const { loading, isSend, requestPasswordReset } = usePasswordReset();
 
   const defaultValues = { email: "" };
   const {
@@ -22,8 +22,13 @@ export default function PasswordResetPage() {
   };
   return (
     <main className="max-w-xl mx-auto py-24">
-      <div className="bg-white lg:rounded-lg lg:px-10 px-5 py-10 shadow-sm">
-        <h1 className="font-black flex items-center text-2xl">
+      <div className="relative bg-white lg:rounded-lg lg:px-10 px-5 py-10 shadow-sm">
+        {loading && (
+          <div className="absolute top-0 left-0 bg-white opacity-50 h-full w-full flex items-center justify-center">
+            <span className="loading loading-spinner loading-md" />
+          </div>
+        )}
+        <h1 className="mb-4 font-black flex items-center text-2xl">
           パスワードをリセット
         </h1>
         {isSend ? (
@@ -33,7 +38,7 @@ export default function PasswordResetPage() {
           </p>
         ) : (
           <>
-            <p className="text-sm py-4 text-gray-600">
+            <p className="text-xs my-2 p-3 font-semibold text-gray-500 bg-gray-50 rounded-lg">
               パスワードリセット用のリンクをお送りいたします。ご登録済みのメールアドレスを入力してください。
             </p>
             <form
@@ -46,7 +51,7 @@ export default function PasswordResetPage() {
                   <input
                     type="email"
                     placeholder="メールアドレスを入力"
-                    className="w-full bg-white outline-none"
+                    className="w-full text-sm bg-white outline-none"
                     {...register("email", {
                       required: "メールアドレスが入力されていません",
                       pattern: {
@@ -65,7 +70,7 @@ export default function PasswordResetPage() {
                 type="submit"
                 className="bg-main p-3 rounded text-white font-bold"
               >
-                リセットリンクを送信
+                パスワードリセットをリクエスト
               </button>
             </form>
           </>
