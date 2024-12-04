@@ -22,8 +22,8 @@ export default function PasswordResetPage() {
   };
   return (
     <main className="max-w-xl mx-auto py-24">
-      <div className="bg-white p-4">
-        <h1 className="font-bold flex items-center text-xl">
+      <div className="bg-white lg:rounded-lg lg:px-10 px-5 py-10 shadow-sm">
+        <h1 className="font-black flex items-center text-2xl">
           パスワードをリセット
         </h1>
         {isSend ? (

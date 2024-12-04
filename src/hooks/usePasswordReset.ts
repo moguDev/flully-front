@@ -10,7 +10,7 @@ export const usePasswordReset = () => {
     try {
       await api.post("/auth/password", {
         email,
-        redirect_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/reset-password`,
+        redirect_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/reset-password/edit`,
       });
       showSuccess("パスワードリセットメールが送信されました");
       setIsSend(true);
