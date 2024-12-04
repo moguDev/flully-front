@@ -117,10 +117,20 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
                   closeDrawer();
                 }}
               >
-                <span className="material-icons mr-1">
-                  format_list_bulleted
-                </span>
-                <span className="text-sm">まいご掲示板</span>
+                <span className="material-icons mr-1">campaign</span>
+                <span className="text-sm">迷子ペット情報</span>
+              </button>
+            </li>
+            <li>
+              <button
+                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                onClick={() => {
+                  router.push("/notifications");
+                  closeDrawer();
+                }}
+              >
+                <span className="material-icons mr-1">notifications</span>
+                <span className="text-sm">通知</span>
               </button>
             </li>
           </ul>

@@ -5,6 +5,7 @@ import { showModal } from "./SelectLocationModal";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { removeParamsFromUrl } from "@/lib";
+import defaultUserImage from "/public/images/default_avatar.png";
 
 export const CommentViewer = ({ boardId }: { boardId: number }) => {
   const [commentText, setCommentText] = useState("");
@@ -52,7 +53,10 @@ export const CommentViewer = ({ boardId }: { boardId: number }) => {
               >
                 <div className="h-5 w-5 overflow-hidden rounded-full relative mr-0.5">
                   <Image
-                    src={removeParamsFromUrl(comment.user.avatarUrl)!}
+                    src={
+                      removeParamsFromUrl(comment.user.avatarUrl) ||
+                      defaultUserImage
+                    }
                     alt={comment.user.nickname}
                     className="object-cover"
                     fill

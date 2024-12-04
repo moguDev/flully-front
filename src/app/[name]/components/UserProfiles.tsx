@@ -72,8 +72,6 @@ export const UserProfiles = () => {
   const setFollowsModalTab = useSetRecoilState<number>(followsModalTabState);
 
   const setHeatmap = (heatmapData: { date: string; value: number }[]) => {
-    console.log(JSON.stringify(heatmapData));
-
     const startDate = new Date();
     startDate.setMonth(startDate.getMonth() - 6);
     startDate.setDate(1);
@@ -93,7 +91,6 @@ export const UserProfiles = () => {
       const existingData = heatmapData.find((item) => item.date === date);
       return existingData || { date, value: 0 }; // 存在しない場合はvalue: 0のデータを追加
     });
-    console.log(completeData);
 
     const cal = new CalHeatmap();
     cal.paint({
@@ -195,7 +192,7 @@ export const UserProfiles = () => {
               <div className="flex items-center">
                 <span
                   className="material-icons text-main"
-                  style={{ fontSize: "32px" }}
+                  style={{ fontSize: "24px" }}
                 >
                   location_on
                 </span>
