@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/useToast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { GoogleLoginButton } from "./GoogleLoginButton";
 
 type FormData = {
   email: string;
@@ -112,6 +113,7 @@ export const LoginForm = () => {
       <button className="w-full" onClick={() => router.push("/map")}>
         キャンセル
       </button>
+      <GoogleLoginButton />
     </div>
   );
 };
