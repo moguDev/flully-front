@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-const GOOGLE_LOGIN_URL = "http://localhost:3000/api/v1/auth/google_oauth2";
+const GOOGLE_LOGIN_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth/google_oauth2`;
 
 export const GoogleLoginButton: React.FC = () => {
   return (
