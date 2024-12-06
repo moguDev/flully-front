@@ -104,6 +104,7 @@ export const NewBoardForm = () => {
         const lat = center?.lat() ?? 35.6895;
         const lng = center?.lng() ?? 139.6917;
         const formData = {
+          status: 0,
           category: data.category,
           species: selectedSpeciesIndex,
           breed: data.breed,
