@@ -42,7 +42,7 @@ export async function generateMetadata({
   };
 }
 
-export default function BoardDetailsPage() {
+export default function Page() {
   return (
     <div className="max-w-5xl mx-auto py-20 p-2">
       <BoardDetail />
