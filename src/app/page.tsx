@@ -8,7 +8,9 @@ import MailIcon from "@mui/icons-material/Mail";
 import XIcon from "@mui/icons-material/X";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import logo from "/public/images/flully_logo.png";
-import screenshot from "/public/images/top_screenshot.png";
+import screenshot_01 from "/public/images/top_screenshot_01.png";
+import screenshot_02 from "/public/images/top_screenshot_02.png";
+import screenshot_03 from "/public/images/top_screenshot_03.png";
 import Link from "next/link";
 
 export default function Home() {
@@ -26,7 +28,7 @@ export default function Home() {
         fill
       />
       <div className="lg:pt-32 pt-20 space-y-5">
-        <div className="max-w-7xl mx-auto pb-20">
+        <div className="max-w-7xl mx-auto pb-5">
           <section className="px-3">
             <div className="lg:flex w-full">
               <div className="flex flex-col items-center w-full">
@@ -67,34 +69,36 @@ export default function Home() {
                       </p>
                     </section>
                   </div>
-                  <div className="w-full grid lg:grid-cols-3 gap-2 p-5 relative">
-                    <div className="col-span-2 lex flex-col items-center justify-center space-y-2 h-full w-full relative">
+                  <div className="w-full grid lg:grid-cols-4 gap-2 p-5 relative">
+                    <div className="col-span-3 lex flex-col items-center justify-center h-full w-full relative">
                       <button
                         className="relative w-full h-1/2 bg-main bg-opacity-80 text-white rounded-lg px-10 py-5 active:scale-95 transition-all duration-700 hover:shadow-xl"
                         onClick={handleStarted}
                       >
                         <p className="lg:text-xl text-base font-black text-center">
-                          ふらりと見てみる
+                          ふらりをはじめましょう！
                         </p>
                       </button>
-                      <button
-                        className="w-full h-1/2 border border-opacity-50 border-white bg-opacity-80 text-white rounded-lg px-10 py-5 active:scale-95 transition-all flex items-center justify-center"
-                        onClick={() => router.push("/signin")}
-                      >
-                        <span className="material-icons mr-1">login</span>
-                        <p className="lg:text-xl text-base font-black text-center">
-                          ログイン
-                        </p>
-                      </button>
+                      <div className="pt-2">
+                        <button
+                          className="w-full h-1/2 border border-opacity-50 border-white bg-opacity-80 text-white rounded-lg px-10 py-5 active:scale-95 transition-all flex items-center justify-center"
+                          onClick={() => router.push("/signin")}
+                        >
+                          <span className="material-icons mr-1">login</span>
+                          <p className="lg:text-lg text-sm font-black text-center">
+                            ログインはこちら
+                          </p>
+                        </button>
+                      </div>
                     </div>
-                    <div className="lg:flex flex-col items-center justify-center bg-white bg-opacity-20 backdrop-blur rounded-lg h-full min-w-52 p-1 hidden">
-                      <p className="text-white font-black w-fit p-1">
+                    <div className="lg:flex flex-col items-center justify-center backdrop-blur rounded-lg h-full min-w-52 p-1 hidden">
+                      <p className="text-white font-black w-fit pb-2">
                         スマホでふらり
                       </p>
                       <Image
                         src={app_qr}
                         alt="app_qr"
-                        className="h-24 w-24 object-contain"
+                        className="h-28 w-28 object-contain"
                       />
                     </div>
                   </div>
@@ -102,11 +106,11 @@ export default function Home() {
               </div>
               <div className="p-10 lg:block hidden rotate-3">
                 <div className="mockup-phone min-w-[352px] shadow-xl">
-                  <div className="camera"></div>
+                  <div className="bg-[#000] z-20 rounded-full relative h-6 w-24 top-3 mx-auto"></div>
                   <div className="display">
                     <div className="h-[701px] w-full overflow-hidden relative">
                       <Image
-                        src={screenshot}
+                        src={screenshot_01}
                         alt="screenshot"
                         className="object-contain shadow-xl"
                         fill
@@ -132,20 +136,76 @@ export default function Home() {
               でできること
             </h2>
             <div className="grid md:grid-cols-3 grid-cols-1 gap-2">
-              <div className="w-full p-4 bg-main bg-opacity-30 backdrop-blur rounded-lg">
-                <h3 className="text-white font-extrabold flex items-center text-lg select-none">
+              <div className="flex flex-col items-center w-full p-4 bg-white bg-opacity-10 backdrop-blur rounded-lg">
+                <h3 className="text-left text-white font-extrabold w-full flex items-center lg:text-lg select-none border-b border-white border-opacity-30 pb-3">
                   <span className="material-icons mr-1">pets</span>
                   みつけた動物をシェア
                 </h3>
+                <p className="mt-4 px-2 text-sm w-full text-left text-white font-semibold text-opacity-90">
+                  街や自然でふと出会った動物の写真を投稿し、その瞬間を共有しましょう！他のユーザーと交流しながら、動物好きならではの感動を広げる体験を提供します。
+                </p>
+                <div className="mockup-phone m-0 min-w-[352px] shadow-xl scale-90">
+                  <div className="bg-[#000] z-20 rounded-full relative h-6 w-24 top-3 left-0 mx-auto"></div>
+                  <div className="display">
+                    <div className="h-[701px] w-full overflow-hidden relative">
+                      <Image
+                        src={screenshot_03}
+                        alt="screenshot"
+                        className="object-contain shadow-xl"
+                        fill
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="w-full p-4 bg-main bg-opacity-30 backdrop-blur rounded-lg">
-                <h3 className="text-white font-extrabold flex items-center text-lg select-none">
+              <div className="flex flex-col items-center w-full p-4 bg-white bg-opacity-10 backdrop-blur rounded-lg">
+                <h3 className="text-left text-white font-extrabold w-full flex items-center lg:text-lg select-none border-b border-white border-opacity-30 pb-3">
                   <span className="material-icons mr-1">campaign</span>
                   まいごペット情報の掲示板
                 </h3>
+                <p className="mt-4 px-2 text-sm w-full text-left text-white font-semibold text-opacity-90">
+                  迷子になったペットの情報を投稿したり、見つけたペットの保護情報をシェアできます。飼い主や保護者とつながることで、大切な家族を再会へと導くお手伝いができます。
+                </p>
+                <div className="mockup-phone m-0 scale-90 min-w-[352px] shadow-xl">
+                  <div className="bg-[#000] z-20 rounded-full relative h-6 w-24 top-3 left-0 mx-auto"></div>
+                  <div className="display">
+                    <div className="h-[701px] w-full overflow-hidden relative">
+                      <Image
+                        src={screenshot_02}
+                        alt="screenshot"
+                        className="object-contain shadow-xl"
+                        fill
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="w-full p-4 bg-main bg-opacity-30 backdrop-blur rounded-lg"></div>
+              <div className="flex flex-col items-center w-full p-4 bg-white bg-opacity-10 backdrop-blur rounded-lg">
+                <h3 className="text-left text-white font-extrabold w-full flex items-center lg:text-lg select-none border-b border-white border-opacity-30 pb-3">
+                  <span className="material-icons mr-1">location_on</span>
+                  近くの動物や迷子ペット情報の閲覧
+                </h3>
+                <p className="mt-4 px-2 text-sm w-full text-left text-white font-semibold text-opacity-90">
+                  地図を使って、あなたの近くで見つかった動物や迷子ペットの情報を簡単に確認！迷子ペットを見つける手助けや、新たな動物との出会いを楽しめる体験が可能です。
+                </p>
+                <div className="mockup-phone m-0 scale-90 min-w-[352px] shadow-xl">
+                  <div className="bg-[#000] z-20 rounded-full relative h-6 w-24 top-3 left-0 mx-auto"></div>
+                  <div className="display">
+                    <div className="h-[701px] w-full overflow-hidden relative">
+                      <Image
+                        src={screenshot_01}
+                        alt="screenshot"
+                        className="object-contain shadow-xl"
+                        fill
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            <p className="w-full text-xs text-white text-right p-2">
+              ※ 表示されている写真や情報はすべて開発中のイメージです。
+            </p>
           </section>
         </div>
         <footer className="bg-main bg-opacity-30 backdrop-blur-lg text-base p-5">

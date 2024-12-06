@@ -4,6 +4,7 @@ import { atom, useRecoilState } from "recoil";
 import Cookies from "js-cookie";
 import camelcaseKeys from "camelcase-keys";
 import { useNotifications } from "./useNotifications";
+import { useRouter } from "next/navigation";
 
 export type AuthState = {
   isAuthenticated: boolean;
@@ -38,6 +39,7 @@ export const useAuth = () => {
   const [auth, setAuth] = useRecoilState<AuthState>(authState);
   const [loading, setLoading] = useState<boolean>(false);
   const { checkHasUnread } = useNotifications();
+  const router = useRouter();
 
   const initAuthState = () => {
     Cookies.remove("access-token");
@@ -101,7 +103,8 @@ export const useAuth = () => {
       Cookies.set("access-token", headers["access-token"]);
       Cookies.set("client", headers["client"]);
       Cookies.set("uid", headers["uid"]);
-      checkAuth();
+      await checkAuth();
+      router.replace("/map");
     } catch (e) {
       throw e;
     } finally {
@@ -117,7 +120,8 @@ export const useAuth = () => {
       Cookies.set("access-token", headers["access-token"]);
       Cookies.set("client", headers["client"]);
       Cookies.set("uid", headers["uid"]);
-      checkAuth();
+      await checkAuth();
+      router.replace("/map");
     } catch (e) {
       throw e;
     } finally {

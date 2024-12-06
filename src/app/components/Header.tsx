@@ -48,7 +48,7 @@ export const Header = () => {
         ) : (
           <Link
             href="/signin"
-            className="flex items-center border border-white border-opacity-80 text-white px-3 py-2 rounded transition-all active:scale-95"
+            className="flex items-center bg-white bg-opacity-10 text-white mr-4 px-3 py-2 rounded transition-all active:scale-95"
           >
             <span className="material-icons mr-0.5">login</span>
             <span className="font-bold">ログイン</span>
