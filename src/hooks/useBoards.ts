@@ -6,6 +6,7 @@ import { atom, useRecoilState } from "recoil";
 import snakecaseKeys from "snakecase-keys";
 
 type BoardData = {
+  status: number;
   category: string;
   species: number;
   breed: string;
