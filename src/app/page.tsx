@@ -107,7 +107,7 @@ export default function Home() {
                   <div className="display">
                     <div className="h-[701px] w-full overflow-hidden relative">
                       <Image
-                        src="/images/top_screenshot_01.png"
+                        src="/images/top_img_01.png"
                         alt="screenshot"
                         className="object-contain shadow-xl"
                         fill
@@ -146,7 +146,7 @@ export default function Home() {
                   <div className="display">
                     <div className="h-[701px] w-full overflow-hidden relative">
                       <Image
-                        src="/images/top_screenshot_03.png"
+                        src="/images/top_img_03.png"
                         alt="screenshot"
                         className="object-contain shadow-xl"
                         fill
@@ -168,7 +168,7 @@ export default function Home() {
                   <div className="display">
                     <div className="h-[701px] w-full overflow-hidden relative">
                       <Image
-                        src="/images/top_screenshot_02.png"
+                        src="/images/top_img_02.png"
                         alt="screenshot"
                         className="object-contain shadow-xl"
                         fill
@@ -190,7 +190,7 @@ export default function Home() {
                   <div className="display">
                     <div className="h-[701px] w-full overflow-hidden relative">
                       <Image
-                        src="/images/top_screenshot_01.png"
+                        src="/images/top_img_01.png"
                         alt="screenshot"
                         className="object-contain shadow-xl"
                         fill
