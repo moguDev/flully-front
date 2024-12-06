@@ -35,15 +35,15 @@ export default async function OpengraphImage({
         ? "#60A5FAaa"
         : "#8aa8aa";
 
-  const endpoint = new URL("https://www.googleapis.com/webfonts/v1/webfonts");
-  endpoint.searchParams.set("family", "Zen Kaku Gothic New");
-  endpoint.searchParams.set(
-    "key",
-    process.env.NEXT_PUBLIC_GOOGLE_FONTS_API_KEY as string
-  );
-  const info = await fetch(endpoint).then((res) => res.json());
-  const fontResponse = await fetch(info.items[0].files["900"]);
-  const fontBuffer = await fontResponse.arrayBuffer();
+  // const endpoint = new URL("https://www.googleapis.com/webfonts/v1/webfonts");
+  // endpoint.searchParams.set("family", "Zen Kaku Gothic New");
+  // endpoint.searchParams.set(
+  //   "key",
+  //   process.env.NEXT_PUBLIC_GOOGLE_FONTS_API_KEY as string
+  // );
+  // const info = await fetch(endpoint).then((res) => res.json());
+  // const fontResponse = await fetch(info.items[0].files["900"]);
+  // const fontBuffer = await fontResponse.arrayBuffer();
 
   return new ImageResponse(
     (
@@ -258,12 +258,12 @@ export default async function OpengraphImage({
     {
       width: 1200,
       height: 630,
-      fonts: [
-        {
-          name: "Zen_Kaku_Gothic_New",
-          data: fontBuffer,
-        },
-      ],
+      // fonts: [
+      //   {
+      //     name: "Zen_Kaku_Gothic_New",
+      //     data: fontBuffer,
+      //   },
+      // ],
     }
   );
 }
