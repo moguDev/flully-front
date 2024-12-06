@@ -8,9 +8,6 @@ import MailIcon from "@mui/icons-material/Mail";
 import XIcon from "@mui/icons-material/X";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import logo from "/public/images/flully_logo.png";
-import screenshot_01 from "/public/images/top_screenshot_01.png";
-import screenshot_02 from "/public/images/top_screenshot_02.png";
-import screenshot_03 from "/public/images/top_screenshot_03.png";
 import Link from "next/link";
 
 export default function Home() {
@@ -110,7 +107,7 @@ export default function Home() {
                   <div className="display">
                     <div className="h-[701px] w-full overflow-hidden relative">
                       <Image
-                        src={screenshot_01}
+                        src="/images/top_screenshot_01.png"
                         alt="screenshot"
                         className="object-contain shadow-xl"
                         fill
@@ -149,7 +146,7 @@ export default function Home() {
                   <div className="display">
                     <div className="h-[701px] w-full overflow-hidden relative">
                       <Image
-                        src={screenshot_03}
+                        src="/images/top_screenshot_03.png"
                         alt="screenshot"
                         className="object-contain shadow-xl"
                         fill
@@ -171,7 +168,7 @@ export default function Home() {
                   <div className="display">
                     <div className="h-[701px] w-full overflow-hidden relative">
                       <Image
-                        src={screenshot_02}
+                        src="/images/top_screenshot_02.png"
                         alt="screenshot"
                         className="object-contain shadow-xl"
                         fill
@@ -193,7 +190,7 @@ export default function Home() {
                   <div className="display">
                     <div className="h-[701px] w-full overflow-hidden relative">
                       <Image
-                        src={screenshot_01}
+                        src="/images/top_screenshot_01.png"
                         alt="screenshot"
                         className="object-contain shadow-xl"
                         fill
