@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { BoardDetail } from "./components/BoardDetails";
-import { api } from "@/lib/axiosInstance";
 
 export async function generateMetadata({
   params,
