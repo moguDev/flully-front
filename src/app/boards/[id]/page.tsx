@@ -8,9 +8,6 @@ export async function generateMetadata({
   params: { id: string };
 }): Promise<Metadata> {
   const { id } = params;
-  const res = await api.get(`/boards/${id}`);
-  const recipe = res.data;
-
   return {
     title: "flully - ふらりと出会った動物をシェアできるコミュニティ",
     description: `ふらりは、街や自然で出会った動物をシェアできるコミュニティサービスです。
@@ -29,7 +26,7 @@ export async function generateMetadata({
           url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/boards/${id}/opengraph-image`,
           width: 1200,
           height: 630,
-          alt: recipe?.title,
+          alt: "opengraph-image",
         },
       ],
       type: "article",
