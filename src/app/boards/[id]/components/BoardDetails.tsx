@@ -76,7 +76,7 @@ export const BoardDetail = () => {
       <div className="lg:flex">
         <section className="w-full max-w-lg mx-auto rounded-lg relative overflow-hidden bg-white lg:mb-0 mb-20 shadow-sm">
           <div
-            className={`w-full backdrop-blur p-2 z-10 ${board.category === "迷子" ? "bg-red-500" : board.category === "保護" ? "bg-blue-500" : "bg-green-500"}`}
+            className={`flex items-center justify-between w-full backdrop-blur p-2 z-10 ${board.category === "迷子" ? "bg-red-500" : board.category === "保護" ? "bg-blue-500" : "bg-green-500"}`}
           >
             <p className="text-white font-bold flex items-center">
               <span className="material-icons mr-1">campaign</span>
@@ -85,6 +85,9 @@ export const BoardDetail = () => {
                 : board.category === "保護"
                   ? "保護しました"
                   : "目撃しました"}
+            </p>
+            <p className="bg-white rounded text-xs font-bold p-1 opacity-90">
+              {board.status}
             </p>
           </div>
           <div className="cursor-pointer overflow-hidden">

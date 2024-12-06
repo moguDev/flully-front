@@ -28,7 +28,10 @@ const NotificationView = ({
   } as const;
   return (
     <button
-      className={`w-full bg-white p-5 rounded-lg shadow-sm transition-all active:scale-95 ${item.checked ? "opacity-60" : "opacity-100"}}`}
+      className={`
+        w-full bg-white p-5 rounded-lg shadow-sm
+        transition-all duration-500 active:scale-95 hover:bg-main hover:bg-opacity-5 hover:shadow hover:translate-x-1
+        ${item.checked ? "opacity-60" : "opacity-100"}}`}
       onClick={() => {
         onClick();
         router.push(item.url);

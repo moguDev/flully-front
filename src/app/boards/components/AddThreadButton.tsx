@@ -13,7 +13,8 @@ export const AddThreadButton = () => {
     <div className="fixed w-full lg:bottom-5 bottom-16 right-0 left-0">
       <div className="max-w-5xl mx-auto flex items-center justify-end">
         <button
-          className="p-4 m-2 bg-main lg:rounded-xl rounded-full text-white transition-all active:scale-95 z-20"
+          className="p-4 m-2 bg-main lg:rounded-xl rounded-full text-white transition-all active:scale-95 z-20 hover:brightness-105"
+          style={{ boxShadow: "0 3px 15px rgba(0, 0, 0, 0.08)" }}
           onClick={() => {
             if (isAuthenticated) {
               router.push("/boards/new");

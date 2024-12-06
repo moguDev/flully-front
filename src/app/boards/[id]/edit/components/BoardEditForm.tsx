@@ -1,5 +1,5 @@
 "use client";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import dogIcon from "/public/images/ic_dog.png";
 import catIcon from "/public/images/ic_cat.png";
 import birdIcon from "/public/images/ic_bird.png";
@@ -13,6 +13,7 @@ import { showBoardDeleteModal } from "./BoardDeleteModal";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/useToast";
 import { GoogleMap } from "@react-google-maps/api";
+import { SpeciesButton } from "@/app/boards/new/components/NewBoardForm";
 
 type FormData = {
   category: string;
@@ -47,23 +48,21 @@ const formattedDate = (date: string) => {
   return `${year}-${month}-${day}T${hour}:${minute}`;
 };
 
-const SpeciesButton = ({
-  icon,
+const StatusButton = ({
   label,
   selected,
+  onClick,
 }: {
-  icon: StaticImageData;
   label: string;
   selected: boolean;
+  onClick: () => void;
 }) => {
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded p-2 w-full transition-all ${selected ? "bg-main bg-opacity-30" : "opacity-30"}`}
+      className={`px-2 py-1 rounded cursor-pointer transition-all ${selected ? "bg-main  bg-opacity-20" : "opacity-50"}`}
+      onClick={onClick}
     >
-      <div className="h-12 w-12 relative">
-        <Image src={icon} alt="cat_icon" className="object-cover" fill />
-      </div>
-      <p className="font-bold text-xs text-center">{label}</p>
+      <p className="text-sm font-bold">{label}</p>
     </div>
   );
 };
@@ -76,7 +75,7 @@ export const BoardEditForm = () => {
   const [categoryText, setCategoryText] = useState<string>("いなくなった");
   const router = useRouter();
   const { id } = useParams();
-  const { board, update } = useBoard(parseInt(id as string));
+  const { loading, board, update } = useBoard(parseInt(id as string));
 
   const mapRef = useRef<google.maps.Map | null>(null);
   const { isLoaded, loadError } = useGoogleMaps();
@@ -84,6 +83,8 @@ export const BoardEditForm = () => {
     lat: 35.6895,
     lng: 139.6917,
   });
+
+  const [selectdStatusIndex, setSelectedStatusIndex] = useState<number>(0);
 
   const [selectedSpeciesIndex, setSelectedSpeciesIndex] = useState<number>(0);
   const defaultValues: FormData = {
@@ -124,6 +125,7 @@ export const BoardEditForm = () => {
         const lat = center?.lat() ?? 35.6895;
         const lng = center?.lng() ?? 139.6917;
         const formData = {
+          status: selectdStatusIndex,
           category: data.category,
           species: selectedSpeciesIndex,
           breed: data.breed,
@@ -176,6 +178,19 @@ export const BoardEditForm = () => {
 
   useEffect(() => {
     if (board) {
+      switch (board.status) {
+        case "未解決":
+          setSelectedStatusIndex(0);
+          break;
+        case "解決済み":
+          setSelectedStatusIndex(1);
+          break;
+        case "掲載終了":
+          setSelectedStatusIndex(2);
+          break;
+        default:
+          break;
+      }
       switch (board.category) {
         case "迷子":
           setValue("category", "0");
@@ -259,38 +274,63 @@ export const BoardEditForm = () => {
           掲示板にもどる
         </button>
       </section>
-      <section className="bg-white rounded-lg p-4 shadow-sm">
-        <h1 className="text-2xl font-bold my-4">掲示板を編集</h1>
+      <section className="relative bg-white rounded-lg p-4 shadow-sm">
+        {loading && (
+          <div className="flex items-center justify-center absolute top-0 left-0 h-full w-full bg-white opacity-70 z-10">
+            <span className="loading loading-spinner loading-sm mr-1" />
+            <p className="text-xs">掲示板を作成しています</p>
+          </div>
+        )}
+        <h1 className="lg:text-2xl text-xl font-bold my-4">掲示板を編集</h1>
         <form method="post" onSubmit={handleSubmit(onsubmit)}>
+          <div className="flex items-center space-x-2 pb-4">
+            <StatusButton
+              label="未解決"
+              selected={selectdStatusIndex === 0}
+              onClick={() => setSelectedStatusIndex(0)}
+            />
+            <StatusButton
+              label="解決済み"
+              selected={selectdStatusIndex === 1}
+              onClick={() => setSelectedStatusIndex(1)}
+            />
+            <StatusButton
+              label="掲載終了"
+              selected={selectdStatusIndex === 2}
+              onClick={() => setSelectedStatusIndex(2)}
+            />
+          </div>
           <section className="divide-y">
-            <div className="flex items-center space-x-2 py-1">
-              <div>
-                <input
-                  type="radio"
-                  value={0}
-                  {...register("category")}
-                  className="mr-1"
-                  defaultChecked
-                />
-                <label className="font-bold">まいご</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  value={1} // "1" に設定
-                  {...register("category")}
-                  className="mr-1"
-                />
-                <label className="font-bold">保護</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  value={2} // "2" に設定
-                  {...register("category")}
-                  className="mr-1"
-                />
-                <label className="font-bold">目撃</label>
+            <div className="py-1">
+              <div className="flex items-center space-x-2">
+                <div>
+                  <input
+                    type="radio"
+                    value={0}
+                    {...register("category")}
+                    className="mr-1"
+                    defaultChecked
+                  />
+                  <label className="font-bold">まいご</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    value={1} // "1" に設定
+                    {...register("category")}
+                    className="mr-1"
+                  />
+                  <label className="font-bold">保護</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    value={2} // "2" に設定
+                    {...register("category")}
+                    className="mr-1"
+                  />
+                  <label className="font-bold">目撃</label>
+                </div>
               </div>
             </div>
             <div className="py-1">
@@ -311,6 +351,82 @@ export const BoardEditForm = () => {
                   </button>
                 ))}
               </div>
+            </div>
+            <div className="py-2">
+              <label className="text-sm font-bold">
+                {categoryText}ペットの写真
+              </label>
+              <div className="flex items-center overflow-x-auto space-x-1 flex-nowrap">
+                <div
+                  className="bg-gray-100 min-w-28 h-32 rounded p-1 flex flex-col items-center justify-center text-gray-400 cursor-pointer"
+                  onClick={() => {
+                    imagesInputRef.current?.click();
+                  }}
+                >
+                  <span className="material-icons" style={{ fontSize: "36px" }}>
+                    camera_alt
+                  </span>
+                  <p className="text-xs font-bold p-0.5">写真を追加</p>
+                </div>
+                {imageSources.map((src, index) => (
+                  <div
+                    key={index}
+                    className="relative h-32 min-w-28 overflow-hidden rounded"
+                    onClick={() => {
+                      setImageSources((prev) => prev.splice(index, index));
+                    }}
+                  >
+                    <Image
+                      src={src}
+                      alt={`Preview ${index}`}
+                      className="object-cover"
+                      fill
+                    />
+                  </div>
+                ))}
+                {board?.images.map(
+                  (image, index) =>
+                    !removeImageId.includes(image.id) && (
+                      <div
+                        key={index}
+                        className="relative h-32 min-w-28 overflow-hidden rounded"
+                        onClick={() => {
+                          setImageSources((prev) => prev.splice(index, index));
+                        }}
+                      >
+                        <button
+                          className="material-icons rounded-full h-2 w-2 p-1 absolute top-0 right-4 z-10"
+                          onClick={() => {
+                            setRemoveImageId((prev) => [...prev, image.id]);
+                          }}
+                        >
+                          <p
+                            className="bg-black text-white"
+                            style={{ fontSize: "16px" }}
+                          >
+                            cancel
+                          </p>
+                        </button>
+                        <Image
+                          src={image.url}
+                          alt={`Preview ${index}`}
+                          className="object-cover"
+                          fill
+                        />
+                      </div>
+                    )
+                )}
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                {...register("images")}
+                ref={(e: HTMLInputElement) => {
+                  register("images").ref(e);
+                  imagesInputRef.current = e;
+                }}
+                hidden
+              />
             </div>
             <div className="py-2">
               <label className="text-sm font-bold">種類</label>
@@ -481,82 +597,6 @@ export const BoardEditForm = () => {
               <div className="text-red-500 font-bold text-xs p-1">
                 {errors.breed?.message}
               </div>
-            </div>
-            <div className="py-2">
-              <label className="text-sm font-bold">
-                {categoryText}ペットの写真
-              </label>
-              <div className="flex items-center overflow-x-auto space-x-1 flex-nowrap">
-                <div
-                  className="bg-gray-100 min-w-28 h-32 rounded p-1 flex flex-col items-center justify-center text-gray-400 cursor-pointer"
-                  onClick={() => {
-                    imagesInputRef.current?.click();
-                  }}
-                >
-                  <span className="material-icons" style={{ fontSize: "36px" }}>
-                    camera_alt
-                  </span>
-                  <p className="text-xs font-bold p-0.5">写真を追加</p>
-                </div>
-                {imageSources.map((src, index) => (
-                  <div
-                    key={index}
-                    className="relative h-32 min-w-28 overflow-hidden rounded"
-                    onClick={() => {
-                      setImageSources((prev) => prev.splice(index, index));
-                    }}
-                  >
-                    <Image
-                      src={src}
-                      alt={`Preview ${index}`}
-                      className="object-cover"
-                      fill
-                    />
-                  </div>
-                ))}
-                {board?.images.map(
-                  (image, index) =>
-                    !removeImageId.includes(image.id) && (
-                      <div
-                        key={index}
-                        className="relative h-32 min-w-28 overflow-hidden rounded"
-                        onClick={() => {
-                          setImageSources((prev) => prev.splice(index, index));
-                        }}
-                      >
-                        <button
-                          className="material-icons rounded-full h-2 w-2 p-1 absolute top-0 right-4 z-10"
-                          onClick={() => {
-                            setRemoveImageId((prev) => [...prev, image.id]);
-                          }}
-                        >
-                          <p
-                            className="bg-black text-white"
-                            style={{ fontSize: "16px" }}
-                          >
-                            cancel
-                          </p>
-                        </button>
-                        <Image
-                          src={image.url}
-                          alt={`Preview ${index}`}
-                          className="object-cover"
-                          fill
-                        />
-                      </div>
-                    )
-                )}
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                {...register("images")}
-                ref={(e: HTMLInputElement) => {
-                  register("images").ref(e);
-                  imagesInputRef.current = e;
-                }}
-                hidden
-              />
             </div>
           </section>
           <div className="flex items-center mt-4">

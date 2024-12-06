@@ -6,7 +6,7 @@ const GOOGLE_LOGIN_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth/google_oauth2`
 export const GoogleLoginButton: React.FC = () => {
   return (
     <a href={GOOGLE_LOGIN_URL}>
-      <button className="gsi-material-button" style={{ width: "550px" }}>
+      <button className="gsi-material-button">
         <div className="w-full flex items-center justify-center">
           <div className="gsi-material-button-icon">
             <svg

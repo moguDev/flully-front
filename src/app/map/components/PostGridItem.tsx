@@ -13,7 +13,7 @@ export const PostGridItem = ({
   return (
     <div
       key={`post-${post.id}`}
-      className="w-full h-44 overflow-hidden relative rounded cursor-pointer"
+      className="w-full h-44 overflow-hidden relative rounded cursor-pointer transition-all duration-500 hover:-translate-y-1"
       onClick={onClick}
     >
       <div className="flex items-center justify-between absolute bottom-0 left-0 w-full bg-black bg-opacity-20 backdrop-blur-sm z-10 px-1 py-0.5">
