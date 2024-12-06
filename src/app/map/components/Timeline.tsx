@@ -136,14 +136,19 @@ export const Timeline = () => {
                         : "bg-green-400"
                   }`}
                 >
-                  <p className="flex items-center">
-                    <span className="material-icons mr-1">campaign</span>
-                    {(item.content as Board).category === "迷子"
-                      ? "探しています"
-                      : (item.content as Board).category === "保護"
-                        ? "保護しました"
-                        : "目撃しました"}
-                  </p>
+                  <div className="flex items-center justify-between">
+                    <p className="flex items-center">
+                      <span className="material-icons mr-1">campaign</span>
+                      {(item.content as Board).category === "迷子"
+                        ? "探しています"
+                        : (item.content as Board).category === "保護"
+                          ? "保護しました"
+                          : "目撃しました"}
+                    </p>
+                    <p className="bg-white text-black rounded text-xs font-bold p-1 opacity-90">
+                      {(item.content as Board).status}
+                    </p>
+                  </div>
                 </div>
                 <Image
                   src={

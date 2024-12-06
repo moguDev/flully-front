@@ -31,7 +31,7 @@ const NavigationMenu = ({
         <></>
       )}
       <p
-        className={`material-icons select-none lg:px-2 px-6 p-2 rounded-xl transition-all ${selected ? "opacity-100 scale-110" : "opacity-30"} `}
+        className={`material-icons select-none lg:px-2 px-6 p-2 rounded-xl transition-all hover:text-main hover:opacity-100 ${selected ? "opacity-100 scale-110" : "opacity-30"} `}
         style={{ fontSize: "28px" }}
       >
         {selected ? iconName : iconName}

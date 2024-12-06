@@ -3,8 +3,10 @@ import { api } from "@/lib/axiosInstance";
 import camelcaseKeys from "camelcase-keys";
 import { useEffect, useState } from "react";
 import snakecaseKeys from "snakecase-keys";
+import { useToast } from "./useToast";
 
 type UpdateData = {
+  status: number;
   category: string;
   species: number;
   breed: string;
@@ -24,6 +26,7 @@ type UpdateData = {
 export const useBoard = (boardId: number) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [board, setBoard] = useState<Board | null>(null);
+  const { showSuccess, showAlert } = useToast();
   const fetch = async () => {
     setLoading(true);
     try {
@@ -76,8 +79,10 @@ export const useBoard = (boardId: number) => {
     setLoading(true);
     try {
       await api.delete(`/boards/${boardId}`);
+      showSuccess("掲示板を削除しました");
     } catch (e) {
       console.error(e);
+      showAlert("掲示板の削除に失敗しました");
     } finally {
       setLoading(false);
     }

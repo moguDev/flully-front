@@ -21,7 +21,7 @@ export const Header = () => {
     <header
       className={`fixed top-0 w-full z-40 bg-main ${pathname === "/" ? "bg-opacity-0 shadow-none" : "bg-opacity-100 backdrop-blur shadow"}`}
     >
-      <div className="flex items-center justify-between h-16 lg:px-5 px-3">
+      <div className="flex items-center justify-between h-16 lg:pl-5 lg:pr-2 pl-3">
         <div
           className="h-12 w-20 cursor-pointer relative select-none"
           onClick={() => {
@@ -36,7 +36,10 @@ export const Header = () => {
         </div>
         {isAuthenticated ? (
           <ul className="flex items-center text-base space-x-2">
-            <li className="material-icons" style={{ fontSize: "32px" }}>
+            <li
+              className="material-icons transition-all duration-500 hover:bg-white hover:bg-opacity-10 p-3 rounded-full"
+              style={{ fontSize: "32px" }}
+            >
               <label htmlFor="drawer-menu" className="cursor-pointer">
                 menu
               </label>

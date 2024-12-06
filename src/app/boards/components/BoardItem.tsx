@@ -11,12 +11,12 @@ export const BoardItem = ({ board }: BoardItemProps) => {
   const router = useRouter();
   return (
     <div
-      className="bg-white cursor-pointer transition-all hover:translate-x-1 rounded-md overflow-hidden relative shadow"
+      className={`bg-white cursor-pointer transition-all duration-500 hover:-translate-y-1 rounded-md overflow-hidden relative shadow ${board.status !== "未解決" && "opacity-50"}`}
       onClick={() => router.push(`/boards/${board.id}`)}
     >
       <div className="w-full min-h-80 overflow-hidden rounded-t-md relative">
         <div
-          className={`absolute top-0 left-0 w-full bg-opacity-80 backdrop-blur p-2 z-10 ${board.category === "迷子" ? "bg-red-500" : board.category === "保護" ? "bg-blue-500" : "bg-green-500"}`}
+          className={`absolute flex items-center justify-between top-0 left-0 w-full bg-opacity-80 backdrop-blur p-2 z-10 ${board.category === "迷子" ? "bg-red-500" : board.category === "保護" ? "bg-blue-500" : "bg-green-500"}`}
         >
           <p className="text-white font-bold flex items-center">
             <span className="material-icons mr-1">campaign</span>
@@ -25,6 +25,9 @@ export const BoardItem = ({ board }: BoardItemProps) => {
               : board.category === "保護"
                 ? "保護しました"
                 : "目撃しました"}
+          </p>
+          <p className="bg-white rounded text-xs font-bold p-1 opacity-90">
+            {board.status}
           </p>
         </div>
         <Image

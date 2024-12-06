@@ -33,7 +33,7 @@ const SPECIES_LIST = [
   { icon: dogIcon, label: "その他" },
 ];
 
-const SpeciesButton = ({
+export const SpeciesButton = ({
   icon,
   label,
   selected,
@@ -44,7 +44,7 @@ const SpeciesButton = ({
 }) => {
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded p-2 w-full transition-all ${selected ? "bg-main bg-opacity-30" : "opacity-30"}`}
+      className={`flex flex-col items-center justify-center rounded p-2 w-full transition-all ${selected ? "bg-main bg-opacity-20" : "opacity-30"}`}
     >
       <div className="h-12 w-12 relative">
         <Image src={icon} alt="cat_icon" className="object-cover" fill />
@@ -67,7 +67,7 @@ export const NewBoardForm = () => {
   });
 
   const [selectedSpeciesIndex, setSelectedSpeciesIndex] = useState<number>(0);
-  const { postNewBoard } = useBoards();
+  const { loading, postNewBoard } = useBoards();
   const defaultValues: FormData = {
     category: "0",
     breed: "",
@@ -194,7 +194,13 @@ export const NewBoardForm = () => {
           掲示板一覧
         </button>
       </section>
-      <section className="bg-white rounded-lg p-4 shadow-sm">
+      <section className="relative bg-white rounded-lg p-4 shadow-sm">
+        {loading && (
+          <div className="flex items-center justify-center absolute top-0 left-0 h-full w-full bg-white opacity-70 z-10">
+            <span className="loading loading-spinner loading-sm mr-1" />
+            <p className="text-xs">掲示板を作成しています</p>
+          </div>
+        )}
         <h1 className="text-2xl font-bold my-4">掲示板を作成</h1>
         <form method="post" onSubmit={handleSubmit(onsubmit)}>
           <section className="divide-y">
@@ -246,6 +252,50 @@ export const NewBoardForm = () => {
                   </button>
                 ))}
               </div>
+            </div>
+            <div className="py-2">
+              <label className="text-sm font-bold">
+                {categoryText}ペットの写真
+              </label>
+              <div className="grid grid-cols-4">
+                <div
+                  className="bg-gray-100 w-full h-28 rounded p-1 flex flex-col items-center justify-center text-gray-400 cursor-pointer transition-all hover:bg-gray-50"
+                  onClick={() => {
+                    imagesInputRef.current?.click();
+                  }}
+                >
+                  <span className="material-icons" style={{ fontSize: "36px" }}>
+                    camera_alt
+                  </span>
+                  <p className="text-xs font-bold p-0.5">写真を追加</p>
+                </div>
+                {imageSources.map((src, index) => (
+                  <div
+                    key={index}
+                    className="relative"
+                    onClick={() => {
+                      setImageSources((prev) => prev.splice(index, index));
+                    }}
+                  >
+                    <Image
+                      src={src}
+                      alt={`Preview ${index}`}
+                      className="object-cover"
+                      fill
+                    />
+                  </div>
+                ))}
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                {...register("images")}
+                ref={(e: HTMLInputElement) => {
+                  register("images").ref(e);
+                  imagesInputRef.current = e;
+                }}
+                hidden
+              />
             </div>
             <div className="py-2">
               <label className="text-sm font-bold">種類</label>
@@ -326,7 +376,7 @@ export const NewBoardForm = () => {
                     <input
                       type="number"
                       placeholder="年齢"
-                      className="p-2 bg-gray-100 rounded mr-1 w-14 outline-none"
+                      className="p-2 bg-gray-100 rounded mr-1 w-20 outline-none"
                       {...register("age")}
                     />
                     <label className="font-bold">歳</label>
@@ -364,8 +414,7 @@ export const NewBoardForm = () => {
               <div>
                 <input
                   type="datetime-local"
-                  placeholder="年齢"
-                  className="w-full p-2 bg-gray-100 rounded mr-1 outline-none"
+                  className="w-full p-2 bg-gray-100 rounded mr-1 outline-none cursor-pointer"
                   {...register("date", {
                     required: "日時を入力してください。",
                   })}
@@ -380,7 +429,7 @@ export const NewBoardForm = () => {
               <div className="flex items-center p-1">
                 <input
                   type="checkbox"
-                  className="mr-1"
+                  className="mr-1 cursor-pointer"
                   {...register("isLocationPublic")}
                 />
                 <label className="text-xs">正確な位置情報を共有しない</label>
@@ -423,52 +472,8 @@ export const NewBoardForm = () => {
                 />
               </div>
               <div className="text-red-500 font-bold text-xs p-1">
-                {errors.breed?.message}
+                {errors.body?.message}
               </div>
-            </div>
-            <div className="py-2">
-              <label className="text-sm font-bold">
-                {categoryText}ペットの写真
-              </label>
-              <div className="grid grid-cols-4">
-                <div
-                  className="bg-gray-100 w-full h-28 rounded p-1 flex flex-col items-center justify-center text-gray-400"
-                  onClick={() => {
-                    imagesInputRef.current?.click();
-                  }}
-                >
-                  <span className="material-icons" style={{ fontSize: "36px" }}>
-                    camera_alt
-                  </span>
-                  <p className="text-xs font-bold p-0.5">写真を追加</p>
-                </div>
-                {imageSources.map((src, index) => (
-                  <div
-                    key={index}
-                    className="relative"
-                    onClick={() => {
-                      setImageSources((prev) => prev.splice(index, index));
-                    }}
-                  >
-                    <Image
-                      src={src}
-                      alt={`Preview ${index}`}
-                      className="object-cover"
-                      fill
-                    />
-                  </div>
-                ))}
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                {...register("images")}
-                ref={(e: HTMLInputElement) => {
-                  register("images").ref(e);
-                  imagesInputRef.current = e;
-                }}
-                hidden
-              />
             </div>
           </section>
           <div className="flex items-center mt-2">

@@ -292,7 +292,7 @@ export const Map: React.FC = () => {
               </span>
             </button>
             <button
-              className="rounded-2xl h-16 w-16 bg-main flex flex-col items-center justify-center shadow transition-all active:scale-95"
+              className="rounded-2xl h-16 w-16 bg-main flex flex-col items-center justify-center shadow transition-all active:scale-95 hover:brightness-110"
               onClick={() => {
                 if (isAuthenticated) {
                   showPostModal();

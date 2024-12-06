@@ -35,7 +35,7 @@ body {
   -webkit-appearance: none;
   background-color: WHITE;
   background-image: none;
-  border: 1px solid #747775;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
   -webkit-border-radius: 4px;
   border-radius: 4px;
   -webkit-box-sizing: border-box;
@@ -61,7 +61,7 @@ body {
     box-shadow 0.218s;
   vertical-align: middle;
   white-space: nowrap;
-  width: auto;
+  width: 100%;
   max-width: 496px;
   min-width: min-content;
 }

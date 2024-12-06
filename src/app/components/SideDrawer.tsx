@@ -72,9 +72,9 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           <ul className="my-2 py-2 space-y-1 border-t border-gray-200">
             <li>
               <button
-                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                className="w-full flex items-center rounded p-2 transition-all active:scale-95 hover:bg-main hover:bg-opacity-15"
                 onClick={() => {
-                  router.push(`/${name}`);
+                  router.push(`/${authState.name}`);
                   closeDrawer();
                 }}
               >
@@ -84,7 +84,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
             </li>
             <li>
               <button
-                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                className="w-full flex items-center rounded p-2 transition-all active:scale-95 hover:bg-main hover:bg-opacity-15"
                 onClick={() => {
                   logout();
                   closeDrawer();
@@ -99,7 +99,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           <ul className="my-2 py-2 space-y-1 border-t border-gray-200">
             <li>
               <button
-                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                className="w-full flex items-center rounded p-2 transition-all active:scale-95 hover:bg-main hover:bg-opacity-15"
                 onClick={() => {
                   router.push("/map");
                   closeDrawer();
@@ -111,7 +111,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
             </li>
             <li>
               <button
-                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                className="w-full flex items-center rounded  p-2 transition-all active:scale-95 hover:bg-main hover:bg-opacity-15"
                 onClick={() => {
                   router.push("/boards");
                   closeDrawer();
@@ -123,7 +123,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
             </li>
             <li>
               <button
-                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                className="w-full flex items-center rounded p-2 transition-all active:scale-95 hover:bg-main hover:bg-opacity-15"
                 onClick={() => {
                   router.push("/notifications");
                   closeDrawer();
@@ -137,7 +137,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
           <ul className="my-2 py-2 space-y-1 border-t border-gray-200">
             <li>
               <button
-                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                className="w-full flex items-center rounded p-2 transition-all active:scale-95 hover:bg-main hover:bg-opacity-15"
                 onClick={() => {
                   router.push("/terms");
                   closeDrawer();
@@ -149,7 +149,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
             </li>
             <li>
               <button
-                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                className="w-full flex items-center rounded p-2 transition-all active:scale-95 hover:bg-main hover:bg-opacity-15"
                 onClick={() => {
                   router.push("/privacy");
                   closeDrawer();
@@ -162,7 +162,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
             <li>
               <a
                 href="mailto:contact@flully.jp?subject=お問い合わせ"
-                className="w-full flex items-center rounded py-2 transition-all active:scale-95"
+                className="w-full flex items-center rounded p-2 transition-all active:scale-95 hover:bg-main hover:bg-opacity-15"
                 onClick={() => {
                   closeDrawer();
                 }}
@@ -172,7 +172,7 @@ export const SideDrawer = ({ children }: { children: React.ReactNode }) => {
               </a>
             </li>
           </ul>
-          <p className="text-center font-bold text-xs">©️ flully 2024</p>
+          <p className="text-center font-bold text-sm">©️ flully 2024</p>
         </div>
       </div>
     </div>
