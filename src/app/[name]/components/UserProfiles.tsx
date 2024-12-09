@@ -120,10 +120,10 @@ export const UserProfiles = () => {
   }, []);
 
   useEffect(() => {
-    if (user && user.posts) {
+    if (user?.posts && document.querySelector("#cal-heatmap")) {
       setHeatmap(getDailyPostCounts(user.posts));
     }
-  }, [user, user?.posts]);
+  }, [user?.posts]);
 
   return loading ? (
     <Loading />
@@ -241,7 +241,7 @@ export const UserProfiles = () => {
                 フォロー中
               </p>
             </div>
-            <div className="mt-4">
+            <div className="mt-4 h-fit">
               <div id="cal-heatmap" className="overflow-auto mx-auto" />
             </div>
           </section>
