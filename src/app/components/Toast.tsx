@@ -21,7 +21,7 @@ export const Toast = () => {
     <div
       className={`w-full fixed flex items-center justify-center top-0 transition-all ${
         toast.message === ""
-          ? "-translate-y-20 opacity-0"
+          ? "-translate-y-20 opacity-0 -z-10"
           : "translate-y-20 opacity-100"
       }`}
     >

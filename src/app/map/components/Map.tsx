@@ -186,26 +186,26 @@ export const Map: React.FC = () => {
   return (
     <>
       <section>
-        <div
-          className={`z-20 fixed flex items-center justify-center w-full top-16`}
-        >
-          <div className="flex items-center rounded-full bg-gray-100 mt-2 p-1">
-            <SelectCategoryButton
-              icon="pets"
-              label="みつかった動物"
-              selected={selectTab === 0}
-              onClick={() => setSelectTab(0)}
-            />
-            <SelectCategoryButton
-              icon="campaign"
-              label="迷子・保護情報"
-              selected={selectTab === 1}
-              onClick={() => setSelectTab(1)}
-            />
-          </div>
-        </div>
         <div className={`flex absolute h-full w-full`}>
-          <div className="lg:block hidden">
+          <div
+            className={`z-10 fixed flex items-center justify-center w-full top-16`}
+          >
+            <div className="flex items-center rounded-full bg-gray-100 mt-2 p-1">
+              <SelectCategoryButton
+                icon="pets"
+                label="みつかった動物"
+                selected={selectTab === 0}
+                onClick={() => setSelectTab(0)}
+              />
+              <SelectCategoryButton
+                icon="campaign"
+                label="迷子・保護情報"
+                selected={selectTab === 1}
+                onClick={() => setSelectTab(1)}
+              />
+            </div>
+          </div>
+          <div className="lg:block hidden z-20">
             <NearbyInformation posts={filteredPosts} boards={filteredBoards} />
           </div>
           <GoogleMap
