@@ -69,7 +69,6 @@ export const Map: React.FC = () => {
   const { boards } = useBoards();
   const [filteredBoards, setFilteredBoards] = useState(boards);
 
-  const [harfModalIsOpen, setHarfModalIsOpen] = useState<boolean>(false);
   const { authState } = useAuth();
   const { isAuthenticated } = authState;
   const { requireSignin } = useToast();
@@ -232,8 +231,7 @@ export const Map: React.FC = () => {
                   <div
                     className="rounded-full overflow-hidden w-8 h-8 shadow border border-white relative"
                     onClick={() => {
-                      setHarfModalIsOpen(true);
-                      router.replace(`?post_id=${post.id}`);
+                      router.push(`?info=display&post_id=${post.id}`);
                     }}
                   >
                     {post.imageUrl && (
@@ -318,11 +316,7 @@ export const Map: React.FC = () => {
         </div>
       </section>
       <div className="lg:hidden">
-        <HalfModal
-          posts={filteredPosts}
-          boards={filteredBoards}
-          open={harfModalIsOpen}
-        />
+        <HalfModal posts={filteredPosts} boards={filteredBoards} />
       </div>
     </>
   );

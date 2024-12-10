@@ -1,7 +1,7 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Board, Post } from "@/app/types";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { PostDetails } from "./PostDetails";
 import { BoardItem } from "@/app/boards/components/BoardItem";
 import { SelectCategoryButton } from "./SelectCategoryButton";
@@ -14,28 +14,30 @@ import { Timeline } from "./Timeline";
 export const HalfModal = ({
   posts,
   boards,
-  open,
 }: {
   posts: Post[];
   boards: Board[];
-  open: boolean;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const postId = searchParams.get("post_id");
+  const isOpen = searchParams.get("info") === "display";
   const [selectTab, setSelectTab] = useState<number>(0);
   const [selectCategory, setSelectCategory] = useRecoilState<number>(
     selectDisplayTabState
   );
-  const [isOpen, setIsOpen] = useState<boolean>(open);
   const startY = useRef<number | null>(null);
 
   const handleClickTab = (tabIndex: number) => {
     if (selectTab === tabIndex) {
-      setIsOpen(false);
-      router.replace("?");
+      if (isOpen) {
+        router.push("?");
+      } else {
+        router.push(`?info=display`);
+      }
       startY.current = null;
     } else {
+      router.push(`?info=display`);
       setSelectTab(tabIndex);
     }
   };
@@ -51,14 +53,18 @@ export const HalfModal = ({
     const distance = currentY - (startY.current || 0);
 
     if (isOpen && distance > 50) {
-      setIsOpen(false);
       router.replace("?");
       startY.current = null;
     } else if (!isOpen && distance < -50) {
-      setIsOpen(true);
       startY.current = null;
     }
   };
+
+  useEffect(() => {
+    if (postId) {
+      setSelectTab(1);
+    }
+  }, [postId]);
 
   return (
     <div
@@ -69,9 +75,6 @@ export const HalfModal = ({
         className="border-b border-gray-200"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
-        onClick={() => {
-          if (!isOpen) setIsOpen(true);
-        }}
       >
         <div className="h-14 flex items-center border-b border-main bg-gray-200 z-10">
           <SelectTabButton
@@ -119,8 +122,7 @@ export const HalfModal = ({
                       key={index}
                       post={post}
                       onClick={() => {
-                        setIsOpen(true);
-                        router.push(`?post_id=${post.id}`);
+                        router.push(`?info=display&post_id=${post.id}`);
                       }}
                     />
                   ))}

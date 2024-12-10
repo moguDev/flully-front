@@ -273,7 +273,7 @@ export const UserProfiles = () => {
                         key={index}
                         post={post}
                         onClick={() => {
-                          router.push(`/map?post_id=${post.id}`);
+                          router.push(`/map?info=display&post_id=${post.id}`);
                         }}
                       />
                     ))}
