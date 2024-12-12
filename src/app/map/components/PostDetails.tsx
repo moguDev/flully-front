@@ -67,7 +67,7 @@ export const PostDetails = ({ postId }: PostDetailsProps) => {
         <section className="space-y-1">
           <button
             className="flex items-center text-sm text-gray-600 py-2"
-            onClick={() => router.push("/map")}
+            onClick={() => router.push("/map?info=display")}
           >
             <span className="material-icons">keyboard_arrow_left</span>
             <p>一覧にもどる</p>
