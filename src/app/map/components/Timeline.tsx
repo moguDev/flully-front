@@ -55,7 +55,9 @@ export const Timeline = () => {
             <div
               className="px-2 py-4 cursor-pointer"
               key={`post_${index}`}
-              onClick={() => router.push(`?post_id=${item.content.id}`)}
+              onClick={() =>
+                router.push(`?info=display&post_id=${item.content.id}`)
+              }
             >
               <div className="flex">
                 <div className="h-12 min-w-12 rounded-full overflow-hidden relative">
