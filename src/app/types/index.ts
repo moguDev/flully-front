@@ -14,6 +14,8 @@ export type User = {
   isLocationPublic?: boolean;
   followersCount?: number;
   followingCount?: number;
+  explorePoints?: number;
+  level?: number;
 };
 
 export type Board = {

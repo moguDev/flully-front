@@ -16,6 +16,7 @@ import { removeParamsFromUrl } from "@/lib";
 import { format, parseISO } from "date-fns";
 import CalHeatmap from "cal-heatmap";
 import "cal-heatmap/cal-heatmap.css";
+import { LevelProgressBar } from "./LevelProgressBar";
 
 const TabComponent = ({
   label,
@@ -174,18 +175,10 @@ export const UserProfiles = () => {
                   </div>
                   <p className="text-sm opacity-50">@{user.name}</p>
                 </div>
-                <div className="flex items-center justify-between w-full">
-                  <p className="text-sm">
-                    LV<span>{1}</span>
-                  </p>
-                  <p className="text-xs">
-                    次のレベルまで<span>{0}</span>EXP
-                  </p>
-                </div>
-                <div className="relative">
-                  <div className="w-full h-2 bg-gray-200 rounded-full" />
-                  <div className="w-0 h-2 bg-main rounded-full absolute top-0 left-0" />
-                </div>
+                <LevelProgressBar
+                  level={user.level || 1}
+                  explorePoints={user.explorePoints || 0}
+                />
               </div>
             </div>
             <div className="flex items-center justify-between py-1">
