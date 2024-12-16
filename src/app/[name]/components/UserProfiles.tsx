@@ -84,13 +84,13 @@ export const UserProfiles = () => {
     const tempDate = new Date(startDate);
     tempDate.setDate(tempDate.getDate() - 1);
     while (tempDate <= new Date(endDate)) {
-      allDates.push(tempDate.toISOString().split("T")[0]); // YYYY-MM-DD形式で日付を保存
+      allDates.push(tempDate.toISOString().split("T")[0]);
       tempDate.setDate(tempDate.getDate() + 1);
     }
 
     const completeData = allDates.map((date) => {
       const existingData = heatmapData.find((item) => item.date === date);
-      return existingData || { date, value: 0 }; // 存在しない場合はvalue: 0のデータを追加
+      return existingData || { date, value: 0 };
     });
 
     const cal = new CalHeatmap();
